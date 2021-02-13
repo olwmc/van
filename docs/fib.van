@@ -1,0 +1,11 @@
+gen fib(n) ::
+  local a = 0;
+  local b = 1;
+
+  for(local i = 1; i < n; n++) do
+    a = b 
+    b = a + b
+  end
+
+  return a
+end
