@@ -21,6 +21,7 @@ class BinaryExpression;
 class Block;
 class ForLoop;
 class ReturnStatement;
+class Identifier;
 
 /* ##################################################################################### */
 
@@ -35,6 +36,7 @@ class ASTVisitor {
         Value visit(NumberLiteral& numberLiteral);
         Value visit(BinaryExpression& binaryExpression);
         Value visit(StringLiteral& stringLiteral);
+        Value visit(Identifier& identifier);
         Value visit(ReturnStatement& returnStatement);
         Value visit(ForLoop& forLoop);
         Value visit(Block& block);
@@ -95,6 +97,19 @@ class StringLiteral : public ASTNode {
         }
 
         std::string value() { return this->m_value; }
+};
+
+/* Identifier class */
+class Identifier : public ASTNode {
+    std::string m_name;
+
+    public:
+        Identifier(std::string name) : m_name(name) {}
+        virtual Value accept(ASTVisitor& visitor) override {
+            return visitor.visit(*this);
+        }
+
+        std::string name() { return this->m_name; }
 };
 
 /* BinaryExpression class */

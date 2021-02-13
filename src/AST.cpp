@@ -51,6 +51,10 @@ Value ASTVisitor::visit(StringLiteral& stringLiteral) {
     return Value(stringLiteral.value());
 }
 
+// Value ASTVisitor::visit(Identifier& identifier) {
+//     return this->context.resolve(identifier.name());
+// }
+
 Value ASTVisitor::visit(ReturnStatement& returnStatement) {
     return returnStatement.argument()->accept(*this);
 }
