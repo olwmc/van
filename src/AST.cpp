@@ -1,23 +1,37 @@
 #include "AST.h"
 #include "value.h"
 
-/* REFACTOR THIS TO ACCOMIDATE NUMBERS & STRINGS */
 Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
-    double lhs = binaryExpression.getLhs()->accept(*this).asNumber();
-    double rhs = binaryExpression.getRhs()->accept(*this).asNumber();
+    double lhs = binaryExpression.lhs()->accept(*this).asNumber();
+    double rhs = binaryExpression.rhs()->accept(*this).asNumber();
     double result = 0;
     
     // Switch on op
-    /* Make operator overloading for this instead of dealing with raw values */
     /* Do all typechecking beforehand, don't let operator overloading do any work */
+	/* Make special case for operator overloading of + for strings, doubles, and lists */
     /* Report errors to ErrorHandler member of this */
     
-    switch(binaryExpression.getOp()) {
+    /*
+    Value lhs = binaryExpression.getLhs()->accept(*this);
+    Value rhs = binaryExpression.getRhs()->accept(*this);
+    
+    if(binaryExpression.getOp()
+    if(lhs.type() != rhs.type() {
+        this->errorHandler().exception("Cannot perform this operation on two different types", 
+                                       binaryExpression.index(),
+                                       binaryExpression.lineNum());
+    }
+    
+    */
+    switch(binaryExpression.op()) {
         /* Arithmetic operations */
         case Operator::ADD:         result = lhs + rhs;  break;
         case Operator::SUBTRACT:    result = lhs - rhs;  break;
         case Operator::MULTIPLY:    result = lhs * rhs;  break;
         case Operator::DIVIDE:      result = lhs / rhs;  break;
+            
+        // TODO: Overload this to support proper double modulo
+        case Operator::MOD:         result = (int)lhs % (int)rhs;  break;
             
         /* Logical operations */
         case Operator::EQUALS:      result = lhs == rhs; break;
@@ -41,26 +55,41 @@ Value ASTVisitor::visit(ReturnStatement& returnStatement) {
     return returnStatement.argument()->accept(*this);
 }
 
+Value ASTVisitor::visit(Block& block) {
+    Value value;
+    for(ASTNode* statement: block.body()) {  
+        // Accept each ASTNode
+
+        // TODO: Implement operator overloading for Value= to do
+        // Value = statement->accept(*this);
+        // To keep track of returns
+        statement->accept(*this);
+        // Check if statement is a return statement
+        // The reason why we check this, instead of just non-nil value
+        // is because things like n++; are statements but return values
+        // but are not terminal returns
+        if(statement->isReturn()) { break; }
+    }
+
+    return value;
+}
+
+
 Value ASTVisitor::visit(ForLoop& forLoop) {
     // make new context
     // run init with new context
+    // this->context.pushContext();
 
-    while(forLoop.test()->accept(*this).asNumber() != 0) {
+    forLoop.init()->accept(*this);
+    
+    Value value;
+    // While test != False (0)
+    while(forLoop.test()->accept(*this).asNumber() != false && value.type() == Value_Type::NIL) {
         
-        Value value;
-        // For each ASTNode in the body of block of the for loop */
-        for(ASTNode* statement: forLoop.block()->body()) {  
-            // Accept each ASTNode
-            
-            // TODO: Implement operator overloading for Value= to do
-            // Value = statement->accept(*this);
-            // To keep track of returns
-            statement->accept(*this);
+        // Execute body and set return value
+        value = forLoop.block()->accept(*this);
 
-            if(statement->isReturn()) { break; }
-        }
-
-        // Then update
+        // Update value
         forLoop.update()->accept(*this);
     }
     return Value();

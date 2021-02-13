@@ -37,13 +37,14 @@ class ASTVisitor {
         Value visit(StringLiteral& stringLiteral);
         Value visit(ReturnStatement& returnStatement);
         Value visit(ForLoop& forLoop);
+        Value visit(Block& block);
 };
 
 /* ##################################################################################### */
 
 /* Used for arithmetic expressions */
 enum Operator {
-    ADD, SUBTRACT, MULTIPLY, DIVIDE,
+    ADD, SUBTRACT, MULTIPLY, DIVIDE, MOD,
     
     EQUALS, NOTEQUAL, AND, OR
 };
@@ -110,9 +111,9 @@ class BinaryExpression : public ASTNode {
             return visitor.visit(*this);
         };
 
-        ASTNode* getLhs()   { return this->m_lhs; }
-        ASTNode* getRhs()   { return this->m_rhs; }
-        Operator getOp()    { return this->m_op;  }
+        ASTNode* lhs()   { return this->m_lhs; }
+        ASTNode* rhs()   { return this->m_rhs; }
+        Operator op()    { return this->m_op;  }
 };
 
 /* Block class (Denotes beginning of new scope) */
@@ -121,6 +122,10 @@ class Block : ASTNode{
 
     public:
         Block(std::vector<ASTNode*> body) : m_body(body) {}
+
+        virtual Value accept(ASTVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
         std::vector<ASTNode*> body() { return this->m_body; }
 };
 
@@ -160,8 +165,9 @@ class ForLoop : public ASTNode {
             return visitor.visit(*this);
         };
 
-        ASTNode* test()    { return this->m_test;  }
-        ASTNode* update()  { return this->m_update;  }
-        Block* block()     { return this->m_block; }
+        ASTNode* test()    { return this->m_test;   }
+        ASTNode* init()    { return this->m_init;   }
+        ASTNode* update()  { return this->m_update; }
+        Block* block()     { return this->m_block;  }
 };
 /* ##################################################################################### */
