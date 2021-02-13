@@ -1,4 +1,5 @@
 #include "AST.h"
+#include "value.h"
 
 /* REFACTOR THIS TO ACCOMIDATE NUMBERS & STRINGS */
 Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
@@ -36,16 +37,31 @@ Value ASTVisitor::visit(StringLiteral& stringLiteral) {
     return Value(stringLiteral.value());
 }
 
-// Value visit(Chunk& chunk) {
-//     // this->context.makeGlobalContext();
-//     // this->context.destroyGlobalContext();
-//     // Return NIL value
-//     return Value();
-// }
+Value ASTVisitor::visit(ReturnStatement& returnStatement) {
+    return returnStatement.argument()->accept(*this);
+}
 
-// Value visit(Block& block) {
-//     // Return NIL value
-//     // this->context.pushLocalContext();
-//     // this->context.popLocalContext();
-//     return Value();
-// }
+Value ASTVisitor::visit(ForLoop& forLoop) {
+    // make new context
+    // run init with new context
+
+    while(forLoop.test()->accept(*this).asNumber() != 0) {
+        
+        Value value;
+        // For each ASTNode in the body of block of the for loop */
+        for(ASTNode* statement: forLoop.block()->body()) {  
+            // Accept each ASTNode
+            
+            // TODO: Implement operator overloading for Value= to do
+            // Value = statement->accept(*this);
+            // To keep track of returns
+            statement->accept(*this);
+
+            if(statement->isReturn()) { break; }
+        }
+
+        // Then update
+        forLoop.update()->accept(*this);
+    }
+    return Value();
+}
