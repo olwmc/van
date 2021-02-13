@@ -67,7 +67,6 @@ class ASTNode {
 
     protected:
         bool m_return = false;
-    
 };
 
 /* Number literal class */
@@ -104,15 +103,15 @@ class BinaryExpression : public ASTNode {
     Operator m_op;
     
     public:
-        BinaryExpression(ASTNode* l, ASTNode* r, Operator op)
+        BinaryExpression(ASTNode *l, ASTNode *r, Operator op)
             : m_lhs(l), m_rhs(r), m_op(op) {}
 
         virtual Value accept(ASTVisitor& visitor) override {
             return visitor.visit(*this);
         };
 
-        ASTNode* lhs()   { return this->m_lhs; }
-        ASTNode* rhs()   { return this->m_rhs; }
+        ASTNode *lhs()   { return this->m_lhs; }
+        ASTNode *rhs()   { return this->m_rhs; }
         Operator op()    { return this->m_op;  }
 };
 
@@ -155,19 +154,19 @@ class ForLoop : public ASTNode {
      *  * Is type: "Block", therefore only run the body of the block 
      */
     ASTNode *m_init, *m_update, *m_test;
-    Block* m_block;
+    Block *m_block;
 
     public:
-        ForLoop(ASTNode* init, ASTNode* update, ASTNode* test, Block* block)
+        ForLoop(ASTNode *init, ASTNode *update, ASTNode *test, Block* block)
             : m_init(init), m_update(update), m_test(test), m_block(block) {}
         
         virtual Value accept(ASTVisitor& visitor) override {
             return visitor.visit(*this);
         };
 
-        ASTNode* test()    { return this->m_test;   }
-        ASTNode* init()    { return this->m_init;   }
-        ASTNode* update()  { return this->m_update; }
+        ASTNode *test()    { return this->m_test;   }
+        ASTNode *init()    { return this->m_init;   }
+        ASTNode *update()  { return this->m_update; }
         Block* block()     { return this->m_block;  }
 };
 /* ##################################################################################### */
