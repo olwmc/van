@@ -8,7 +8,7 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     
     // Switch on op
     /* Do all typechecking beforehand, don't let operator overloading do any work */
-	/* Make special case for operator overloading of + for strings, doubles, and lists */
+    /* Make special case for operator overloading of + for strings, doubles, and lists */
     /* Report errors to ErrorHandler member of this */
     
     /*
@@ -17,9 +17,9 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     
     if(binaryExpression.getOp()
     if(lhs.type() != rhs.type() {
-        this->errorHandler().exception("Cannot perform this operation on two different types", 
-                                       binaryExpression.index(),
-                                       binaryExpression.lineNum());
+        this->errorHandler().raise("Cannot perform this operation on two different types", 
+                                    binaryExpression.index(),
+                                    binaryExpression.lineNum());
     }
     
     */
@@ -36,6 +36,7 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
         /* Logical operations */
         case Operator::EQUALS:      result = lhs == rhs; break;
         case Operator::NOTEQUAL:    result = lhs != rhs; break;
+        case Operator::LESSEQUAL:   result = lhs <= rhs; break;
         case Operator::AND:         result = lhs || rhs; break;
         case Operator::OR:          result = lhs && rhs; break;
     }
@@ -51,9 +52,9 @@ Value ASTVisitor::visit(StringLiteral& stringLiteral) {
     return Value(stringLiteral.value());
 }
 
-// Value ASTVisitor::visit(Identifier& identifier) {
-//     return this->context.resolve(identifier.name());
-// }
+Value ASTVisitor::visit(Identifier& identifier) {
+    return this->m_context->resolveVariable(identifier.name());
+}
 
 Value ASTVisitor::visit(ReturnStatement& returnStatement) {
     return returnStatement.argument()->accept(*this);
@@ -81,12 +82,12 @@ Value ASTVisitor::visit(ForLoop& forLoop) {
     // make new context
     // run init with new context
     // this->context.pushContext();
+    Value value;
 
     forLoop.init()->accept(*this);
-    
-    Value value;
+
     // While test != False (0)
-    while(forLoop.test()->accept(*this).asNumber() != false && value.type() == Value_Type::NIL) {
+    while(forLoop.test()->accept(*this).asNumber() != false) {
         
         // Execute body and set return value
         value = forLoop.block()->accept(*this);
