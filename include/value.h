@@ -23,9 +23,10 @@ class Value {
         /* Constructors */
         Value(double v)      : m_number(v) { this->m_type = Value_Type::NUMBER; }
         Value(std::string v) : m_string(v) { this->m_type = Value_Type::STRING; }
-        Value() { this->m_type = NIL; }
+        Value() : m_number(0) { this->m_type = NIL; }
         
         /* Return representations */
+        /* Possibly pass an error handler */
         double asNumber()           { return this->m_number; }
         std::string asString()      { return this->m_string; }
         Value_Type type()           { return this->m_type;   }
@@ -37,5 +38,5 @@ class Value {
         bool isConst() { return this->m_const; }
         
         // Value operator+(Value& other); <== If it's a string and * always concatentate
-        // Value operator-(Value& other);
+        // Value operator=(Value& other);
 };
