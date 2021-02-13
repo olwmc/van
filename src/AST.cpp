@@ -59,19 +59,17 @@ Value ASTVisitor::visit(Block& block) {
     Value value;
     for(ASTNode* statement: block.body()) {  
         // Accept each ASTNode
+        value = statement->accept(*this);
 
-        // TODO: Implement operator overloading for Value= to do
-        // Value = statement->accept(*this);
-        // To keep track of returns
-        statement->accept(*this);
-        // Check if statement is a return statement
-        // The reason why we check this, instead of just non-nil value
-        // is because things like n++; are statements but return values
-        // but are not terminal returns
-        if(statement->isReturn()) { break; }
+        /* Check if statement is a return statement
+         * The reason why we check this, instead of just non-nil value
+         * is because things like n++; are statements but return values
+         * but are not terminal returns */
+        if(statement->isReturn()) { return value; }
     }
 
-    return value;
+    // Return empty value
+    return Value();
 }
 
 
