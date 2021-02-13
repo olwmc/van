@@ -30,5 +30,5 @@ int main() {
     BinaryExpression expr_5(&expr_4, &num_5, Operator::AND);
     
     std::cout << "Expr_3: " << expr_3.accept(vis).asNumber() << "\n";
-    std::cout << expr_5.accept(vis).asBoolString() << "\n";
+    std::cout << expr_5.accept(vis).asNumber() << "\n";
 }

@@ -18,6 +18,8 @@
 class NumberLiteral;
 class StringLiteral;
 class BinaryExpression;
+class Chunk;
+class Block;
 
 /* ##################################################################################### */
 
@@ -32,6 +34,8 @@ class ASTVisitor {
         Value visit(NumberLiteral& numberLiteral);
         Value visit(BinaryExpression& binaryExpression);
         Value visit(StringLiteral& stringLiteral);
+        Value visit(Chunk& chunk);
+        Value visit(Block& block);
 };
 
 /* ##################################################################################### */
@@ -56,6 +60,30 @@ class ASTNode {
             this->m_index = index;
             this->m_lineNum = line;
         }
+};
+
+/* Chunk class (Denotes beginning of GLOBAL scope) */
+class Chunk : ASTNode{
+    std::vector<ASTNode*> m_body;
+
+    public:
+        Chunk(std::vector<ASTNode*> body) : m_body(body) {}
+        
+        virtual Value accept(ASTVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
+};
+
+/* Block class (Denotes beginning of LOCAL scope) */
+class Block : ASTNode{
+    std::vector<ASTNode*> m_body;
+
+    public:
+        Block(std::vector<ASTNode*> body) : m_body(body) {}
+        
+        virtual Value accept(ASTVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
 };
 
 /* Number literal class */

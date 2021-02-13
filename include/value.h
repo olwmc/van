@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 enum Value_Type {
     NUMBER, STRING, NIL
@@ -8,7 +9,7 @@ enum Value_Type {
 /* Value holder class */
 class Value {
     // Map : Dict
-    // Vector : List
+    std::vector<Value> m_list;
     double m_number;
     std::string m_string;
     
@@ -18,21 +19,16 @@ class Value {
         /* Constructors */
         Value(double v)      : m_number(v) { this->m_type = Value_Type::NUMBER; }
         Value(std::string v) : m_string(v) { this->m_type = Value_Type::STRING; }
-        
-        /* Default constructor is NIL */
         Value() { this->m_type = NIL; }
         
         /* Return representations */
         double asNumber()           { return this->m_number; }
         std::string asString()      { return this->m_string; }
         Value_Type type()           { return this->m_type;   }
-    
-        std::string asBoolString() {
-            if(this->m_number == 1) { return "True"; }
-            
-            return "False";
-        }
-    
-        // Value operator+(Value& other);
+	    
+		/* ToString as opposed to AsString. Used in casting.*/
+	    std::string toString(); 
+	
+        // Value operator+(Value& other); <== If it's a string and * always concatentate
         // Value operator-(Value& other);
 };

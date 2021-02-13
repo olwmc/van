@@ -4,8 +4,7 @@
 
 class Scope;
 class Context {
-    Scope globalScope;
-    Scope localScope;
+    Scope currentScope;
     Builtins builtins;
 }
 

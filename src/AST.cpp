@@ -35,3 +35,17 @@ Value ASTVisitor::visit(NumberLiteral& numberLiteral) {
 Value ASTVisitor::visit(StringLiteral& stringLiteral) {
     return Value(stringLiteral.value());
 }
+
+// Value visit(Chunk& chunk) {
+//     // this->context.makeGlobalContext();
+//     // this->context.destroyGlobalContext();
+//     // Return NIL value
+//     return Value();
+// }
+
+// Value visit(Block& block) {
+//     // Return NIL value
+//     // this->context.pushLocalContext();
+//     // this->context.popLocalContext();
+//     return Value();
+// }
