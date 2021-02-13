@@ -13,16 +13,16 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     
     switch(binaryExpression.getOp()) {
         /* Arithmetic operations */
-        case Operator::ADD:			result = lhs + rhs;		break;
-        case Operator::SUBTRACT:	result = lhs - rhs;		break;
-        case Operator::MULTIPLY:	result = lhs * rhs;		break;
-        case Operator::DIVIDE:		result = lhs / rhs;		break;
+        case Operator::ADD:         result = lhs + rhs;  break;
+        case Operator::SUBTRACT:    result = lhs - rhs;  break;
+        case Operator::MULTIPLY:    result = lhs * rhs;  break;
+        case Operator::DIVIDE:      result = lhs / rhs;  break;
             
         /* Logical operations */
-        case Operator::EQUALS:		result = lhs == rhs;	break;
-        case Operator::NOTEQUAL:	result = lhs != rhs;	break;
-        case Operator::AND:			result = lhs || rhs;	break;
-        case Operator::OR:			result = lhs && rhs;	break;
+        case Operator::EQUALS:      result = lhs == rhs; break;
+        case Operator::NOTEQUAL:    result = lhs != rhs; break;
+        case Operator::AND:         result = lhs || rhs; break;
+        case Operator::OR:          result = lhs && rhs; break;
     }
 
     return Value(result);

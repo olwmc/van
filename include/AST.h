@@ -50,8 +50,8 @@ class ASTNode {
     public:
         virtual Value accept(ASTVisitor& visitor) = 0;
 
-        int index()		{ return this->m_index; }
-        int lineNum()	{ return this->m_lineNum; }
+        int index()     { return this->m_index; }
+        int lineNum()   { return this->m_lineNum; }
         void setIndexAndLine(int index, int line) {
             this->m_index = index;
             this->m_lineNum = line;
@@ -99,9 +99,9 @@ class BinaryExpression : public ASTNode {
             return visitor.visit(*this);
         };
 
-        ASTNode* getLhs()	{ return this->m_lhs; }
-        ASTNode* getRhs()	{ return this->m_rhs; }
-        Operator getOp()	{ return this->m_op;  }
+        ASTNode* getLhs()   { return this->m_lhs; }
+        ASTNode* getRhs()   { return this->m_rhs; }
+        Operator getOp()    { return this->m_op;  }
 };
 
 /* ##################################################################################### */

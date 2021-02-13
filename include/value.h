@@ -16,16 +16,16 @@ class Value {
 
     public:
         /* Constructors */
-        Value(double v) 		: m_number(v) { this->m_type = Value_Type::NUMBER; }
-        Value(std::string v) 	: m_string(v) { this->m_type = Value_Type::STRING; }
+        Value(double v)      : m_number(v) { this->m_type = Value_Type::NUMBER; }
+        Value(std::string v) : m_string(v) { this->m_type = Value_Type::STRING; }
         
         /* Default constructor is NIL */
-        Value()	{ this->m_type = NIL; }
+        Value() { this->m_type = NIL; }
         
         /* Return representations */
-        double asNumber() 			{ return this->m_number; }
-        std::string asString()  	{ return this->m_string; }
-        Value_Type type()			{ return this->m_type;   }
+        double asNumber()           { return this->m_number; }
+        std::string asString()      { return this->m_string; }
+        Value_Type type()           { return this->m_type;   }
     
         std::string asBoolString() {
             if(this->m_number == 1) { return "True"; }
