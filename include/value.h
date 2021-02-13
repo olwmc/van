@@ -3,7 +3,7 @@
 #include <vector>
 
 enum Value_Type {
-    NUMBER, STRING, NIL
+    NUMBER, STRING, LIST, TABLE, BOOL, NIL
 };
 
 /* Value holder class */
@@ -13,7 +13,11 @@ class Value {
     double m_number;
     std::string m_string;
     
+    // Value type
     Value_Type m_type;
+
+    // Const specifier
+    bool m_const;
 
     public:
         /* Constructors */
@@ -28,7 +32,10 @@ class Value {
 	    
 		/* ToString as opposed to AsString. Used in casting.*/
 	    std::string toString(); 
-	
+        
+        /* Check const state */
+        bool isConst() { return this->m_const; }
+        
         // Value operator+(Value& other); <== If it's a string and * always concatentate
         // Value operator-(Value& other);
 };
