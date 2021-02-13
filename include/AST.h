@@ -13,26 +13,21 @@
 #include <string>
 #include <vector>
 
-#include "value.h"
+#include "forward.h"
 
-class NumberLiteral;
-class StringLiteral;
-class BinaryExpression;
-class Block;
-class ForLoop;
-class ReturnStatement;
-class Identifier;
+#include "value.h"
+#include "context.h"
 
 /* ##################################################################################### */
 
 /* AST Visitor "executes" each node */
 class ASTVisitor {
-    std::string m_context;
+    Context* m_context;
     // error handler
     // Actual context
 
     public:
-        ASTVisitor(std::string c) : m_context(c) {}
+        ASTVisitor(Context* c) : m_context(c) {}
         Value visit(NumberLiteral& numberLiteral);
         Value visit(BinaryExpression& binaryExpression);
         Value visit(StringLiteral& stringLiteral);
@@ -47,8 +42,7 @@ class ASTVisitor {
 /* Used for arithmetic expressions */
 enum Operator {
     ADD, SUBTRACT, MULTIPLY, DIVIDE, MOD,
-    
-    EQUALS, NOTEQUAL, AND, OR
+    EQUALS, LESSEQUAL, NOTEQUAL, AND, OR
 };
 
 /* AST Node abstract class */
