@@ -1,22 +1,37 @@
 #include "AST.h"
+#include "context.h"
 
 int main() {
-    ASTVisitor vis("Context-Goes-Here");
 
-    // 1.253, 3.687
-    NumberLiteral num_1(1.253);
-    NumberLiteral num_2(3.687);
+    // Create a new context and push a local scope
+    Context context;
+    context.pushScope();
 
-    // 1.253 * 3.687
-    BinaryExpression expr_1(&num_1, &num_2, Operator::MULTIPLY);
-
-    // return (1.253 * 3.687)
-    ReturnStatement ret_1(&expr_1);
+    // Give the scope to the visitor
+    ASTVisitor vis(&context);
     
-    std::vector<ASTNode*> body;
-    body.push_back(&ret_1);
+    // Add a new local variable to the context
+    context.addLocalVariable("Beans", Value("Heyooo"));
 
-    Block block_1(body);
+    // "return Beans"
+    Identifier b_beans("Beans");
+    ReturnStatement ret_1(&b_beans);
 
-    std::cout << block_1.accept(vis).asNumber() << "\n";
+    // Visit the return statement and resolve the argument
+    std::cout << ret_1.accept(vis).asString() << "\n";
+
+    // Pop scope
+    context.popScope();
 }
+
+/*
+local n = 5;
+
+for(global i = 1; i <= n; i++) do 
+    i = i * n;
+end
+
+return i;
+*/
+
+// Maybe pass an InfoHandler class or something to hold the ast, program, etc.
