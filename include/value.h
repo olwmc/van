@@ -3,12 +3,12 @@
 #include <vector>
 
 enum Value_Type {
-    NUMBER, STRING, LIST, TABLE, BOOL, NIL
+    NUMBER, STRING, LIST, TABLE, NIL
 };
 
 /* Value holder class */
 class Value {
-    // Map : Dict
+    // We also need a table (map)
     std::vector<Value> m_list;
     double m_number;
     std::string m_string;
@@ -26,7 +26,6 @@ class Value {
         Value() : m_number(0) { this->m_type = NIL; }
         
         /* Return representations */
-        /* Possibly pass an error handler */
         double asNumber()           { return this->m_number; }
         std::string asString()      { return this->m_string; }
         Value_Type type()           { return this->m_type;   }

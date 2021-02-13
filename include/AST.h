@@ -24,7 +24,6 @@
 class ASTVisitor {
     Context* m_context;
     // error handler
-    // Actual context
 
     public:
         ASTVisitor(Context* c) : m_context(c) {}
@@ -54,8 +53,13 @@ class ASTNode {
 
         int index()     { return this->m_index;   }
         int lineNum()   { return this->m_lineNum; }
+
+        // String comparisons are costly, this is a simple way
+        // of checking if the node is a return w/o having a type
+        // string nor clogging up with type enums
         bool isReturn() { return this->m_return;  }
         
+        // Index and line number for original token
         void setIndexAndLine(int index, int line) {
             this->m_index = index;
             this->m_lineNum = line;
@@ -99,6 +103,7 @@ class Identifier : public ASTNode {
 
     public:
         Identifier(std::string name) : m_name(name) {}
+        
         virtual Value accept(ASTVisitor& visitor) override {
             return visitor.visit(*this);
         }
@@ -126,6 +131,9 @@ class BinaryExpression : public ASTNode {
 
 /* Block class (Denotes beginning of new scope) */
 class Block : ASTNode{
+    // Maybe refactor this later to an array to decrease
+    // memory usage. It doesn't really need to be a vector
+    // since it's not mutated
     std::vector<ASTNode*> m_body;
 
     public:
@@ -143,7 +151,7 @@ class ReturnStatement: public ASTNode {
 
     public:
         ReturnStatement(ASTNode *argument) : m_argument(argument) {
-            // Set return bool
+            // Set is_return_statement flag
             m_return = true;
         }
 

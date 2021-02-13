@@ -1,6 +1,7 @@
 #include "AST.h"
 #include "value.h"
 
+// TODO: Redo this
 Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     double lhs = binaryExpression.lhs()->accept(*this).asNumber();
     double rhs = binaryExpression.rhs()->accept(*this).asNumber();
@@ -9,14 +10,15 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     // Switch on op
     /* Do all typechecking beforehand, don't let operator overloading do any work */
     /* Make special case for operator overloading of + for strings, doubles, and lists */
-    /* Report errors to ErrorHandler member of this */
+    /* Report errors to ErrorHandler */
     
     /*
     Value lhs = binaryExpression.getLhs()->accept(*this);
     Value rhs = binaryExpression.getRhs()->accept(*this);
     
-    if(binaryExpression.getOp()
-    if(lhs.type() != rhs.type() {
+    // Exhaust all options
+
+    if(lhs.type() != rhs.type()) {
         this->errorHandler().raise("Cannot perform this operation on two different types", 
                                     binaryExpression.index(),
                                     binaryExpression.lineNum());
@@ -44,24 +46,33 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     return Value(result);
 }
 
+// Return the literal representation of the Number
 Value ASTVisitor::visit(NumberLiteral& numberLiteral) {
     return Value(numberLiteral.value());
 }
 
+// Return the literal representation of th String
 Value ASTVisitor::visit(StringLiteral& stringLiteral) {
     return Value(stringLiteral.value());
 }
 
+// Resolve the identifier and return the result
 Value ASTVisitor::visit(Identifier& identifier) {
     return this->m_context->resolveVariable(identifier.name());
 }
 
+// Return the expressed argument
 Value ASTVisitor::visit(ReturnStatement& returnStatement) {
     return returnStatement.argument()->accept(*this);
 }
 
 Value ASTVisitor::visit(Block& block) {
+    // When evaluating a block, pushing context beforehand is 
+    // necessary to conserve the logic of loops and other things.
+    // This is why context is not pushed *within* the block but
+    // before and afterwards popped
     Value value;
+
     for(ASTNode* statement: block.body()) {  
         // Accept each ASTNode
         value = statement->accept(*this);
@@ -79,10 +90,10 @@ Value ASTVisitor::visit(Block& block) {
 
 
 Value ASTVisitor::visit(ForLoop& forLoop) {
-    // make new context
-    // run init with new context
-    // this->context.pushContext();
     Value value;
+
+    // Push a new scope and initialize init within it
+    this->m_context->pushScope();
 
     forLoop.init()->accept(*this);
 
@@ -95,5 +106,10 @@ Value ASTVisitor::visit(ForLoop& forLoop) {
         // Update value
         forLoop.update()->accept(*this);
     }
+
+    // The reason this returns something is you may have
+    // a return somewhere conditionally within the loop,
+    // therefore it's necessary to return from it even if
+    // syntactically you never return from a loop
     return Value();
 }
