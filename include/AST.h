@@ -18,8 +18,9 @@
 class NumberLiteral;
 class StringLiteral;
 class BinaryExpression;
-class Chunk;
 class Block;
+class ForLoop;
+class ReturnStatement;
 
 /* ##################################################################################### */
 
@@ -34,8 +35,8 @@ class ASTVisitor {
         Value visit(NumberLiteral& numberLiteral);
         Value visit(BinaryExpression& binaryExpression);
         Value visit(StringLiteral& stringLiteral);
-        Value visit(Chunk& chunk);
-        Value visit(Block& block);
+        Value visit(ReturnStatement& returnStatement);
+        Value visit(ForLoop& forLoop);
 };
 
 /* ##################################################################################### */
@@ -50,40 +51,22 @@ enum Operator {
 /* AST Node abstract class */
 class ASTNode {
     int m_index, m_lineNum;
-
+    
     public:
         virtual Value accept(ASTVisitor& visitor) = 0;
 
-        int index()     { return this->m_index; }
+        int index()     { return this->m_index;   }
         int lineNum()   { return this->m_lineNum; }
+        bool isReturn() { return this->m_return;  }
+        
         void setIndexAndLine(int index, int line) {
             this->m_index = index;
             this->m_lineNum = line;
         }
-};
 
-/* Chunk class (Denotes beginning of GLOBAL scope) */
-class Chunk : ASTNode{
-    std::vector<ASTNode*> m_body;
-
-    public:
-        Chunk(std::vector<ASTNode*> body) : m_body(body) {}
-        
-        virtual Value accept(ASTVisitor& visitor) override {
-            return visitor.visit(*this);
-        };
-};
-
-/* Block class (Denotes beginning of LOCAL scope) */
-class Block : ASTNode{
-    std::vector<ASTNode*> m_body;
-
-    public:
-        Block(std::vector<ASTNode*> body) : m_body(body) {}
-        
-        virtual Value accept(ASTVisitor& visitor) override {
-            return visitor.visit(*this);
-        };
+    protected:
+        bool m_return = false;
+    
 };
 
 /* Number literal class */
@@ -116,7 +99,7 @@ class StringLiteral : public ASTNode {
 
 /* BinaryExpression class */
 class BinaryExpression : public ASTNode {
-    ASTNode* m_lhs, *m_rhs;
+    ASTNode *m_lhs, *m_rhs;
     Operator m_op;
     
     public:
@@ -132,4 +115,53 @@ class BinaryExpression : public ASTNode {
         Operator getOp()    { return this->m_op;  }
 };
 
+/* Block class (Denotes beginning of new scope) */
+class Block : ASTNode{
+    std::vector<ASTNode*> m_body;
+
+    public:
+        Block(std::vector<ASTNode*> body) : m_body(body) {}
+        std::vector<ASTNode*> body() { return this->m_body; }
+};
+
+
+class ReturnStatement: public ASTNode {
+    ASTNode *m_argument;
+
+    public:
+        ReturnStatement(ASTNode *argument) : m_argument(argument) {
+            // Set return bool
+            m_return = true;
+        }
+
+        virtual Value accept(ASTVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
+
+        ASTNode *argument() { return this->m_argument; }
+};
+
+
+class ForLoop : public ASTNode {
+    /* Initializer (local i = 0)
+     * Update (i++)
+     * Test (i < n)
+     * Block (Statements in body)
+     *  * Is type: "Block", therefore only run the body of the block 
+     */
+    ASTNode *m_init, *m_update, *m_test;
+    Block* m_block;
+
+    public:
+        ForLoop(ASTNode* init, ASTNode* update, ASTNode* test, Block* block)
+            : m_init(init), m_update(update), m_test(test), m_block(block) {}
+        
+        virtual Value accept(ASTVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
+
+        ASTNode* test()    { return this->m_test;  }
+        ASTNode* update()  { return this->m_update;  }
+        Block* block()     { return this->m_block; }
+};
 /* ##################################################################################### */
