@@ -17,8 +17,7 @@ variableDeclaration ::= 'local' identifier '=' expr |
 
 variableAssignment ::= identifier '=' expr
 
-functionDeclaration ::= 'gen' identifer arglist 'is' block 'end' |
-'nil' identifier 'is' block 'end'
+functionDeclaration ::= 'defun' identifer arglist 'is' block 'end'
 
 functionCall ::= identifier arglist
 
