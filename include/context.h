@@ -59,17 +59,15 @@ class Context {
 
         void addLocalVariable(std::string name, Value v);
         void addGlobalVariable(std::string name, Value v);
+        void addFunction(std::string name, std::vector<std::string> args, ASTNode* body);
 
         // Resolves a variable name to its associated Value
         Value resolveVariable(std::string name);
-
-        void addFunction(std::string name, ASTNode* body);
 
         // ResolveFunction passes an ASTNode* to our visitor
         Callable* resolveFunction(std::string name);
 
         void pushScope()     {
-            // TODO: Copy over previous scope to new one
             this->m_callStack.push(Scope());
         }
 
