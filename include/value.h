@@ -5,7 +5,11 @@
 #include <vector>
 
 enum Value_Type {
-    NUMBER, STRING, LIST, TABLE, NIL
+    // Basic types
+    NUMBER, STRING, LIST, TABLE, NIL,
+
+    // Error type used for checking
+    ERR
 };
 
 /* Value holder class */
@@ -25,8 +29,14 @@ class Value {
         /* Constructors */
         Value(double v)      : m_number(v) { this->m_type = Value_Type::NUMBER; }
         Value(std::string v) : m_string(v) { this->m_type = Value_Type::STRING; }
-        Value() : m_number(0) { this->m_type = NIL; }
+        Value(Value_Type v)  : m_type(v) {};
+        Value() { this->m_type = NIL; }
         
+        /* Value setters */
+        void setValue(double val);
+        void setValue(std::string val);
+        void setValue(Value val);
+
         /* Return representations */
         double asNumber()           { return this->m_number; }
         std::string asString()      { return this->m_string; }
