@@ -27,6 +27,7 @@ Function:
 
 #include <unordered_map>
 #include <stack>
+#include <utility>
 
 #include "forward.h"
 #include "AST.h"
@@ -37,15 +38,17 @@ Function:
 typedef std::unordered_map<std::string, Value> Scope;
 
 class Context {
-    Scope globalScope;
-    std::stack<Scope> callStack;
+    Scope m_globalScope;
+    std::stack<Scope> m_callStack;
 
     // Holds functions and buitins
-    std::unordered_map<std::string, Callable*> functions;
+    std::unordered_map<std::string, Callable*> m_functions;
 
     public:
         // Add builtins
-        Context() {}
+        Context() {
+             this->m_functions.insert( {"print", new builtin_Print()} );
+        }
         ~Context() {}
 
         void addLocalVariable(std::string name, Value v);
@@ -57,14 +60,14 @@ class Context {
         void addFunction(std::string name, ASTNode* body);
 
         // ResolveFunction passes an ASTNode* to our visitor
-        Value resolveFunction(std::string name, Value args[]);
+        Callable* resolveFunction(std::string name);
 
         void pushScope()     {
             // TODO: Copy over previous scope to new one
-            this->callStack.push(Scope());
+            this->m_callStack.push(Scope());
         }
 
-        void popScope()    { this->callStack.pop(); };
+        void popScope()    { this->m_callStack.pop(); };
 };
 
 #endif /* CONTEXT_H */
