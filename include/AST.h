@@ -27,25 +27,14 @@ enum Operator {
 };
 
 /* AST Node abstract class */
-class ASTNode {
-    int m_index, m_lineNum;
-    
+class ASTNode {    
     public:
         virtual Value accept(ASTVisitor& visitor) = 0;
-
-        int index()     { return this->m_index;   }
-        int lineNum()   { return this->m_lineNum; }
 
         // String comparisons are costly, this is a simple way
         // of checking if the node is a return w/o having a type
         // string nor clogging up with type enums
         bool isReturn() { return this->m_return;  }
-        
-        // Index and line number for original token
-        void setIndexAndLine(int index, int line) {
-            this->m_index = index;
-            this->m_lineNum = line;
-        }
 
     protected:
         bool m_return = false;
@@ -99,8 +88,8 @@ class BinaryExpression : public ASTNode {
     Operator m_op;
     
     public:
-        BinaryExpression(ASTNode *l, ASTNode *r, Operator op)
-            : m_lhs(l), m_rhs(r), m_op(op) {}
+        BinaryExpression(ASTNode *lhs, ASTNode *rhs, Operator op)
+            : m_lhs(lhs), m_rhs(rhs), m_op(op) {}
 
         virtual Value accept(ASTVisitor& visitor) override {
             return visitor.visit(*this);
