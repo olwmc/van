@@ -19,15 +19,17 @@ class Callable {
 /* User Function class */
 class UserFunction : Callable {
   std::vector<std::string> m_args;
-  std::vector<ASTNode *> m_body;
+  Block * m_body;
 
   public:
-    UserFunction(std::vector<std::string> args, std::vector<ASTNode *> body)
+    UserFunction(std::vector<std::string> args, Block * body)
       : m_args(args), m_body(body) {}
 
     virtual Value accept(ASTVisitor& visitor) override {
       return visitor.visit(*this);
     }
+
+    Block* body() { return this->m_body; }
 };
 
 /* Builtin print statement class */
