@@ -158,4 +158,20 @@ class ForLoop : public ASTNode {
         Block* block()     { return this->m_block;  }
 };
 
+class FunctionCall : public ASTNode {
+    std::string m_callee;
+    std::vector<ASTNode*> m_args;
+
+    public:
+        FunctionCall(std::string callee, std::vector<ASTNode*> args)
+            : m_callee(callee), m_args(args) {}
+
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
+
+        std::string callee() { return this->m_callee; }
+        std::vector<ASTNode*> args()   { return this->m_args; }
+};
+
 #endif /* AST_H */
