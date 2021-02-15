@@ -11,35 +11,21 @@ int main() {
     ASTVisitor vis(&context);
     
     // Add a new local variable to the context
-    context.addLocalVariable("Beans", Value("Heyooo"));
+    // local x = 35;
+    context.addLocalVariable("x", Value(35));
 
-    // "return Beans"
-    Identifier b_beans("Beans");
-    ReturnStatement ret_1(&b_beans);
+    // x, 100
+    Identifier id_x("x");
+    NumberLiteral num_1(100);
 
-    // Visit the return statement and resolve the argument
-    std::cout << ret_1.accept(vis).asString() << "\n";
+    // x + 100
+    BinaryExpression bin_1(&id_x, &num_1, Operator::ADD);
 
-    // Pop scope
-    context.popScope();
+    // 135
+    std::cout << bin_1.accept(vis).asNumber() << "\n";
 
-    /* For a for loop we need
-       VariableAsignment i = i + 1
-                         i = i * n
+    context.addLocalVariable("__input__", Value("Hello! My name is myVar!"));
 
-        Block
-        ForLoop
-
-    */
+    /* Simulate function call */
+    builtin_Print().accept(vis);
 }
-
-/*
-local n = 5;
-local i;
-
-for(i = 0; i <= n; i = i + 1) do 
-    i = i * n;
-end
-
-return i;
-*/
