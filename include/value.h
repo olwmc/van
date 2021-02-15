@@ -35,7 +35,4 @@ class Value {
         
         /* Check const state */
         bool isConst() { return this->m_const; }
-        
-        // Value operator+(Value& other); <== If it's a string and * always concatentate
-        // Value operator=(Value& other);
 };

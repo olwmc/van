@@ -45,6 +45,6 @@ class Context {
             // TODO: Copy over previous scope to new one
             this->callStack.push(Scope());
         }
-        
+
         void popScope()    { this->callStack.pop(); };
 };

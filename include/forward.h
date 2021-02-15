@@ -1,3 +1,5 @@
+class Token;
+
 class ASTNode;
 
 class NumberLiteral;

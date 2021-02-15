@@ -22,16 +22,24 @@ int main() {
 
     // Pop scope
     context.popScope();
+
+    /* For a for loop we need
+       VariableAsignment i = i + 1
+                         i = i * n
+
+        Block
+        ForLoop
+
+    */
 }
 
 /*
 local n = 5;
+local i;
 
-for(global i = 1; i <= n; i++) do 
+for(i = 0; i <= n; i = i + 1) do 
     i = i * n;
 end
 
 return i;
 */
-
-// Maybe pass an InfoHandler class or something to hold the ast, program, etc.

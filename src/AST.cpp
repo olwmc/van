@@ -25,6 +25,7 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     }
     
     */
+
     switch(binaryExpression.op()) {
         /* Arithmetic operations */
         case Operator::ADD:         result = lhs + rhs;  break;

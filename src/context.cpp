@@ -26,3 +26,8 @@ Value Context::resolveVariable(std::string name) {
 
     return Value();
 }
+
+/*
+	Check if in map \/
+	mymap.count(x)<1
+*/
