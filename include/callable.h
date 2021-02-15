@@ -46,4 +46,17 @@ class builtin_Print : public Callable {
     std::vector<std::string> args() { return this->m_args; }    
 };
 
+class builtin_Assert: public Callable {
+  std::vector<std::string> m_args = {"__assert_condition__"};
+  
+  public:
+    builtin_Assert() {}
+
+    virtual Value accept(ASTVisitor& visitor) override {
+      return visitor.visit(*this);
+    }
+
+    std::vector<std::string> args() { return this->m_args; }
+};
+
 #endif /* CALLABLE_H */

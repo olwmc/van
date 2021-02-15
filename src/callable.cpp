@@ -3,6 +3,7 @@
 #include "visitor.h"
 #include "context.h"
 #include "callable.h"
+#include "err.h"
 
 #include <iostream>
 
@@ -23,4 +24,18 @@ Value ASTVisitor::visit(builtin_Print& printStatment) {
 
   // Return NIL
   return Value();
+}
+
+Value ASTVisitor::visit(builtin_Assert& assertStatement) {
+  // Assert that the value is true
+  Value condition = this->m_context->resolveVariable(assertStatement.args()[0]);
+
+  if(condition.type() == Value_Type::NUMBER && condition.asNumber() == 1) {
+    return Value();
+  }
+
+  else {
+    raiseError("FAILED TO ASSERT");
+    exit(1);
+  }
 }
