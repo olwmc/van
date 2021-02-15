@@ -19,6 +19,7 @@ any evaluation or checking or anything.
 #include "forward.h"
 #include "AST.h"
 #include "value.h"
+#include "callable.h"
 
 typedef std::unordered_map<std::string, Value> Scope;
 
