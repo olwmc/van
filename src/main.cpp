@@ -12,17 +12,25 @@ int main() {
     
     // Add a new local variable to the context
     // local x = 35;
-    context.addLocalVariable("x", Value(35));
+    context.addLocalVariable("x", Value(100));
 
     // x, 100
     Identifier id_x("x");
-    NumberLiteral num_1(100);
+    NumberLiteral num_1(101);
 
     // x + 100
     BinaryExpression bin_1(&id_x, &num_1, Operator::ADD);
 
-    // 135
-    std::cout << bin_1.accept(vis).asNumber() << "\n";
+    // x == 100
+    BinaryExpression bin_2(&id_x, &num_1, Operator::EQUALS);
+
+    double are_equal = bin_2.accept(vis).asNumber();
+
+    // __assert_condition__ = (x==101);
+    context.addLocalVariable("__assert_condition__", Value(are_equal));
+
+    // Fails and exits
+    builtin_Assert().accept(vis);
 
     context.addLocalVariable("__input__", Value("Hello! My name is myVar!"));
 
