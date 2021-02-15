@@ -8,7 +8,7 @@ int main() {
     context.pushScope();
 
     // Give the scope to the visitor
-    ASTVisitor vis(&context);
+    ProgramVisitor vis(&context);
     
     // Add a new local variable to the context
     // local x = 35;

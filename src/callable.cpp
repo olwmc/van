@@ -8,14 +8,14 @@
 #include <iostream>
 
 /* User defined function */
-Value ASTVisitor::visit(UserFunction& userFunction) {
+Value ProgramVisitor::visit(UserFunction& userFunction) {
   Value v = userFunction.body()->accept(*this);
   return v;
 }
 
 
 /* Builtin print statement */
-Value ASTVisitor::visit(builtin_Print& printStatment) {
+Value ProgramVisitor::visit(builtin_Print& printStatment) {
   // Get the input from context
   // Using "printStatement.args()" instead of __input__ to make this more
   // maintainable
@@ -29,7 +29,7 @@ Value ASTVisitor::visit(builtin_Print& printStatment) {
 }
 
 /* Builtin assert statement */
-Value ASTVisitor::visit(builtin_Assert& assertStatement) {
+Value ProgramVisitor::visit(builtin_Assert& assertStatement) {
   // Assert that the value is true
   Value condition = this->m_context->resolveVariable(assertStatement.args()[0]);
 

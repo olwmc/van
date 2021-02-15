@@ -29,7 +29,7 @@ enum Operator {
 /* AST Node abstract class */
 class ASTNode {    
     public:
-        virtual Value accept(ASTVisitor& visitor) = 0;
+        virtual Value accept(ProgramVisitor& visitor) = 0;
 
         // String comparisons are costly, this is a simple way
         // of checking if the node is a return w/o having a type
@@ -47,7 +47,7 @@ class NumberLiteral : public ASTNode {
     public:
         NumberLiteral(double val) : m_value(val) {}
     
-        virtual Value accept(ASTVisitor& visitor) override {
+        virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
 
@@ -61,7 +61,7 @@ class StringLiteral : public ASTNode {
     public:
         StringLiteral(std::string val) : m_value(val) {}
 
-        virtual Value accept(ASTVisitor& visitor) override {
+        virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         }
 
@@ -75,7 +75,7 @@ class Identifier : public ASTNode {
     public:
         Identifier(std::string name) : m_name(name) {}
         
-        virtual Value accept(ASTVisitor& visitor) override {
+        virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         }
 
@@ -91,7 +91,7 @@ class BinaryExpression : public ASTNode {
         BinaryExpression(ASTNode *lhs, ASTNode *rhs, Operator op)
             : m_lhs(lhs), m_rhs(rhs), m_op(op) {}
 
-        virtual Value accept(ASTVisitor& visitor) override {
+        virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
 
@@ -110,7 +110,7 @@ class Block : ASTNode{
     public:
         Block(std::vector<ASTNode*> body) : m_body(body) {}
 
-        virtual Value accept(ASTVisitor& visitor) override {
+        virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
         std::vector<ASTNode*> body() { return this->m_body; }
@@ -126,7 +126,7 @@ class ReturnStatement: public ASTNode {
             m_return = true;
         }
 
-        virtual Value accept(ASTVisitor& visitor) override {
+        virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
 
@@ -148,7 +148,7 @@ class ForLoop : public ASTNode {
         ForLoop(ASTNode *init, ASTNode *update, ASTNode *test, Block* block)
             : m_init(init), m_update(update), m_test(test), m_block(block) {}
         
-        virtual Value accept(ASTVisitor& visitor) override {
+        virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
 

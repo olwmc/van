@@ -2,7 +2,7 @@
 #include "value.h"
 
 // TODO: Redo this
-Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
+Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     double lhs = binaryExpression.lhs()->accept(*this).asNumber();
     double rhs = binaryExpression.rhs()->accept(*this).asNumber();
     double result = 0;
@@ -36,26 +36,26 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
 }
 
 // Return the literal representation of the Number
-Value ASTVisitor::visit(NumberLiteral& numberLiteral) {
+Value ProgramVisitor::visit(NumberLiteral& numberLiteral) {
     return Value(numberLiteral.value());
 }
 
 // Return the literal representation of th String
-Value ASTVisitor::visit(StringLiteral& stringLiteral) {
+Value ProgramVisitor::visit(StringLiteral& stringLiteral) {
     return Value(stringLiteral.value());
 }
 
 // Resolve the identifier and return the result
-Value ASTVisitor::visit(Identifier& identifier) {
+Value ProgramVisitor::visit(Identifier& identifier) {
     return this->m_context->resolveVariable(identifier.name());
 }
 
 // Return the expressed argument
-Value ASTVisitor::visit(ReturnStatement& returnStatement) {
+Value ProgramVisitor::visit(ReturnStatement& returnStatement) {
     return returnStatement.argument()->accept(*this);
 }
 
-Value ASTVisitor::visit(Block& block) {
+Value ProgramVisitor::visit(Block& block) {
     // When evaluating a block, pushing context beforehand is 
     // necessary to conserve the logic of loops and other things.
     // This is why context is not pushed *within* the block but
@@ -78,7 +78,7 @@ Value ASTVisitor::visit(Block& block) {
 }
 
 
-Value ASTVisitor::visit(ForLoop& forLoop) {
+Value ProgramVisitor::visit(ForLoop& forLoop) {
     Value value;
 
     // Push a new scope and initialize init within it

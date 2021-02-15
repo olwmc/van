@@ -5,11 +5,11 @@
 #include "value.h"
 
 /* AST Visitor "executes" each node */
-class ASTVisitor {
+class ProgramVisitor {
     Context* m_context;
 
     public:
-        ASTVisitor(Context* c) : m_context(c) {}
+        ProgramVisitor(Context* c) : m_context(c) {}
         Value visit(NumberLiteral& numberLiteral);
         Value visit(StringLiteral& stringLiteral);
         Value visit(Identifier& identifier);
@@ -21,6 +21,7 @@ class ASTVisitor {
 
         Value visit(builtin_Print& printStatment);
         Value visit(UserFunction& userFunction);
+        Value visit(builtin_Assert& assertStatement);
 };
 
 #endif /* VISITOR_H */

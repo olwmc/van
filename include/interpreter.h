@@ -5,7 +5,7 @@ Going to need a static variable AST to reference
 
 class Interpreter {
     Parser* parser;
-    ASTVisitor* vis;
+    ProgramVisitor* vis;
     
     public:
         // The case for a static variable here is simply that the AST and the program
@@ -14,6 +14,6 @@ class Interpreter {
         static ASTNode* ast;
         static std::string program;
 
-        Interpreter(Parser* parser, ASTVisitor* vis);
+        Interpreter(Parser* parser, ProgramVisitor* vis);
 }
 */

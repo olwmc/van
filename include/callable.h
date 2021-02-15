@@ -13,7 +13,7 @@ class Callable {
   public:
     Callable() {}
 
-    virtual Value accept(ASTVisitor& visitor) = 0;
+    virtual Value accept(ProgramVisitor& visitor) = 0;
 };
 
 /* User Function class */
@@ -25,7 +25,7 @@ class UserFunction : Callable {
     UserFunction(std::vector<std::string> args, Block * body)
       : m_args(args), m_body(body) {}
 
-    virtual Value accept(ASTVisitor& visitor) override {
+    virtual Value accept(ProgramVisitor& visitor) override {
       return visitor.visit(*this);
     }
 
@@ -39,7 +39,7 @@ class builtin_Print : public Callable {
   public:
     builtin_Print() {}
 
-    virtual Value accept(ASTVisitor& visitor) override {
+    virtual Value accept(ProgramVisitor& visitor) override {
       return visitor.visit(*this);
     }
 
@@ -52,7 +52,7 @@ class builtin_Assert: public Callable {
   public:
     builtin_Assert() {}
 
-    virtual Value accept(ASTVisitor& visitor) override {
+    virtual Value accept(ProgramVisitor& visitor) override {
       return visitor.visit(*this);
     }
 
