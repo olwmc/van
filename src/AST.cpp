@@ -7,23 +7,11 @@ Value ASTVisitor::visit(BinaryExpression& binaryExpression) {
     double rhs = binaryExpression.rhs()->accept(*this).asNumber();
     double result = 0;
     
-    // Switch on op
-    /* Do all typechecking beforehand, don't let operator overloading do any work */
-    /* Make special case for operator overloading of + for strings, doubles, and lists */
-    /* Report errors to ErrorHandler */
-    
     /*
     Value lhs = binaryExpression.getLhs()->accept(*this);
     Value rhs = binaryExpression.getRhs()->accept(*this);
     
-    // Exhaust all options
-
-    if(lhs.type() != rhs.type()) {
-        this->errorHandler().raise("Cannot perform this operation on two different types", 
-                                    binaryExpression.index(),
-                                    binaryExpression.lineNum());
-    }
-    
+    Do operation then check if type() == Value_Type::ERROR. If so, report error
     */
 
     switch(binaryExpression.op()) {
@@ -110,7 +98,6 @@ Value ASTVisitor::visit(ForLoop& forLoop) {
 
     // The reason this returns something is you may have
     // a return somewhere conditionally within the loop,
-    // therefore it's necessary to return from it even if
-    // syntactically you never return from a loop
-    return Value();
+    // therefore it's necessary to return from it.
+    return value;
 }
