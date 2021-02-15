@@ -1,4 +1,4 @@
-gen fib(n) ::
+gen fib(n) is
   local a = 0;
   local b = 1;
 
