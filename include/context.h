@@ -10,7 +10,8 @@ The point of this class is *Just* to hold the associations, it doesnt do
 any evaluation or checking or anything.
 */
 
-#pragma once
+#ifndef CONTEXT_H
+#define CONTEXT_H
 
 #include <unordered_map>
 #include <stack>
@@ -24,7 +25,8 @@ typedef std::unordered_map<std::string, Value> Scope;
 class Context {
     Scope globalScope;
     std::stack<Scope> callStack;
-    std::unordered_map<std::string, ASTNode*> functions;
+    std::unordered_map<std::string, Callable*> functions;
+    std::unordered_map<std::string, Callable*> builtins;
 
     public:
         Context() {}
@@ -48,3 +50,5 @@ class Context {
 
         void popScope()    { this->callStack.pop(); };
 };
+
+#endif /* CONTEXT_H */
