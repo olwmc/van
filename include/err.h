@@ -3,8 +3,10 @@
 
 #include <string>
 #include <iostream>
-void raise(std::string message, int index, int lineNum) {
-    std::cout << message << ".\nLine: " << lineNum << "\n";
+
+void raiseError(std::string message) {
+    std::cout << message << "\n";
+    exit(1);
 }
 
 #endif /* ERR_H */
