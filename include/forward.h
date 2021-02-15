@@ -18,5 +18,6 @@ class Context;
 class Callable;
 class UserFunction;
 class builtin_Print;
+class builtin_Assert;
 
 #endif /* FORWARD_H */
