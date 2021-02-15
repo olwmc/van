@@ -10,15 +10,19 @@ class ProgramVisitor {
 
     public:
         ProgramVisitor(Context* c) : m_context(c) {}
+
+        /* Literal nodes */
         Value visit(NumberLiteral& numberLiteral);
         Value visit(StringLiteral& stringLiteral);
         Value visit(Identifier& identifier);
 
+        /* Statement nodes */
         Value visit(BinaryExpression& binaryExpression);
         Value visit(ReturnStatement& returnStatement);
         Value visit(ForLoop& forLoop);
         Value visit(Block& block);
 
+        /* Function callables */
         Value visit(builtin_Print& printStatment);
         Value visit(UserFunction& userFunction);
         Value visit(builtin_Assert& assertStatement);
