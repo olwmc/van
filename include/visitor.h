@@ -21,6 +21,7 @@ class ProgramVisitor {
         Value visit(ReturnStatement& returnStatement);
         Value visit(ForLoop& forLoop);
         Value visit(Block& block);
+        Value visit(FunctionCall& functionCall);
 
         /* Function callables */
         Value visit(builtin_Print& printStatment);
