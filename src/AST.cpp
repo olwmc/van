@@ -1,5 +1,6 @@
 #include "AST.h"
 #include "value.h"
+#include "err.h"
 
 // TODO: Redo this
 Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
@@ -100,4 +101,36 @@ Value ProgramVisitor::visit(ForLoop& forLoop) {
     // a return somewhere conditionally within the loop,
     // therefore it's necessary to return from it.
     return value;
+}
+
+Value ProgramVisitor::visit(FunctionCall& functionCall) {
+    // Push new scope
+    this->m_context->pushScope();
+
+    // Get the callable function
+    Callable* func = this->m_context->resolveFunction(functionCall.callee());
+
+    // Get the function argument names
+    std::vector<std::string> funcArgs = func->args();
+
+    // Get the function call values
+    std::vector<ASTNode*> callArgs = functionCall.args();
+
+    if(callArgs.size() != funcArgs.size()) {
+        raiseError("Incorrect number of arguments for function \"" + functionCall.callee() + "\"");
+    }
+
+    // Add each argument as a local variable with value passed through call
+    for(int i = 0; i < (int)funcArgs.size(); ++i) {
+        this->m_context->addLocalVariable(funcArgs[i], callArgs[i]->accept(*this));
+    }
+
+    // Visit the Callable
+    Value v = func->accept(*this);
+
+    // Pop the scope
+    this->m_context->popScope();
+
+    // Return return value
+    return v;
 }
