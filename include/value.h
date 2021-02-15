@@ -33,8 +33,6 @@ class Value {
         Value() { this->m_type = NIL; }
         
         /* Value setters */
-        void setValue(double val);
-        void setValue(std::string val);
         void setValue(Value val);
 
         /* Return representations */
