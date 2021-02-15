@@ -7,7 +7,8 @@
 3. IMPLEMENT THAT VISITOR METHOD
 */
 
-#pragma once
+#ifndef AST_H
+#define AST_H
 
 #include <iostream>
 #include <string>
@@ -167,3 +168,5 @@ class ForLoop : public ASTNode {
         ASTNode *update()  { return this->m_update; }
         Block* block()     { return this->m_block;  }
 };
+
+#endif /* AST_H */

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VALUE_H
+#define VALUE_H
+
 #include <string>
 #include <vector>
 
@@ -52,3 +54,5 @@ class Value {
         Value operator&&(const Value& other);
         Value operator||(const Value& other);
 };
+
+#endif /* VALUE_H */
