@@ -11,12 +11,14 @@ class ASTVisitor {
     public:
         ASTVisitor(Context* c) : m_context(c) {}
         Value visit(NumberLiteral& numberLiteral);
-        Value visit(BinaryExpression& binaryExpression);
         Value visit(StringLiteral& stringLiteral);
         Value visit(Identifier& identifier);
+
+        Value visit(BinaryExpression& binaryExpression);
         Value visit(ReturnStatement& returnStatement);
         Value visit(ForLoop& forLoop);
         Value visit(Block& block);
+
         Value visit(builtin_Print& printStatment);
         Value visit(UserFunction& userFunction);
 };
