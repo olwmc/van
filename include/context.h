@@ -44,6 +44,7 @@ class Context {
     std::unordered_map<std::string, Callable*> functions;
 
     public:
+        // Add builtins
         Context() {}
         ~Context() {}
 
