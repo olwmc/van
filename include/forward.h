@@ -12,6 +12,7 @@ class Block;
 class ForLoop;
 class ReturnStatement;
 class Identifier;
+class FunctionCall;
 
 class Context;
 
