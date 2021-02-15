@@ -8,7 +8,7 @@
 
 #include <vector>
 
-
+/* Base Callable Class */
 class Callable {
   public:
     Callable() {}
@@ -16,6 +16,7 @@ class Callable {
     virtual Value accept(ASTVisitor& visitor) = 0;
 };
 
+/* User Function class */
 class UserFunction : Callable {
   std::vector<std::string> m_args;
   std::vector<ASTNode *> m_body;
@@ -29,6 +30,7 @@ class UserFunction : Callable {
     }
 };
 
+/* Builtin print statement class */
 class builtin_Print : public Callable {
   std::vector<std::string> m_args = {"__input__"};
 
