@@ -28,5 +28,5 @@ expr ::= false | true | Number | String | identifier | functionCall | expr binop
 binOp ::= `+´ | `-´ | `*´ | `/´ |  `%´ | `<´ | '>' |
           `<=´ | `>´ | `>=´ | `==´ | '&&' | '||'
 
-argList ::= '(' {exp ','} exp ')'
+argList ::= '(' [{exp ','} exp] ')'
 ```
