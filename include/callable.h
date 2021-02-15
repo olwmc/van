@@ -25,10 +25,12 @@ class Callable {
 /* User Function class */
 class UserFunction : public Callable {
   Block * m_body;
+  std::string m_name;
 
   public:
-    UserFunction(std::vector<std::string> args, Block * body)
-      : m_body(body) {
+    UserFunction(std::string name, std::vector<std::string> args, Block * body)
+      : m_body(body), m_name(name) 
+      {
         this->m_args = args;
       }
 
