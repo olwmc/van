@@ -45,11 +45,17 @@ class Context {
     std::unordered_map<std::string, Callable*> m_functions;
 
     public:
-        // Add builtins
         Context() {
-             this->m_functions.insert( {"print", new builtin_Print()} );
+            /* Add builtins */
+            this->m_functions.insert( {"print", new builtin_Print()} );
+            this->m_functions.insert( {"assert", new builtin_Assert()} );
         }
-        ~Context() {}
+        
+        ~Context() {
+            for(auto it: this->m_functions) {
+                delete it.second;
+            } 
+        }
 
         void addLocalVariable(std::string name, Value v);
         void addGlobalVariable(std::string name, Value v);
