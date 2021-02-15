@@ -15,28 +15,9 @@
 
 #include "forward.h"
 
+#include "visitor.h"
 #include "value.h"
 #include "context.h"
-
-/* ##################################################################################### */
-
-/* AST Visitor "executes" each node */
-class ASTVisitor {
-    Context* m_context;
-    // error handler
-
-    public:
-        ASTVisitor(Context* c) : m_context(c) {}
-        Value visit(NumberLiteral& numberLiteral);
-        Value visit(BinaryExpression& binaryExpression);
-        Value visit(StringLiteral& stringLiteral);
-        Value visit(Identifier& identifier);
-        Value visit(ReturnStatement& returnStatement);
-        Value visit(ForLoop& forLoop);
-        Value visit(Block& block);
-};
-
-/* ##################################################################################### */
 
 /* Used for arithmetic expressions */
 enum Operator {
@@ -186,4 +167,3 @@ class ForLoop : public ASTNode {
         ASTNode *update()  { return this->m_update; }
         Block* block()     { return this->m_block;  }
 };
-/* ##################################################################################### */
