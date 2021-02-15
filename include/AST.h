@@ -7,6 +7,8 @@
 3. IMPLEMENT THAT VISITOR METHOD
 */
 
+// TODO: Proper destructor for all this stuff
+
 #ifndef AST_H
 #define AST_H
 
@@ -35,6 +37,8 @@ class ASTNode {
         // of checking if the node is a return w/o having a type
         // string nor clogging up with type enums
         bool isReturn() { return this->m_return;  }
+        ASTNode() {}
+        virtual ~ASTNode() {}
 
     protected:
         bool m_return = false;
@@ -101,7 +105,7 @@ class BinaryExpression : public ASTNode {
 };
 
 /* Block class (Denotes beginning of new scope) */
-class Block : ASTNode{
+class Block : public ASTNode {
     // Maybe refactor this later to an array to decrease
     // memory usage. It doesn't really need to be a vector
     // since it's not mutated
@@ -157,6 +161,12 @@ class ForLoop : public ASTNode {
         ASTNode *update()  { return this->m_update; }
         Block* block()     { return this->m_block;  }
 };
+
+// class FunctionDeclaration : public ASTNode {
+//     std::string m_name;
+//     std::vector<ASTNode*> m_args;
+
+// }
 
 class FunctionCall : public ASTNode {
     std::string m_callee;
