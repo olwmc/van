@@ -1,3 +1,6 @@
+#ifndef FORWARD_H
+#define FORWARD_H
+
 class Token;
 
 class ASTNode;
@@ -11,3 +14,9 @@ class ReturnStatement;
 class Identifier;
 
 class Context;
+
+class Callable;
+class UserFunction;
+class builtin_Print;
+
+#endif /* FORWARD_H */
