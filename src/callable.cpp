@@ -7,7 +7,8 @@
 #include <iostream>
 
 Value ASTVisitor::visit(UserFunction& userFunction) {
-  return Value();
+  Value v = userFunction.body()->accept(*this);
+  return v;
 }
 
 
