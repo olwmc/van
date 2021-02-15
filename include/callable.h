@@ -11,58 +11,57 @@
 
 /* Base Callable Class */
 class Callable {
-  protected:
-  std::vector<std::string> m_args;
-  
   public:
     Callable() {}
+    virtual ~Callable() {}
 
     virtual Value accept(ProgramVisitor& visitor) = 0;
-    virtual std::vector<std::string> args() = 0;
+    std::vector<std::string> args() { return this->m_args; }
+
+  protected:
+    std::vector<std::string> m_args;
 };
 
 /* User Function class */
 class UserFunction : public Callable {
-  std::vector<std::string> m_args;
   Block * m_body;
 
   public:
     UserFunction(std::vector<std::string> args, Block * body)
-      : m_args(args), m_body(body) {}
+      : m_body(body) {
+        this->m_args = args;
+      }
 
     virtual Value accept(ProgramVisitor& visitor) override {
       return visitor.visit(*this);
     }
 
-    virtual std::vector<std::string> args() override { return this->m_args; }
     Block* body() { return this->m_body; }
 };
 
 /* Builtin print statement class */
 class builtin_Print : public Callable {
-  std::vector<std::string> m_args;
 
   public:
-    builtin_Print() : m_args({"__input__"}) {}
+    builtin_Print() {
+      this->m_args = {"__input__"};
+    }
 
     virtual Value accept(ProgramVisitor& visitor) override {
       return visitor.visit(*this);
     }
 
-    virtual std::vector<std::string> args() override { return this->m_args; }
 };
 
-class builtin_Assert: public Callable {
-  std::vector<std::string> m_args;
-  
+class builtin_Assert: public Callable {  
   public:
-    builtin_Assert() : m_args({"__assert_condition__"}) {}
+    builtin_Assert() {
+      this->m_args = {"__assert_condition__"};
+    }
 
     virtual Value accept(ProgramVisitor& visitor) override {
       return visitor.visit(*this);
     }
-
-    virtual std::vector<std::string> args() override { return this->m_args; }
 };
 
 #endif /* CALLABLE_H */
