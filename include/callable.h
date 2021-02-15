@@ -1,0 +1,45 @@
+
+#ifndef CALLABLE_H
+#define CALLABLE_H
+
+#include "forward.h"
+#include "visitor.h"
+#include "value.h"
+
+#include <vector>
+
+
+class Callable {
+  public:
+    Callable() {}
+
+    virtual Value accept(ASTVisitor& visitor) = 0;
+};
+
+class UserFunction : Callable {
+  std::vector<std::string> m_args;
+  std::vector<ASTNode *> m_body;
+
+  public:
+    UserFunction(std::vector<std::string> args, std::vector<ASTNode *> body)
+      : m_args(args), m_body(body) {}
+
+    virtual Value accept(ASTVisitor& visitor) override {
+      return visitor.visit(*this);
+    }
+};
+
+class builtin_Print : public Callable {
+  std::vector<std::string> m_args = {"__input__"};
+
+  public:
+    builtin_Print() {}
+
+    virtual Value accept(ASTVisitor& visitor) override {
+      return visitor.visit(*this);
+    }
+
+    std::vector<std::string> args() { return this->m_args; }    
+};
+
+#endif /* CALLABLE_H */
