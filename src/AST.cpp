@@ -4,16 +4,9 @@
 
 // TODO: Redo this
 Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
-    double lhs = binaryExpression.lhs()->accept(*this).asNumber();
-    double rhs = binaryExpression.rhs()->accept(*this).asNumber();
-    double result = 0;
-    
-    /*
-    Value lhs = binaryExpression.getLhs()->accept(*this);
-    Value rhs = binaryExpression.getRhs()->accept(*this);
-    
-    Do operation then check if type() == Value_Type::ERROR. If so, report error
-    */
+    Value lhs = binaryExpression.lhs()->accept(*this).asNumber();
+    Value rhs = binaryExpression.rhs()->accept(*this).asNumber();
+    Value result;
 
     switch(binaryExpression.op()) {
         /* Arithmetic operations */
@@ -23,17 +16,18 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
         case Operator::DIVIDE:      result = lhs / rhs;  break;
             
         // TODO: Overload this to support proper double modulo
-        case Operator::MOD:         result = (int)lhs % (int)rhs;  break;
+        case Operator::MOD:         result = lhs % rhs;  break;
             
         /* Logical operations */
         case Operator::EQUALS:      result = lhs == rhs; break;
-        case Operator::NOTEQUAL:    result = lhs != rhs; break;
         case Operator::LESSEQUAL:   result = lhs <= rhs; break;
-        case Operator::AND:         result = lhs || rhs; break;
-        case Operator::OR:          result = lhs && rhs; break;
     }
 
-    return Value(result);
+    if(result.type() == Value_Type::ERR) {
+        raiseError("Incorrect types");
+    }
+
+    return result;
 }
 
 // Return the literal representation of the Number
