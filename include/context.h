@@ -60,7 +60,7 @@ class Context {
         void addLocalVariable(std::string name, Value v);
         void addGlobalVariable(std::string name, Value v);
         void addFunction(std::string name, std::vector<std::string> args, ASTNode* body);
-
+        
         // Resolves a variable name to its associated Value
         Value resolveVariable(std::string name);
 
@@ -68,7 +68,11 @@ class Context {
         Callable* resolveFunction(std::string name);
 
         void pushScope()     {
-            this->m_callStack.push(Scope());
+            if(this->m_callStack.size() == 0) {
+                this->m_callStack.push(Scope());
+            }
+
+            else { this->m_callStack.push(this->m_callStack.top()); }
         }
 
         void popScope()    { this->m_callStack.pop(); };
