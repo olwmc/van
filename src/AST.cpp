@@ -20,7 +20,10 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
             
         /* Logical operations */
         case Operator::EQUALS:      result = lhs == rhs; break;
+        case Operator::NOTEQUAL:    result = lhs != rhs; break;
         case Operator::LESSEQUAL:   result = lhs <= rhs; break;
+        case Operator::OR:          result = lhs || rhs; break;
+        case Operator::AND:         result = lhs && rhs; break;
     }
 
     if(result.type() == Value_Type::ERR) {
