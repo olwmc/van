@@ -3,6 +3,8 @@
 
 #include "err.h"
 
+#include <string>
+
 void Context::addLocalVariable(std::string name, Value v) {
     this->m_callStack.top()[name] = v;
 }

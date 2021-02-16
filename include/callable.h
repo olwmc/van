@@ -6,8 +6,10 @@
 #include "forward.h"
 #include "visitor.h"
 #include "value.h"
+#include "AST.h"
 
 #include <vector>
+#include <string>
 
 /* Base Callable Class */
 class Callable {

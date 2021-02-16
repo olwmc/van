@@ -25,15 +25,15 @@ Function:
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include <unordered_map>
-#include <stack>
-#include <utility>
-
 #include "forward.h"
 #include "AST.h"
 #include "value.h"
 #include "callable.h"
 #include "builtin.h"
+
+#include <unordered_map>
+#include <stack>
+#include <utility>
 
 // Typedef Scope to improve readability
 typedef std::unordered_map<std::string, Value> Scope;
