@@ -162,12 +162,6 @@ class ForLoop : public ASTNode {
         Block* block()     { return this->m_block;  }
 };
 
-// class FunctionDeclaration : public ASTNode {
-//     std::string m_name;
-//     std::vector<ASTNode*> m_args;
-
-// }
-
 class FunctionCall : public ASTNode {
     std::string m_callee;
     std::vector<ASTNode*> m_args;
@@ -200,5 +194,22 @@ class AssignmentStatement : public ASTNode {
         ASTNode* rhs()   { return this->m_rhs; }
 };
 
+class VariableDeclaration: public ASTNode {
+    std::string m_id;
+    ASTNode* m_init;
+    bool m_local;
+
+    public:
+        VariableDeclaration(std::string id, ASTNode* init, bool local) 
+                : m_id(id), m_init(init), m_local(local) {}
+
+        virtual Value accept(ProgramVisitor& visitor) override {
+                return visitor.visit(*this);
+        }
+
+        std::string id() { return this->m_id;    }
+        ASTNode* init()  { return this->m_init;  }
+        bool isLocal()   { return this->m_local; }
+};
 
 #endif /* AST_H */

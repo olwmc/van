@@ -86,9 +86,9 @@ Value ProgramVisitor::visit(ForLoop& forLoop) {
     this->m_context->pushScope();
 
     forLoop.init()->accept(*this);
-
+    
     // While test != False (0)
-    while(forLoop.test()->accept(*this).asNumber() != false) {
+    while(forLoop.test()->accept(*this).asNumber() != 0) {
         
         // Execute body and set return value
         value = forLoop.block()->accept(*this);
@@ -100,6 +100,8 @@ Value ProgramVisitor::visit(ForLoop& forLoop) {
     // The reason this returns something is you may have
     // a return somewhere conditionally within the loop,
     // therefore it's necessary to return from it.
+
+    this->m_context->popScope();
     return value;
 }
 
@@ -140,6 +142,23 @@ Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     Value init = assignmentStatement.rhs()->accept(*this);
 
     this->m_context->addLocalVariable(id, init);
+
+    return Value();
+}
+
+Value ProgramVisitor::visit(VariableDeclaration& variableDeclaration) {
+    std::string id = variableDeclaration.id();
+    ASTNode *init = variableDeclaration.init();
+
+    Value v = init->accept(*this);
+    
+    if(variableDeclaration.isLocal()) {
+        this->m_context->addLocalVariable(id, v);
+    }
+
+    else {
+        this->m_context->addGlobalVariable(id, v);
+    }
 
     return Value();
 }

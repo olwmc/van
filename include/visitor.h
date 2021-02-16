@@ -23,6 +23,7 @@ class ProgramVisitor {
         Value visit(Block& block);
         Value visit(FunctionCall& functionCall);
         Value visit(AssignmentStatement& assignmentStatement);
+        Value visit(VariableDeclaration& variableDeclaration);
 
         /* Function callables */
         Value visit(builtin_Print& printStatment);
