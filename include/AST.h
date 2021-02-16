@@ -12,15 +12,15 @@
 #ifndef AST_H
 #define AST_H
 
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include "forward.h"
 
 #include "visitor.h"
 #include "value.h"
 #include "context.h"
+
+#include <iostream>
+#include <string>
+#include <vector>
 
 /* Used for arithmetic expressions */
 enum Operator {
