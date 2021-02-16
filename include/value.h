@@ -31,9 +31,6 @@ class Value {
         Value(std::string v) : m_string(v) { this->m_type = Value_Type::STRING; }
         Value(Value_Type v)  : m_type(v) {};
         Value() { this->m_type = NIL; }
-        
-        /* Value setters */
-        void setValue(Value val);
 
         /* Return representations */
         double asNumber()           { return this->m_number; }
