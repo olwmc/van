@@ -134,3 +134,12 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     // Return return value
     return v;
 }
+
+Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
+    std::string id = assignmentStatement.id();
+    Value init = assignmentStatement.rhs()->accept(*this);
+
+    this->m_context->addLocalVariable(id, init);
+
+    return Value();
+}

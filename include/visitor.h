@@ -22,11 +22,11 @@ class ProgramVisitor {
         Value visit(ForLoop& forLoop);
         Value visit(Block& block);
         Value visit(FunctionCall& functionCall);
+        Value visit(AssignmentStatement& assignmentStatement);
 
         /* Function callables */
         Value visit(builtin_Print& printStatment);
-        Value visit(UserFunction& userFunction);
         Value visit(builtin_Assert& assertStatement);
-};
+        Value visit(UserFunction& userFunction);};
 
 #endif /* VISITOR_H */

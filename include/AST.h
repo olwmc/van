@@ -184,4 +184,21 @@ class FunctionCall : public ASTNode {
         std::vector<ASTNode*> args()   { return this->m_args; }
 };
 
+class AssignmentStatement : public ASTNode {
+    std::string m_id;
+    ASTNode* m_rhs;
+
+    public:
+        AssignmentStatement(std::string id, ASTNode* rhs) 
+            : m_id(id), m_rhs(rhs) {}
+        
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        }
+
+        std::string id() { return this->m_id;  }
+        ASTNode* rhs()   { return this->m_rhs; }
+};
+
+
 #endif /* AST_H */

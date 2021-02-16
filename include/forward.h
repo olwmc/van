@@ -13,6 +13,7 @@ class ForLoop;
 class ReturnStatement;
 class Identifier;
 class FunctionCall;
+class AssignmentStatement;
 
 class Context;
 
