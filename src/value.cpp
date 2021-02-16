@@ -1,6 +1,7 @@
 #include "value.h"
 #include <string>
 
+// TODO Refactor this to remove trailing 0's
 std::string Value::toString() {
     if(this->m_type == Value_Type::NUMBER) {
         return std::to_string(this->m_number);
