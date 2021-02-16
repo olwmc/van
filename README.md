@@ -23,7 +23,10 @@ functionCall ::= identifier arglist
 
 forLoop ::= 'for' variableDeclaration ',' expr ',' expr ',' 'do' block 'end'
 
-expr ::= false | true | Number | String | identifier | functionCall | expr binop expr
+returnStatement ::= 'return' expr
+
+expr ::= false | true | Number | String | identifier |
+         functionCall | expr binop expr | '(' expr ')'
 
 binOp ::= `+´ | `-´ | `*´ | `/´ |  `%´ | `<´ | '>' |
           `<=´ | `>´ | `>=´ | `==´ | '&&' | '||'
