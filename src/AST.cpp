@@ -67,10 +67,9 @@ Value ProgramVisitor::visit(Block& block) {
         // Accept each ASTNode
         value = statement->accept(*this);
 
-        /* Check if statement is a return statement
-         * The reason why we check this, instead of just non-nil value
-         * is because things like n++; are statements but return values
-         * but are not terminal returns */
+        // TODO: figure out how to check if this is an
+        // actual return because rn this doesnt work if 
+        // its in another block. Maybe annotate value?
         if(statement->isReturn()) { return value; }
     }
 
@@ -141,6 +140,7 @@ Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     std::string id = assignmentStatement.id();
     Value init = assignmentStatement.rhs()->accept(*this);
 
+    // TODO Fix this
     this->m_context->addLocalVariable(id, init);
 
     return Value();
