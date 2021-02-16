@@ -8,13 +8,13 @@ Variable:
     it's associated value. Else, raise an error.
 
 Function:
-    Function resolution works by first pushing a
-    new scope. Checking if the function has been
-    defined, if it hasn't, an error is raised.
-    If it has, we push a new scope, get the args
-    that the callable requires and map our
-    supplied arguments to their id within the
-    current scope.
+    Function resolution works by checking if the 
+    function has been defined, if it hasn't, an 
+    error is raised. If it has, we push a new
+    scope, get the args that the callable 
+    requires and map our supplied arguments to
+    their id within the current scope.
+    
         i.e. foo(1,2,3) => x=1, y=2, z=3
 
     We then visit the Callable which returns a 
@@ -33,6 +33,7 @@ Function:
 #include "AST.h"
 #include "value.h"
 #include "callable.h"
+#include "builtin.h"
 
 // Typedef Scope to improve readability
 typedef std::unordered_map<std::string, Value> Scope;
