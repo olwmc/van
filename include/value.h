@@ -44,21 +44,21 @@ class Value {
         bool isConst() { return this->m_const; }
 
         /* Arithmetic operations */
-        Value operator+(Value& other);
-        Value operator-(Value& other);
-        Value operator*(Value& other);
-        Value operator/(Value& other);
-        Value operator%(Value& other);
+        Value operator+(Value other);
+        Value operator-(Value other);
+        Value operator*(Value other);
+        Value operator/(Value other);
+        Value operator%(Value other);
 
         /* Comparators */
-        Value operator==(Value& other);
-        Value operator!=(Value& other);
-        Value operator<=(Value& other);
-        Value operator>=(Value& other);
+        Value operator==(Value other);
+        Value operator!=(Value other);
+        Value operator<=(Value other);
+        Value operator>=(Value other);
             
         /* Logical Operations */
-        Value operator&&(Value& other);
-        Value operator||(Value& other);
+        Value operator&&(Value other);
+        Value operator||(Value other);
 };
 
 #endif /* VALUE_H */
