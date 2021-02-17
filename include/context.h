@@ -40,7 +40,7 @@ typedef std::unordered_map<std::string, Value> Scope;
 
 class Context {
     Scope m_globalScope;
-    std::stack<Scope> m_callStack;
+    std::vector<Scope> m_callStack;
 
     // Holds functions and buitins
     std::unordered_map<std::string, Callable*> m_functions;
@@ -68,15 +68,8 @@ class Context {
         // ResolveFunction passes an ASTNode* to our visitor
         Callable* resolveFunction(std::string name);
 
-        void pushScope()     {
-            if(this->m_callStack.size() == 0) {
-                this->m_callStack.push(Scope());
-            }
-
-            else { this->m_callStack.push(this->m_callStack.top()); }
-        }
-
-        void popScope()    { this->m_callStack.pop(); };
+        void pushScope()   { this->m_callStack.push_back(Scope()); }
+        void popScope()    { this->m_callStack.pop_back(); };
 };
 
 #endif /* CONTEXT_H */
