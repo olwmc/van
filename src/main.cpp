@@ -11,7 +11,7 @@ int main() {
     
     // init
     NumberLiteral num_0(0);
-    VariableDeclaration init_1("myVar", &num_0, false);
+    VariableDeclaration init_1("myVar", &num_0, true);
 
     // Update
     Identifier id_1("myVar");
