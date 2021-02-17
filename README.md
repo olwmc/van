@@ -2,7 +2,7 @@
 Final Project for CSC212
 
 ## Grammar
-```
+```ebnf
 block ::= {stmnt ';'}
 
 stmnt ::= variableDeclaration |
