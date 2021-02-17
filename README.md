@@ -21,15 +21,17 @@ functionDeclaration ::= 'defun' identifer arglist 'is' block 'end'
 
 functionCall ::= identifier arglist
 
-forLoop ::= 'for' variableDeclaration ',' expr ',' expr ',' 'do' block 'end'
+forLoop ::= 'for' '(' variableDeclaration ',' expr ',' expr ')' 'do' block 'end'
 
 returnStatement ::= 'return' expr
 
-expr ::= 'false' | 'true | Number | String | identifier |
-         functionCall | expr binop expr | '(' expr ')'
+expr ::= 'false' | 'true' | Number | String | identifier 
+         | expr binop expr | prefixExpr
 
-binOp ::= `+´ | `-´ | `*´ | `/´ |  `%´ | `<´ | '>' |
-          `<=´ | `>´ | `>=´ | `==´ | '&&' | '||'
+prefixExpr ::=  functioncall  |  '(' expr ')'
+
+binOp ::= '+' | '-' | '*' | '/' |  '%' | '<' | '>' |
+          '<=' | '>' | '>=' | '==' | '&&' | '||'
 
 argList ::= '(' [{exp ','} exp] ')'
 ```
