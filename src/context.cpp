@@ -13,10 +13,10 @@ void Context::addGlobalVariable(std::string name, Value v) {
 }
 
 Value Context::resolveVariable(std::string name) {
-	Scope local;
+    Scope local;
     Scope global = this->m_globalScope;
-	
-	for(int i = (int)this->m_callStack.size(); i--;) {
+
+    for(int i = (int)this->m_callStack.size(); i--;) {
         local = this->m_callStack[i];
 
         if(local.find(name) != local.end()) {

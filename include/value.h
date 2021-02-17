@@ -36,9 +36,9 @@ class Value {
         double asNumber()           { return this->m_number; }
         std::string asString()      { return this->m_string; }
         Value_Type type()           { return this->m_type;   }
-	    
-		/* ToString as opposed to AsString. Used in casting.*/
-	    std::string toString(); 
+        
+        /* ToString as opposed to AsString. Used in casting.*/
+        std::string toString(); 
         
         /* Check const state */
         bool isConst() { return this->m_const; }
