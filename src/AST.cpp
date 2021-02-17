@@ -78,9 +78,6 @@ Value ProgramVisitor::visit(Block& block) {
 Value ProgramVisitor::visit(ForLoop& forLoop) {
     Value value;
 
-    // Push a new scope and initialize init within it
-    this->m_context->pushScope();
-
     forLoop.init()->accept(*this);
     
     // While test != False (0)
@@ -96,8 +93,6 @@ Value ProgramVisitor::visit(ForLoop& forLoop) {
     // The reason this returns something is you may have
     // a return somewhere conditionally within the loop,
     // therefore it's necessary to return from it.
-
-    this->m_context->popScope();
     return value;
 }
 
