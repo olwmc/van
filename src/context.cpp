@@ -1,6 +1,5 @@
 #include "forward.h"
 #include "context.h"
-
 #include "err.h"
 
 #include <string>
@@ -16,6 +15,7 @@ Value Context::resolveVariable(std::string name) {
     Scope local;
     Scope global = this->m_globalScope;
 
+    // Look through call stack for variable
     for(int i = (int)this->m_callStack.size(); i--;) {
         local = this->m_callStack[i];
 
@@ -24,10 +24,12 @@ Value Context::resolveVariable(std::string name) {
         }
     }
     
+    // Else look through globals
     if (global.find(name) != global.end()) {
         return global[name];
     }
 
+    // Else raise error
     else {
         raiseError("Could not resolve variable name: " + name);
     }
