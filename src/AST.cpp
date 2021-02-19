@@ -128,7 +128,6 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     // Pop the scope
     this->m_context->popScope();
 
-    // Return return value
     return v;
 }
 
@@ -136,7 +135,6 @@ Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     std::string id = assignmentStatement.id();
     Value init = assignmentStatement.rhs()->accept(*this);
 
-    // TODO Fix this
     this->m_context->addLocalVariable(id, init);
 
     return Value();
