@@ -27,7 +27,9 @@ class Token {
             : m_type(type), m_raw(raw), m_keyword(keyword),
               m_index(index), m_line(line)
             {}
-    
+
+        ~Token() {}
+        
         bool isKeyword()     { return this->m_keyword; }
 
         Token_type type()    { return this->m_type;    }
@@ -43,38 +45,44 @@ class Token {
 class Lexer {
     std::string m_prog;
     int m_line, m_index;
+    char m_currentChar;
 
-  /* Index operations */
-  char peek();
-  char peekNext();
-  void advance();
+    /* Index operations */
+    char peek();
+    char peekNext();
+    void advance();
     
     // Resolves keyword to corresponding Token_type or identifier
     Token_type resolveKeyword(std::string raw);
 
     /* Get different types of tokens */
-    Token getPunctuation();
-    Token getSeparator();
-    Token getOperator();
-    Token getNumberLiteral();
-    Token getKeywordOrId();
-    Token getComment();
-    Token getStringLiteral();
+    Token makeKeywordOrId();
+    Token makePunctuation();
+    Token makeSeparator();
+    Token makeOperator();
+    Token makeNumberLiteral();
+    Token makeComment();
+    Token makeStringLiteral();
 
     /* Different character catagorizers */
     bool isWhiteSpace();
+    bool isAlpha();
     bool isPunctuation();
     bool isSeparator();
     bool isOperator();
     bool isDigit();
-    bool isAlpha();
 
     public:
         Lexer(std::string program) 
             : m_prog(program),
-              m_line(0),
-              m_index(0) {}
+              m_line(1),
+              m_index(0) 
+        {
+            this->m_currentChar = this->m_prog[0];
+        }
 
-        Token nextToken();
+        Token getNextToken();
+        Token peekToken();
+        Token peekNextToken();
 };
 #endif /* LEXER_H */
