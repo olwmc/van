@@ -15,8 +15,12 @@ Easter Eggs
 Group
 
 Topic Overview
-* Stacks
 * Dynamic Array
-* Maps
-* ?Queues <= Parsing possibly
-* Sorting Algos (Implementation) (Implement them in our lang LOL)
+* Hashtable <= Maybe implement my own?
+* Stacks <= Custom callstack type later
+* Recursive Algorithms
+* Recursive Backtracking <= Recursive descent parser
+
+Immediate questions:
+1. *"Why did you implement hashmaps?"*
+    * This is my final project for my data structures class. 
