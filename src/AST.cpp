@@ -27,7 +27,7 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     }
 
     if(result.type() == Value_Type::ERR) {
-        raiseError("Incorrect types");
+        raiseLogicError("Incorrect types");
     }
 
     return result;
@@ -114,7 +114,7 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     std::vector<ASTNode*> callArgs = functionCall.args();
 
     if(callArgs.size() != funcArgs.size()) {
-        raiseError("Incorrect number of arguments for function \"" + functionCall.callee() + "\"");
+        raiseLogicError("Incorrect number of arguments for function \"" + functionCall.callee() + "\"");
     }
 
     // Add each argument as a local variable with value passed through call
