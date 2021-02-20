@@ -32,7 +32,7 @@ Value Context::resolveVariable(std::string name) {
 
     // Else raise error
     else {
-        raiseError("Could not resolve variable name: " + name);
+        raiseLogicError("Could not resolve variable name: " + name);
     }
 
     return Value();

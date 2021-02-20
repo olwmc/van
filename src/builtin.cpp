@@ -38,7 +38,7 @@ Value ProgramVisitor::visit(builtin_Assert& assertStatement) {
   }
 
   else {
-    raiseError("FAILED TO ASSERT");
+    raiseLogicError("FAILED TO ASSERT");
     exit(1);
   }
 }
