@@ -4,8 +4,8 @@
 
 // TODO: Redo this
 Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
-    Value lhs = binaryExpression.lhs()->accept(*this).asNumber();
-    Value rhs = binaryExpression.rhs()->accept(*this).asNumber();
+    Value lhs = binaryExpression.lhs()->accept(*this);
+    Value rhs = binaryExpression.rhs()->accept(*this);
     Value result;
 
     switch(binaryExpression.op()) {
