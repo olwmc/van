@@ -1,4 +1,4 @@
-defun fib(n) is
+defun fib(n) as
   local a = 0;
   local b = 1;
 
