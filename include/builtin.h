@@ -28,4 +28,14 @@ class builtin_Assert: public Callable {
     }
 };
 
+/* Builtin casts */
+/*
+class builtin_NumberCast;
+class builtin_StringCast;
+class builtin_GetKeys;
+class builtin_GetType;
+
+class builtin_Input;
+*/
+
 #endif /* BUILTIN_H */
