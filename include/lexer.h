@@ -12,43 +12,43 @@ enum Token_type {
     
     FOR, RETURN, DEFUN, LOCAL, GLOBAL,
     AS, BEGIN, END,
-	COMMENT
+    COMMENT
 };
 
 /* Holds data about each token recovered from the lexer */
 class Token {
-	Token_type m_type;
-	std::string m_raw;
-	bool m_keyword;
-	int m_index, m_line;
+    Token_type m_type;
+    std::string m_raw;
+    bool m_keyword;
+    int m_index, m_line;
 
-	public:
-		Token(Token_type type, std::string raw, bool keyword, int index, int line)
-			: m_type(type), m_raw(raw), m_keyword(keyword),
-			  m_index(index), m_line(line)
-			{}
-	
-		bool isKeyword() 	{ return this->m_keyword; }
+    public:
+        Token(Token_type type, std::string raw, bool keyword, int index, int line)
+            : m_type(type), m_raw(raw), m_keyword(keyword),
+              m_index(index), m_line(line)
+            {}
+    
+        bool isKeyword()     { return this->m_keyword; }
 
-		Token_type type()	{ return this->m_type;    }
-		std::string raw()	{ return this->m_raw;     }
-		int line() 			{ return this->m_line;    }
-		int index()			{ return this->m_index;   }
+        Token_type type()    { return this->m_type;    }
+        std::string raw()    { return this->m_raw;     }
+        int line()             { return this->m_line;    }
+        int index()            { return this->m_index;   }
 
-		std::string toString();
+        std::string toString();
 
 };
 
 /* Gets the next Token in the program string */
 class Lexer {
-	std::string m_prog;
+    std::string m_prog;
     int m_line, m_index;
 
-    /* Index operations */
-	char peek();
-	char peekNext();
-    void advance();
-	
+  /* Index operations */
+  char peek();
+  char peekNext();
+  void advance();
+    
     // Resolves keyword to corresponding Token_type or identifier
     Token_type resolveKeyword(std::string raw);
 
@@ -69,12 +69,12 @@ class Lexer {
     bool isDigit();
     bool isAlpha();
 
-	public:
-		Lexer(std::string program) 
+    public:
+        Lexer(std::string program) 
             : m_prog(program),
               m_line(0),
               m_index(0) {}
 
-		Token nextToken();
+        Token nextToken();
 };
 #endif /* LEXER_H */

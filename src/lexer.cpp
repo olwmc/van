@@ -12,12 +12,12 @@ std::vector<std::string> token_string = {
     "OP", "SEP", "PUNCT",
 
     "FOR", "RETURN", "DEFUN", "LOCAL", "GLOBAL",
-	"AS", "BEGIN", "END",
+    "AS", "BEGIN", "END",
     "COMMENT"
 };
 
 std::string Token::toString() {
-    	return "Type: " + token_string[this->m_type] + "\tLine: " + \
+        return "Type: " + token_string[this->m_type] + "\tLine: " + \
                std::to_string(this->m_line) + "{" + std::to_string(this->m_index) + "}" + \
                "\tSymbol: \"" + this->m_raw + "\"";
 }
