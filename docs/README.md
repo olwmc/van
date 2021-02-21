@@ -15,12 +15,12 @@ Easter Eggs
 Group
 
 Topic Overview
-* Dynamic Array
+* Dynamic Array <= Value list type
 * Hashtable <= Maybe implement my own?
 * Stacks <= Custom callstack type later
-* Recursive Algorithms
+* Recursive Algorithms <= Visitor
 * Recursive Backtracking <= Recursive descent parser
 
 Immediate questions:
-1. *"Why did you implement hashmaps?"*
+1. *"Why did you implement xyz data structure?"*
     * This is my final project for my data structures class. 
