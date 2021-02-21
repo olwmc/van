@@ -119,7 +119,7 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
 
     // Add each argument as a local variable with value passed through call
     for(int i = 0; i < (int)funcArgs.size(); ++i) {
-        this->m_context->addLocalVariable(funcArgs[i], callArgs[i]->accept(*this));
+        this->m_context->bindLocalVariable(funcArgs[i], callArgs[i]->accept(*this));
     }
 
     // Visit the Callable
@@ -135,7 +135,7 @@ Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     std::string id = assignmentStatement.id();
     Value init = assignmentStatement.rhs()->accept(*this);
 
-    this->m_context->addLocalVariable(id, init);
+    this->m_context->bindLocalVariable(id, init);
 
     return Value();
 }
@@ -147,11 +147,11 @@ Value ProgramVisitor::visit(VariableDeclaration& variableDeclaration) {
     Value v = init->accept(*this);
     
     if(variableDeclaration.isLocal()) {
-        this->m_context->addLocalVariable(id, v);
+        this->m_context->bindLocalVariable(id, v);
     }
 
     else {
-        this->m_context->addGlobalVariable(id, v);
+        this->m_context->bindGlobalVariable(id, v);
     }
 
     return Value();

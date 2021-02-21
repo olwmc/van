@@ -4,11 +4,11 @@
 
 #include <string>
 
-void Context::addLocalVariable(std::string name, Value v) {
+void Context::bindLocalVariable(std::string name, Value v) {
     this->m_callStack.back()[name] = v;
 }
 
-void Context::addGlobalVariable(std::string name, Value v) {
+void Context::bindGlobalVariable(std::string name, Value v) {
     this->m_globalScope[name] = v;
 }
 
