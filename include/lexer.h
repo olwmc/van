@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-enum Token_type { 
+enum Token_Type { 
     IDENTIFIER,
     NUM_LIT, STR_LIT, TRUE_LIT, FALSE_LIT,
     END_FILE,
@@ -17,13 +17,13 @@ enum Token_type {
 
 /* Holds data about each token recovered from the lexer */
 class Token {
-    Token_type m_type;
+    Token_Type m_type;
     std::string m_raw;
     bool m_keyword;
     int m_index, m_line;
 
     public:
-        Token(Token_type type, std::string raw, bool keyword, int index, int line)
+        Token(Token_Type type, std::string raw, bool keyword, int index, int line)
             : m_type(type), m_raw(raw), m_keyword(keyword),
               m_index(index), m_line(line)
             {}
@@ -32,7 +32,7 @@ class Token {
         
         bool isKeyword()     { return this->m_keyword; }
 
-        Token_type type()    { return this->m_type;    }
+        Token_Type type()    { return this->m_type;    }
         std::string raw()    { return this->m_raw;     }
         int line()             { return this->m_line;    }
         int index()            { return this->m_index;   }
@@ -52,8 +52,8 @@ class Lexer {
     char peekNext();
     void advance();
     
-    // Resolves keyword to corresponding Token_type or identifier
-    Token_type resolveKeyword(std::string raw);
+    // Resolves keyword to corresponding Token_Type or identifier
+    Token_Type resolveKeyword(std::string raw);
 
     /* Get different types of tokens */
     Token makeKeywordOrId();

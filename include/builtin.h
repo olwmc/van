@@ -36,6 +36,7 @@ class builtin_GetKeys;
 class builtin_GetType;
 
 class builtin_Input;
+class builtin_Len;
 */
 
 #endif /* BUILTIN_H */
