@@ -3,6 +3,8 @@ Final Project for CSC212
 
 ## Grammar
 ```ebnf
+program ::= block
+
 block ::= {stmnt ';'}
 
 stmnt ::= variableDeclaration |
