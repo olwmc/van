@@ -13,13 +13,16 @@ Value ProgramVisitor::visit(UserFunction& userFunction) {
   return v;
 }
 
+Value ProgramVisitor::visit(Builtin& builtin) {
+  Value v = builtin.execute(*this->m_context);
+  return v;
+}
 
-/* Builtin print statement */
-Value ProgramVisitor::visit(builtin_Print& printStatment) {
+Value builtin_Println::execute(Context& context) {
   // Get the input from context
   // Using "printStatement.args()" instead of __input__ to make this more
   // maintainable
-  Value input = this->m_context->resolveVariable(printStatment.args()[0]);
+  Value input = context.resolveVariable(this->args()[0]);
 
   // Print the input
   std::cout << input.toString() << "\n";
@@ -28,13 +31,12 @@ Value ProgramVisitor::visit(builtin_Print& printStatment) {
   return Value();
 }
 
-/* Builtin assert statement */
-Value ProgramVisitor::visit(builtin_Assert& assertStatement) {
+Value builtin_Assert::execute(Context& context) {
   // Assert that the value is true
-  Value condition = this->m_context->resolveVariable(assertStatement.args()[0]);
+  Value condition = context.resolveVariable(this->args()[0]);
 
   if(condition.type() == Value_Type::NUMBER && condition.asNumber() == 1) {
-    return Value();
+    return Value("SUCCESSFULLY ASSERTED");
   }
 
   else {
@@ -42,5 +44,3 @@ Value ProgramVisitor::visit(builtin_Assert& assertStatement) {
     exit(1);
   }
 }
-
-// builtin_Number_Cast
