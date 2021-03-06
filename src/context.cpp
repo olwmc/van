@@ -5,12 +5,16 @@
 #include <string>
 
 void Context::bindLocalVariable(std::string name, Value v) {
+    // TODO: Make this actually work dummy
     this->m_callStack.back()[name] = v;
 }
 
 void Context::bindGlobalVariable(std::string name, Value v) {
     this->m_globalScope[name] = v;
 }
+
+// TODO
+// void updateVariable
 
 Value Context::resolveVariable(std::string name) {
     Scope local;
