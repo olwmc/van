@@ -2,7 +2,6 @@
 #include "value.h"
 #include "err.h"
 
-// TODO: Redo this
 Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     Value lhs = binaryExpression.lhs()->accept(*this);
     Value rhs = binaryExpression.rhs()->accept(*this);
@@ -22,6 +21,7 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
         case Operator::EQUALS:      result = lhs == rhs; break;
         case Operator::NOTEQUAL:    result = lhs != rhs; break;
         case Operator::LESSEQUAL:   result = lhs <= rhs; break;
+        case Operator::GREATEQUAL:  result = lhs >= rhs; break;
         case Operator::OR:          result = lhs || rhs; break;
         case Operator::AND:         result = lhs && rhs; break;
     }
@@ -59,7 +59,7 @@ Value ProgramVisitor::visit(Block& block) {
     // This is why context is not pushed *within* the block but
     // before and afterwards popped
     Value value;
-
+    
     for(ASTNode* statement: block.body()) {  
         // Accept each ASTNode
         value = statement->accept(*this);
@@ -118,6 +118,7 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     }
 
     // Add each argument as a local variable with value passed through call
+    // foo(x,y,z) ::: foo(1,2+3,4) => pushes x=1, y=5, z=4
     for(int i = 0; i < (int)funcArgs.size(); ++i) {
         this->m_context->bindLocalVariable(funcArgs[i], callArgs[i]->accept(*this));
     }
@@ -135,6 +136,7 @@ Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     std::string id = assignmentStatement.id();
     Value init = assignmentStatement.rhs()->accept(*this);
 
+    // TODO: Fix this, it doesn't work for global variables
     this->m_context->bindLocalVariable(id, init);
 
     return Value();
