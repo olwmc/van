@@ -28,6 +28,10 @@ class Token {
               m_index(index), m_line(line)
             {}
 
+        // TODO: FIX THIS
+        Token() {
+            this->m_type = Token_Type::COMMENT;
+        }
         ~Token() {}
         
         bool isKeyword()     { return this->m_keyword; }
@@ -69,8 +73,10 @@ class Lexer {
     bool isAlpha();
     bool isPunctuation();
     bool isSeparator();
+    bool isCommentStart();
     bool isOperator();
     bool isDigit();
+    bool isStringStart();
 
     public:
         Lexer(std::string program) 
@@ -84,5 +90,15 @@ class Lexer {
         Token getNextToken();
         Token peekToken();
         Token peekNextToken();
+
+        std::vector<Token> makeTokens() {
+            std::vector<Token> tokens;
+            do {
+                tokens.push_back(this->getNextToken());
+                
+            } while(tokens.back().type() != Token_Type::END_FILE);
+
+            return tokens;
+        }
 };
 #endif /* LEXER_H */
