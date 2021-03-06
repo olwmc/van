@@ -31,6 +31,7 @@ std::string Token::toString() {
                "\tSymbol: \"" + this->m_raw + "\"";
 }
 
+
 Token_Type Lexer::resolveKeyword(std::string raw) {
     if(type_map.find(raw) != type_map.end()) {
         return type_map[raw];
@@ -47,6 +48,11 @@ Token Lexer::getNextToken() {
     else if(isWhiteSpace())  {
         advance();
         while(isWhiteSpace()) { advance(); }
+
+        // This assures that trailing whitespace at the end of thefile doesn't return a badchar
+        if(this->m_index > (int)this->m_prog.length() - 1) {
+            return Token(Token_Type::END_FILE, "EOF", true, this->m_index, this->m_line);
+        }
     }
 
     if (isAlpha())            { return makeKeywordOrId();   }
@@ -54,8 +60,13 @@ Token Lexer::getNextToken() {
     else if (isSeparator())   { return makeSeparator();     }
     else if (isOperator())    { return makeOperator();      }
     else if (isDigit())       { return makeNumberLiteral(); }
+    else if (isStringStart()) { return makeStringLiteral(); }
 
-    //else if(isStringStart())  { return makeStringLiteral(); }
+
+    // TODO: Fix this
+    Token t = Token(Token_Type::IDENTIFIER, "BADCHAR", false, this->m_index, this->m_line);
+    advance();
+    return t;
 }
 
 char Lexer::peek() {
@@ -114,6 +125,11 @@ bool Lexer::isPunctuation() {
        break;
     } 
  }
+
+//  bool Lexer::isCommentStart() {
+
+//  }
+ 
  bool Lexer::isOperator() {
     switch(this->m_currentChar) {
        case '=': case '+':
@@ -137,6 +153,10 @@ bool Lexer::isAlpha() {
     return (this->m_currentChar >= 'a' && this->m_currentChar <= 'z') || \
            (this->m_currentChar >= 'A' && this->m_currentChar <= 'Z') || \
            (this->m_currentChar == '_');
+}
+
+bool Lexer::isStringStart() {
+    return this->m_currentChar == '\"' || this->m_currentChar == '\'';
 }
 
 Token Lexer::makeKeywordOrId() {
@@ -189,10 +209,33 @@ Token Lexer::makeNumberLiteral() {
     std::string number(1, this->m_currentChar);
 
     advance();
-    while(isDigit()) {
+    while(isDigit() || this->m_currentChar == '.') {
         number += this->m_currentChar;
         advance();
     }
 
     return Token(Token_Type::NUM_LIT, number, false, this->m_index, this->m_line);
+}
+
+Token Lexer::makeStringLiteral() {
+    std::string str;
+    advance();
+
+    while(!isStringStart()) {
+        // Check if escaped quote
+        if(this->m_currentChar == '\\') {
+            advance();
+            str += this->m_currentChar;
+            advance();
+        }
+
+        // Else juat add the char
+        else {
+            str += this->m_currentChar;
+            advance();
+        }
+    }
+    advance();
+
+    return Token(Token_Type::STR_LIT, str, false, this->m_index, this->m_line);
 }
