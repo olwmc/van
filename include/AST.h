@@ -25,7 +25,7 @@
 /* Used for arithmetic expressions */
 enum Operator {
     ADD, SUBTRACT, MULTIPLY, DIVIDE, MOD,
-    EQUALS, LESSEQUAL, NOTEQUAL, AND, OR
+    EQUALS, LESSEQUAL, GREATEQUAL, NOTEQUAL, AND, OR
 };
 
 /* AST Node abstract class */
@@ -57,6 +57,20 @@ class NumberLiteral : public ASTNode {
 
         double value() { return this->m_value; };
 };
+
+// /* Array literal class */
+// class ArrayLiteral : public ASTNode {
+//     std::vector<ASTNode*> m_contents;
+
+//     public:
+//         ArrayLiteral(std::vector<ASTNode*> contents) : m_contents(contents) {}
+    
+//         virtual Value accept(ProgramVisitor& visitor) override {
+//             return visitor.visit(*this);
+//         };
+
+//         std::vector<ASTNode*> contents() { return this->m_contents; };
+// };
 
 /* String literal class */
 class StringLiteral : public ASTNode {
@@ -95,6 +109,11 @@ class BinaryExpression : public ASTNode {
         BinaryExpression(ASTNode *lhs, ASTNode *rhs, Operator op)
             : m_lhs(lhs), m_rhs(rhs), m_op(op) {}
 
+        ~BinaryExpression() {
+            delete m_lhs;
+            delete m_rhs;
+        }
+
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
@@ -113,7 +132,11 @@ class Block : public ASTNode {
 
     public:
         Block(std::vector<ASTNode*> body) : m_body(body) {}
-
+        ~Block() {
+            for(ASTNode* node: this->m_body) {
+                delete node;
+            }
+        }
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
@@ -152,6 +175,12 @@ class ForLoop : public ASTNode {
         ForLoop(ASTNode *init, ASTNode *update, ASTNode *test, Block* block)
             : m_init(init), m_update(update), m_test(test), m_block(block) {}
         
+        ~ForLoop() {
+            delete this->m_init;
+            delete this->m_update;
+            delete this->m_test;
+            delete this->m_block;
+        }
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
@@ -170,6 +199,12 @@ class FunctionCall : public ASTNode {
         FunctionCall(std::string callee, std::vector<ASTNode*> args)
             : m_callee(callee), m_args(args) {}
 
+        ~FunctionCall() {
+            for(ASTNode* node : m_args) {
+                delete node;
+            }
+        }
+
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
@@ -186,6 +221,9 @@ class AssignmentStatement : public ASTNode {
         AssignmentStatement(std::string id, ASTNode* rhs) 
             : m_id(id), m_rhs(rhs) {}
         
+        ~AssignmentStatement() {
+            delete this->m_rhs;
+        }
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         }
@@ -203,6 +241,9 @@ class VariableDeclaration: public ASTNode {
         VariableDeclaration(std::string id, ASTNode* init, bool local) 
                 : m_id(id), m_init(init), m_local(local) {}
 
+        ~VariableDeclaration() {
+            delete this->m_init;
+        }
         virtual Value accept(ProgramVisitor& visitor) override {
                 return visitor.visit(*this);
         }
