@@ -1,7 +1,7 @@
 # The Van Programming Language DUE: May 6th 2021 @ 3:30 PM
 Final Project for CSC212
 
-## Purpose
+## About
 Van is a language with a simple grammar. It uses a tree-walk interpreter to execute.
 
 Van is extendable, meaning you can add your own functionality and bindings to C++ functions.
