@@ -10,15 +10,23 @@ Van is extendable, meaning you can add your own functionality and bindings to C+
 ```c++
 #include <cmath>
 
+/* Create our "[bu]iltin [sin]" class, inheriting from Builtin */
 class bu_sin : public Builtin {
     public:
-    bu_sin() {
-        this->m_args = {"x"};
-    }
 
-    virtual Value execute(Context& context) override {
-        double x = context.resolveVariable("x").asNumber();
-        return Value(sin(x));
+        /* In the constructor, we must set the argument names to
+           be used later */
+        bu_sin() {
+            this->m_args = {"x"};
+        }
+
+        /* Override the execute function (Gets called when the function does) */
+        virtual Value execute(Context& context) override {
+            // Get the variable "x" from the context
+            double x = context.resolveVariable("x").asNumber();
+
+            // Return sin(x)
+            return Value(sin(x));
     }
 };
 
