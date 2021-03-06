@@ -1,39 +1,28 @@
 # The Van Programming Language
 Final Project for CSC212
 
-## Grammar
-```ebnf
-program ::= block
+## Purpose
+Van is a language with a simple grammar. It uses a tree-walk interpreter to execute.
 
-block ::= {stmnt ';'}
+Van is extendable, meaning you can add your own functionality and bindings to C++ functions.
 
-stmnt ::= variableDeclaration |
-variableAssignment |
-functionDeclaration |
-functionCall |
-forLoop |
-returnStatement
+### Example of an extension: Adding a sin(x) function
+```c++
+#include <cmath>
 
-variableDeclaration ::= 'local' identifier '=' expr |
-'global' identifier '=' expr
+class bu_sin : public Builtin {
+    public:
+    bu_sin() {
+        this->m_args = {"x"};
+    }
 
-variableAssignment ::= identifier '=' expr
+    virtual Value execute(Context& context) override {
+        double x = context.resolveVariable("x").asNumber();
+        return Value(sin(x));
+    }
+};
 
-functionDeclaration ::= 'defun' identifer arglist 'as' block 'end'
-
-functionCall ::= identifier arglist
-
-forLoop ::= 'for' '(' variableDeclaration ',' expr ',' expr ')' 'do' block 'end'
-
-returnStatement ::= 'return' expr
-
-expr ::= 'false' | 'true' | Number | String | identifier 
-         | expr binop expr | prefixExpr
-
-prefixExpr ::=  functioncall  |  '(' expr ')'
-
-binOp ::= '+' | '-' | '*' | '/' |  '%' | '<' | '>' |
-          '<=' | '>' | '>=' | '==' | '&&' | '||'
-
-argList ::= '(' [{exp ','} exp] ')'
+// Later on, when you declare the interpreter
+Interpreter interpreter(input_program);
+interpreter.context()->addBuiltinFunction("sin", bu_sin);
 ```
