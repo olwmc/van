@@ -8,9 +8,13 @@ bool bothNumber(Value lhs, Value rhs) {
     return (lhs.type() == rhs.type()) && (lhs.type() == Value_Type::NUMBER);
 }
 
-// TODO Refactor this to remove trailing 0's
-std::string Value::toString() {
+    std::string Value::toString() {
     if(this->m_type == Value_Type::NUMBER) {
+        // Check if decimal part. Truncate 0's accordingly
+        if(this->m_number == int(this->m_number)) {
+            return std::to_string(int(this->m_number));
+        }
+        
         return std::to_string(this->m_number);
     }
 
