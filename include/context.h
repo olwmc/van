@@ -48,7 +48,7 @@ class Context {
     public:
         Context() {
             /* Add builtins */
-            this->m_functions.insert( {"print", new builtin_Print()} );
+            this->m_functions.insert( {"println", new builtin_Println()} );
             this->m_functions.insert( {"assert", new builtin_Assert()} );
         }
         
@@ -56,6 +56,10 @@ class Context {
             for(auto it: this->m_functions) {
                 delete it.second;
             } 
+        }
+
+        void addBuiltinFunction(std::string name, Builtin* func) {
+            this->m_functions.insert( {name, func} );
         }
 
         void bindLocalVariable(std::string name, Value v);
