@@ -16,10 +16,11 @@ Group
 
 Topic Overview
 * Dynamic Array <= Value list type
-* Hashtable <= Maybe implement my own?
+* Hashtable 
 * Stacks <= Custom callstack type later
 * Recursive Algorithms <= Visitor
 * Recursive Backtracking <= Recursive descent parser
+* Problem Solving <= Fitting all the pieces together
 
 Immediate questions:
 1. *"Why did you implement xyz data structure?"*
