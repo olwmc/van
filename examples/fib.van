@@ -3,7 +3,7 @@ defun fib(n) as
   local b = 1;
 
   -- Loops through getting fibonacci numbers
-  for(local i = 1; i < n; n = n + 1) do
+  for(local i = 1; i < n; n += 1) do
     a = b;
     b = a + b;
   end
@@ -11,4 +11,7 @@ defun fib(n) as
   return a;
 end
 
-assert(fib(8) == 21);
+local result = fib(8);
+
+print(result);
+assert(result == 21);
