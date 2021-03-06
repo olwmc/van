@@ -22,24 +22,8 @@ class Parser {
     }
     
     ~Parser() {}
-    
-    bool error() { return this-> m_error; }
-    Block* parse() {
-        this->m_next = m_tokens[0];
-        Block* body = makeBlock();
-        return body;
-    }
 
-    Block* makeBlock() {
-        std::vector<ASTNode*> block;
-
-        while(this->m_next.type() != Token_Type::END_FILE) {
-            block.push_back(makeStatement());
-        }
-        
-        return new Block(block);
-    }
-
+    /* Raise syntactical error */
     void raiseError(std::string err) {
         int line = this->m_current.line();
 
@@ -56,10 +40,83 @@ class Parser {
         this->m_error = true;
     }
 
+    /* Check if error */
+    bool error() { return this-> m_error; }
+
+    /* Check if assignment operator */
+    bool isAssignmentOp() {
+        return this->m_next.raw() == "=" || this->m_next.raw() == "+=";
+    }
+
+    /* Advance to next token */
+    void advance() {
+        if(this->m_next.type() != Token_Type::END_FILE) {
+            this->m_current = this->m_tokens[index];
+            this->m_next = this->m_tokens[index + 1];
+            index++;
+        }
+
+        else {
+            this->m_current = this->m_next;
+        }
+    }
+
+    /* Accept / reject token raw */
+    bool accept(std::string tt) {
+        if((m_next.type() != Token_Type::END_FILE) && (m_next.raw() == tt)) {
+            advance();
+            return true;
+        }
+
+        return false;
+    }
+
+    /* Accept / reject token type */
+    bool acceptType(Token_Type tt) {
+        if((m_next.type() != Token_Type::END_FILE) && (m_next.type() == tt)) {
+            advance();
+            return true;
+        }
+
+        return false;
+    }
+
+    /* Expect token string otherwhise raiseError */
+    void expect(std::string tt) {
+        if(!accept(tt)) {
+            raiseError("Expected " + tt);
+            this->m_error = true;
+        }
+    }
+
+    /* Parse program */
+    Block* parse() {
+        this->m_next = m_tokens[0];
+        Block* body = makeBlock();
+        return body;
+    }
+
+    /* Parse collection of statements */
+    Block* makeBlock() {
+        std::vector<ASTNode*> block;
+
+        while(this->m_next.type() != Token_Type::END_FILE) {
+            block.push_back(makeStatement());
+        }
+        
+        return new Block(block);
+    }
+
+    /* Parse statement */
     ASTNode* makeStatement() {
+
+        /* Identifier branch */
         if(acceptType(IDENTIFIER)) {
+            
+            /* Get identifier */
             std::string id = m_current.raw();
 
+            /* If '(' is accepted, it's a function call */
             if(accept("(")) {
                 // Make a function that deals with args
                 std::vector<ASTNode*> args = makeArgs();                
@@ -68,26 +125,30 @@ class Parser {
                 return new FunctionCall(id, args );
             }
 
+            /* If an assignment operator is accepted, then it's an assignment statement */
             else if(isAssignmentOp()) {
                 ASTNode *assign = makeAssignmentStatement();
                 expect(";");
 
                 return assign;
             }
-
+            
+            /* Otherwhise, it's an unexpected identifier */
             else {
                 raiseError("Unexpected identifer: " + this->m_current.raw());
                 return nullptr;
             }
         }
 
-        else if(acceptType(Token_Type::LOCAL) || acceptType(Token_Type::LOCAL)) {
+        /* Variable declaration branch */
+        else if(acceptType(Token_Type::LOCAL) || acceptType(Token_Type::GLOBAL)) {
             ASTNode* varDec = makeVariableDeclaration();
             expect(";");
 
             return varDec;
         }
 
+        /* For loop branch */
         else if(acceptType(Token_Type::FOR)) {
             // Get past first open parenthesis
             expect("(");
@@ -106,7 +167,11 @@ class Parser {
             ASTNode* update = makeAssignmentStatement();
             expect(")");
 
+            // Block to hold statements
             std::vector<ASTNode*> block;
+
+            // Expect beginning of do block
+            // TODO: write makeDoBlock(); 
             expect("do");
 
             while(this->m_next.type() != Token_Type::END) {
@@ -117,6 +182,7 @@ class Parser {
             return new ForLoop(init, update, test, new Block(block));
         }
 
+        /* Otherwhise, it's an unexpected token and shouldn't be there */
         else {
             advance();
             raiseError("Unexpected token: " + this->m_current.raw());
@@ -185,51 +251,6 @@ class Parser {
         
         return args;
     }
-    
-    bool isAssignmentOp() {
-        return this->m_next.raw() == "=" || this->m_next.raw() == "+=";
-    }
-
-    void advance() {
-        if(this->m_next.type() != Token_Type::END_FILE) {
-            this->m_current = this->m_tokens[index];
-            this->m_next = this->m_tokens[index + 1];
-            index++;
-        }
-
-        else {
-            this->m_current = this->m_next;
-        }
-    }
-
-    Token peek() {
-        return this->m_next;
-    }
-
-    bool accept(std::string tt) {
-        if((m_next.type() != Token_Type::END_FILE) && (m_next.raw() == tt)) {
-            advance();
-            return true;
-        }
-
-        return false;
-    }
-
-    bool acceptType(Token_Type tt) {
-        if((m_next.type() != Token_Type::END_FILE) && (m_next.type() == tt)) {
-            advance();
-            return true;
-        }
-
-        return false;
-    }
-
-    void expect(std::string tt) {
-        if(!accept(tt)) {
-            raiseError("Expected " + tt);
-            this->m_error = true;
-        }
-    }
 
     ASTNode* expr() {
         ASTNode* exprval = term();
@@ -290,6 +311,15 @@ class Parser {
             expect(")");
             return exprval;
         }
+
+        /*
+        else if (accept("[")) {
+            std::vector<ASTNode*> args = makeArgs();
+            expect("]");
+
+            return new ArrayLiteral(args);
+        }
+        */
 
         // else if(accept("[")) <== Work this out
         else if(acceptType(IDENTIFIER)) {
