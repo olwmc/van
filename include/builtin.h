@@ -3,29 +3,36 @@
 
 #include "callable.h"
 
-/* Builtin print statement class */
-class builtin_Print : public Callable {
-
+class Builtin : public Callable {
   public:
-    builtin_Print() {
-      this->m_args = {"__input__"};
-    }
-
     virtual Value accept(ProgramVisitor& visitor) override {
       return visitor.visit(*this);
     }
 
+    virtual Value execute(Context& context) = 0;
+};  
+
+/* Builtin print statement class */
+class builtin_Println : public Builtin {
+
+  public:
+    builtin_Println() {
+      this->m_args = {"__input__"};
+    }
+  
+    virtual Value execute(Context& context) override;
+
 };
 
-class builtin_Assert: public Callable {  
+class builtin_Assert : public Builtin {
+
   public:
     builtin_Assert() {
       this->m_args = {"__assert_condition__"};
     }
+  
+    virtual Value execute(Context& context) override;
 
-    virtual Value accept(ProgramVisitor& visitor) override {
-      return visitor.visit(*this);
-    }
 };
 
 /* Builtin casts */
