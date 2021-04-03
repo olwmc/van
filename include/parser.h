@@ -104,7 +104,9 @@ class Parser {
             block.push_back(makeStatement());
         }
         
-        return new Block(block);
+        Block* retBlock = new Block(block);
+
+        return retBlock;
     }
 
     /* Parse statement */
