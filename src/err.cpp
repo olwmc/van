@@ -4,5 +4,5 @@
 
 void raiseLogicError(std::string message) {
     std::cout << message << "\n";
-    exit(1);
+    
 }
