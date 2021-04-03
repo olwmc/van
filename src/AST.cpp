@@ -27,7 +27,7 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     }
 
     if(result.type() == Value_Type::ERR) {
-        raiseLogicError("Incorrect types");
+        throw std::runtime_error("Incorrect types");
     }
 
     return result;
