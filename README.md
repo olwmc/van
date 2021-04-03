@@ -32,5 +32,5 @@ class bu_sin : public Builtin {
 
 // Later on, when you declare the interpreter
 Interpreter interpreter(input_program);
-interpreter.context()->addBuiltinFunction("sin", bu_sin);
+interpreter.context()->addBuiltinFunction("sin", new bu_sin());
 ```
