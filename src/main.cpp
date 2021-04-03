@@ -9,6 +9,7 @@
 class Van_Interpreter {
     std::string m_program;
     Context* m_context;
+    Block* m_start;
 
     public:
     Van_Interpreter(std::string program) {
@@ -18,6 +19,7 @@ class Van_Interpreter {
 
     ~Van_Interpreter() {
         delete this->m_context;
+        delete this->m_start;
     }
 
     Value interpret() {
@@ -25,21 +27,24 @@ class Van_Interpreter {
         Lexer lexer(this->m_program);
         std::vector<Token> tokens = lexer.makeTokens();
 
+        // Parsed AST
         Parser parser(tokens, this->m_program);
-        Block* start = parser.parse();
+        m_start = parser.parse();
 
+        // Return value
         Value v;
+
+        // If there were no parser errors, try to run
         if(!parser.error()) {
             // Context and visitor
             this->m_context->pushScope();
 
             ProgramVisitor vis(this->m_context);
             
-            // Accept start node
-            v = start->accept(vis);
+            // Accept start node (This can throw an exception error)
+            v = m_start->accept(vis);
         }
 
-        delete start;
         return v;
     }
 
@@ -104,5 +109,10 @@ int main() {
     interpreter.context()->addBuiltinFunction("print", new builtin_Print());
     interpreter.context()->addBuiltinFunction("num", new builtin_NumCast());
 
-    interpreter.interpret();
+    try {
+        interpreter.interpret();
+    }
+    catch(const std::runtime_error& error) {
+        std::cout << error.what() << "\n";
+    }
 }
