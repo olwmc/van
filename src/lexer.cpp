@@ -222,7 +222,6 @@ Token Lexer::makeStringLiteral() {
     advance();
 
     while(!isStringStart()) {
-        // Check if escaped quote
         if(this->m_currentChar == '\\') {
             advance();
             str += this->m_currentChar;
