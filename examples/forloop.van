@@ -1,10 +1,11 @@
-println("Enter a number");
-print("> ");
+println("Let\'s play a game!");
 
-local n = num(input());
+local start = 0;
+local stop = 100;
+local step = 7;
 
-local x = 1.55;
+println("Count from " + start + " to " + stop + " in increments of " + step);
 
-for(local i = 1; i <= n; i+=1) do
-    println(i + " bottles of beer on the wall");
+for(local i = start; i <= stop; i+= step) do
+    println(i);
 end
