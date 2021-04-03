@@ -2,6 +2,7 @@
 Final Project for CSC212
 
 ## Grammar
+TBAdded: Conditionals & while(x==y) loop (& maybe until(x==y) loop)
 ```ebnf
 program ::= block
 
