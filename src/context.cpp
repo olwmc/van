@@ -5,7 +5,6 @@
 #include <string>
 
 void Context::bindLocalVariable(std::string name, Value v) {
-    // TODO: Make this actually work dummy
     this->m_callStack.back()[name] = v;
 }
 
@@ -13,8 +12,26 @@ void Context::bindGlobalVariable(std::string name, Value v) {
     this->m_globalScope[name] = v;
 }
 
-// TODO
-// void updateVariable
+void Context::updateVariable(std::string name, Value v) {
+    // Loop through each index of the callstack, looking for the variable
+    for(int i = (int)this->m_callStack.size(); i--;) {
+
+        // If the variable is found in the map, set the new value and return
+        if(this->m_callStack[i].find(name) != this->m_callStack[i].end()) {
+            this->m_callStack[i][name] = v;
+            return;
+        }
+    }
+
+    // If the variable isn't in the callstack, check the global scope and set if possible
+    if(this->m_globalScope.find(name) != this->m_globalScope.end()) {
+        this->m_globalScope[name] = v;
+        return;
+    }
+
+    // Otherwhise, the variable has not been declared
+    throw std::runtime_error("Unable to find variable: " + name);
+}
 
 Value Context::resolveVariable(std::string name) {
     Scope local;
