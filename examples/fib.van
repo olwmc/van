@@ -2,7 +2,6 @@ defun fib(n) as
   local a = 0;
   local b = 1;
 
-  -- Loops through getting fibonacci numbers
   for(local i = 1; i < n; n += 1) do
     a = b;
     b = a + b;

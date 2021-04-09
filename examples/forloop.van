@@ -1,11 +1,6 @@
-println("Let\'s play a game!");
+global x = 0;
 
-local start = 0;
-local stop = 100;
-local step = 7;
-
-println("Count from " + start + " to " + stop + " in increments of " + step);
-
-for(local i = start; i <= stop; i+= step) do
-    println(i);
+for(local i = 0; i <= 10; i += 1) do
+    x += 5;
+    println(x);
 end
