@@ -194,13 +194,13 @@ class Parser {
     }
     
     ASTNode* makeVariableDeclaration() {
-        bool islocal = this->m_next.raw() == "local";
+        bool islocal = this->m_current.raw() == "local";
 
         if(acceptType(IDENTIFIER)) {
             std::string id = this->m_current.raw();
             expect("=");
             ASTNode *expression = expr();
-        
+
             return new VariableDeclaration(id, expression, islocal);
         }
 
@@ -323,7 +323,6 @@ class Parser {
         }
         */
 
-        // else if(accept("[")) <== Work this out
         else if(acceptType(IDENTIFIER)) {
             std::string id = m_current.raw();
 
@@ -334,6 +333,11 @@ class Parser {
                 return new FunctionCall(id, args);
             }
 
+            /*
+            else if(accept("[")) {
+                
+            }
+            */
             else {
                 return new Identifier(id);
             }
