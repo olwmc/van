@@ -24,6 +24,8 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
         case Operator::GREATEQUAL:  result = lhs >= rhs; break;
         case Operator::OR:          result = lhs || rhs; break;
         case Operator::AND:         result = lhs && rhs; break;
+        case Operator::LESSTHAN:    result = lhs < rhs;  break;
+        case Operator::GREATERTHAN: result = lhs > rhs;  break;
     }
 
     if(result.type() == Value_Type::ERR) {

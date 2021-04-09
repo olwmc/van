@@ -159,7 +159,7 @@ class Parser {
             // Get for-loop initializer
             ASTNode* init = makeVariableDeclaration();
             expect(";");
-
+            
             // Get loop test
             ASTNode* test = expr();
             expect(";");
@@ -254,14 +254,15 @@ class Parser {
         return args;
     }
 
-    ASTNode* expr() {
-        ASTNode* exprval = term();
-        while(accept("+") || accept("-") || accept("==") || accept("!=") || accept("<=") || accept(">=")) {
+    ASTNode* expr() {        
+        ASTNode* exprval = term();        
+        while(accept("+") || accept("-") || accept("==") || accept("!=") || accept("<=") || accept(">=") || accept(">") || accept("<")) {
             if(exprval == nullptr) {
                 std::cout << "Expected term before binary operator\n";
                 this->m_error = true;
             }
             std::string op = m_current.raw();
+
             ASTNode* right = term();
 
             if(op == "+") {
@@ -276,6 +277,10 @@ class Parser {
                 exprval = new BinaryExpression(exprval, right, Operator::LESSEQUAL);
             } else if (op == ">=") {
                 exprval = new BinaryExpression(exprval, right, Operator::GREATEQUAL);
+            } else if (op == ">") {
+                exprval = new BinaryExpression(exprval, right, Operator::GREATERTHAN);
+            } else if (op == "<") {
+                exprval = new BinaryExpression(exprval, right, Operator::LESSTHAN);
             }
         }
 

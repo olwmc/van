@@ -55,6 +55,8 @@ class Value {
         Value operator!=(Value other);
         Value operator<=(Value other);
         Value operator>=(Value other);
+        Value operator>(Value other);
+        Value operator<(Value other);
             
         /* Logical Operations */
         Value operator&&(Value other);

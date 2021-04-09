@@ -108,6 +108,21 @@ Value Value::operator>=(Value other) {
     return Value(Value_Type::ERR);
 }
 
+Value Value::operator>(Value other) {
+    if(bothNumber(*this, other)) {
+        return Value(this->m_number > other.m_number);
+    }
+    
+    return Value(Value_Type::ERR);
+}
+Value Value::operator<(Value other) {
+    if(bothNumber(*this, other)) {
+        return Value(this->m_number < other.m_number);
+    }
+    
+    return Value(Value_Type::ERR);
+}
+
 Value Value:: operator&&(Value other) {
     if(bothNumber(*this, other)) {
         return Value(this->m_number && other.m_number);

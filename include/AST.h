@@ -25,7 +25,8 @@
 /* Used for arithmetic expressions */
 enum Operator {
     ADD, SUBTRACT, MULTIPLY, DIVIDE, MOD,
-    EQUALS, LESSEQUAL, GREATEQUAL, NOTEQUAL, AND, OR
+    EQUALS, LESSEQUAL, GREATEQUAL, NOTEQUAL, AND, OR,
+    LESSTHAN, GREATERTHAN
 };
 
 /* AST Node abstract class */
