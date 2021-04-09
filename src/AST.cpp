@@ -27,7 +27,7 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     }
 
     if(result.type() == Value_Type::ERR) {
-        throw std::runtime_error("Incorrect types");
+        throw std::runtime_error("Incorrect types on values: " + lhs.toString() + " & " + rhs.toString());
     }
 
     return result;
@@ -83,7 +83,7 @@ Value ProgramVisitor::visit(ForLoop& forLoop) {
     forLoop.init()->accept(*this);
     
     // While test != False (0)
-    while(forLoop.test()->accept(*this).asNumber() != 0) {
+    while(forLoop.test()->accept(*this).asNumber() != false) {
         
         // Execute body and set return value
         value = forLoop.block()->accept(*this);
@@ -137,7 +137,7 @@ Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     Value init = assignmentStatement.rhs()->accept(*this);
 
     // TODO: Fix this, it doesn't work for global variables
-    this->m_context->bindLocalVariable(id, init);
+    this->m_context->updateVariable(id, init);
 
     return Value();
 }

@@ -64,6 +64,9 @@ class Context {
 
         void bindLocalVariable(std::string name, Value v);
         void bindGlobalVariable(std::string name, Value v);
+
+        void updateVariable(std::string name, Value v);
+        
         void bindFunction(std::string name, std::vector<std::string> args, ASTNode* body);
         
         // Resolves a variable name to its associated Value
