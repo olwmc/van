@@ -1,6 +1,0 @@
-global x = 0;
-
-for(local i = 0; i <= 10; i += 1) do
-    x += 5;
-    println(x);
-end
