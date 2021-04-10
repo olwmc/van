@@ -9,7 +9,7 @@ defun fib(n) as
         y = z;
     end
 
-    println("The " + n + "th fibonacci number is: " + x);
+    return x;
 end
 
-fib(11);
+println(fib(fib(7)));
