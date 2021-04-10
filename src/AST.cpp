@@ -2,6 +2,8 @@
 #include "value.h"
 #include "err.h"
 
+#include <cmath>
+
 Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     Value lhs = binaryExpression.lhs()->accept(*this);
     Value rhs = binaryExpression.rhs()->accept(*this);
@@ -14,8 +16,9 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
         case Operator::MULTIPLY:    result = lhs * rhs;  break;
         case Operator::DIVIDE:      result = lhs / rhs;  break;
             
-        // TODO: Overload this to support proper double modulo
-        case Operator::MOD:         result = lhs % rhs;  break;
+        case Operator::MOD:
+            result = fmod(lhs.asNumber(), rhs.asNumber());
+        break;
             
         /* Logical operations */
         case Operator::EQUALS:      result = lhs == rhs; break;
@@ -138,7 +141,6 @@ Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     std::string id = assignmentStatement.id();
     Value init = assignmentStatement.rhs()->accept(*this);
 
-    // TODO: Fix this, it doesn't work for global variables
     this->m_context->updateVariable(id, init);
 
     return Value();

@@ -173,7 +173,6 @@ class Parser {
             std::vector<ASTNode*> block;
 
             // Expect beginning of do block
-            // TODO: write makeDoBlock(); 
             expect("do");
 
             while(this->m_next.type() != Token_Type::END) {
@@ -205,7 +204,7 @@ class Parser {
             // TODO: FIX THIS SO MULTIARGS ARE ALLOWED
             // Get the remaining args
             // while(accept(",")) {
-            //     st
+            //
             // }
 
             expect(")");
@@ -218,6 +217,13 @@ class Parser {
             }
 
             return new FunctionDeclaration(id, args, new Block(block));
+        }
+
+        else if(acceptType(Token_Type::RETURN)) {
+            ASTNode* argument = expr();
+            expect(";");
+
+            return new ReturnStatement(argument);
         }
 
         /* Otherwhise, it's an unexpected token and shouldn't be there */
@@ -293,8 +299,15 @@ class Parser {
         
         // While there's still ",", push a new argument
         while(accept(",")) {
-            // TODO CHECK FOR NULLPTR
-            args.push_back(expr());
+            ASTNode* expression = expr();
+
+            if(expression != nullptr) {
+                args.push_back(expr());
+            }
+
+            else {
+                raiseError("Expected expression");
+            }
         }
         
         return args;

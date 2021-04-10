@@ -152,6 +152,9 @@ class ReturnStatement: public ASTNode {
             m_return = true;
         }
 
+        ~ReturnStatement() {
+            delete this->m_argument;
+        }
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         };
