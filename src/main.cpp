@@ -46,7 +46,7 @@ class builtin_NumCast : public Builtin {
 };
 
 int main() {
-    std::ifstream infile("examples/forloop.van");
+    std::ifstream infile("examples/fib.van");
     std::string file_contents { std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>() };
     
     Van_Interpreter interpreter(file_contents);

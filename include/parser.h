@@ -183,6 +183,42 @@ class Parser {
 
             return new ForLoop(init, update, test, new Block(block));
         }
+        
+        /* Defun function */
+        else if (acceptType(Token_Type::DEFUN)) {
+            // Get identifier and advance
+            std::string id = this->m_next.raw();
+            advance();
+
+            expect("(");
+
+            // Get identifier arguments
+            std::vector<std::string> args;
+
+            if(!accept(")")) {
+                if(this->m_next.type() == Token_Type::IDENTIFIER) {
+                    args.push_back(this->m_next.raw());
+                    advance();
+                }
+            }
+
+            // TODO: FIX THIS SO MULTIARGS ARE ALLOWED
+            // Get the remaining args
+            // while(accept(",")) {
+            //     st
+            // }
+
+            expect(")");
+            expect("as");
+            
+            std::vector<ASTNode*> block;
+
+            while(!accept("end")) {
+                block.push_back(makeStatement());
+            }
+
+            return new FunctionDeclaration(id, args, new Block(block));
+        }
 
         /* Otherwhise, it's an unexpected token and shouldn't be there */
         else {
@@ -193,9 +229,12 @@ class Parser {
         }
     }
     
+    /* Make variableDeclaration AST node */
     ASTNode* makeVariableDeclaration() {
+        // Check if local or global
         bool islocal = this->m_current.raw() == "local";
 
+        // If accept identifier, parse out the statement and return the node
         if(acceptType(IDENTIFIER)) {
             std::string id = this->m_current.raw();
             expect("=");
@@ -207,6 +246,7 @@ class Parser {
         return nullptr;
     }
 
+    /* Make assignmentStatement AST node */
     ASTNode* makeAssignmentStatement() {
         // Get the identifier
         std::string id = this->m_current.raw();
@@ -238,14 +278,20 @@ class Parser {
         return new AssignmentStatement(id, expression);
     }
 
+    /* Make arguments (Function call or array) */
     std::vector<ASTNode*> makeArgs() {
+        // Argument holder
         std::vector<ASTNode*> args = {};
+
+        // Get first expression if available
         ASTNode* expression = expr();
 
+        // Push first expression
         if(expression != nullptr) {
             args.push_back(expression);
         }
         
+        // While there's still ",", push a new argument
         while(accept(",")) {
             // TODO CHECK FOR NULLPTR
             args.push_back(expr());
@@ -254,17 +300,27 @@ class Parser {
         return args;
     }
 
-    ASTNode* expr() {        
-        ASTNode* exprval = term();        
+    /* Expression parser */
+    ASTNode* expr() {
+        // Get first term  
+        ASTNode* exprval = term();
+
+        // Accept the binary opertor if available
         while(accept("+") || accept("-") || accept("==") || accept("!=") || accept("<=") || accept(">=") || accept(">") || accept("<")) {
+
+            // Make a check on the lhs
             if(exprval == nullptr) {
                 std::cout << "Expected term before binary operator\n";
                 this->m_error = true;
             }
+
+            // Get the operator 
             std::string op = m_current.raw();
 
+            // Get the right term
             ASTNode* right = term();
 
+            // Figure out what to do with the operator
             if(op == "+") {
                 exprval = new BinaryExpression(exprval, right, Operator::ADD);
             } else if(op == "-") {
@@ -284,15 +340,22 @@ class Parser {
             }
         }
 
+        // Return the expression
         return exprval;
     }
 
+    /* Term level parser */
     ASTNode* term() {
+        // Get factor
         ASTNode* termval = factor();
+
+        // If accept operator
         while(accept("*") || accept("/")) {
+            // Get the operator and rhs
             std::string op = m_current.raw();
             ASTNode* right = factor();
 
+            // Figure out what to do with the operator
             if(op == "*") {
                 termval = new BinaryExpression(termval, right, Operator::MULTIPLY);
             } else if(op == "/") {

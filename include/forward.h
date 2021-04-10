@@ -15,6 +15,7 @@ class Identifier;
 class FunctionCall;
 class AssignmentStatement;
 class VariableDeclaration;
+class FunctionDeclaration;
 
 class Context;
 

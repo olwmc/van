@@ -160,3 +160,12 @@ Value ProgramVisitor::visit(VariableDeclaration& variableDeclaration) {
 
     return Value();
 }
+
+Value ProgramVisitor::visit(FunctionDeclaration& functionDeclaration) {
+    UserFunction* userFunc = \
+    new UserFunction(functionDeclaration.args(), functionDeclaration.body());
+
+    this->m_context->bindFunction(functionDeclaration.id(), userFunc);
+
+    return Value();
+}

@@ -24,6 +24,7 @@ class ProgramVisitor {
         Value visit(FunctionCall& functionCall);
         Value visit(AssignmentStatement& assignmentStatement);
         Value visit(VariableDeclaration& variableDeclaration);
+        Value visit(FunctionDeclaration& functionDeclaration);
 
         /* Function callables */
         Value visit(Builtin& builtin);

@@ -254,4 +254,26 @@ class VariableDeclaration: public ASTNode {
         bool isLocal()   { return this->m_local; }
 };
 
+class FunctionDeclaration : public ASTNode {
+    std::string m_id;
+    std::vector<std::string> m_args;
+    Block* m_body;
+
+    public:
+        FunctionDeclaration(std::string id, std::vector<std::string> args, Block* body) 
+            : m_id(id), m_args(args), m_body(body) {}
+
+        ~FunctionDeclaration() {
+            delete this->m_body;
+        }
+
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        }
+
+        std::string id()                { return this->m_id;   }
+        std::vector<std::string> args() { return this->m_args; }
+        Block* body()                   { return this->m_body; }
+};
+
 #endif /* AST_H */
