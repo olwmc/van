@@ -7,8 +7,6 @@
 3. IMPLEMENT THAT VISITOR METHOD
 */
 
-// TODO: Proper destructor for all this stuff
-
 #ifndef AST_H
 #define AST_H
 

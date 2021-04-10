@@ -12,7 +12,9 @@ enum Token_Type {
     
     FOR, RETURN, DEFUN, LOCAL, GLOBAL,
     AS, BEGIN, END,
-    COMMENT
+    COMMENT,
+
+    UNDEF
 };
 
 /* Holds data about each token recovered from the lexer */
@@ -28,9 +30,9 @@ class Token {
               m_index(index), m_line(line)
             {}
 
-        // TODO: FIX THIS
+        // Give the 
         Token() {
-            this->m_type = Token_Type::COMMENT;
+            this->m_type = Token_Type::UNDEF;
         }
         ~Token() {}
         

@@ -1,5 +1,3 @@
-// TODO: REWORK THIS WHOLE FILE
-
 #ifndef CALLABLE_H
 #define CALLABLE_H
 

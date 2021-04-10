@@ -13,7 +13,9 @@ std::vector<std::string> token_string = {
     
     "FOR", "RET", "DEFUN", "LOCAL", "GLOBAL",
     "AS", "BEGIN", "END",
-    "COMMENT"
+    "COMMENT",
+
+    "UNDEF"
 };
 
 /* Maps keywords to Token_Type enum */
