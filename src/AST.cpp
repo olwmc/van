@@ -117,7 +117,7 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     std::vector<ASTNode*> callArgs = functionCall.args();
 
     if(callArgs.size() != funcArgs.size()) {
-        raiseLogicError("Incorrect number of arguments for function \"" + functionCall.callee() + "\"");
+        throw std::runtime_error("Incorrect number of arguments for function \"" + functionCall.callee() + "\"");
     }
 
     // Add each argument as a local variable with value passed through call
