@@ -1,48 +1,62 @@
+-- Get mean of a list
 defun getMean(list, size) as
     local sum = 0;
 
+    -- Loop through the list and average it 
     for(local i = 0; i < size; i+=1) do
             sum += list[i];
     end
 
+    -- Return average
     return sum/size;
 end
 
+-- Estimate the coefficents for x,y
 defun estimateCoefficient(x,y,size) as
+    -- Get the means of both
     local m_x = getMean(x, size);
     local m_y = getMean(y, size);
-    local sum = 0;
+    local sum = 0; -- Sneaky little test comment
 
+    -- Sum out x*y
     for(local i = 0; i < size; i += 1) do
         sum += x[i] * y[i];
     end
 
+    -- Get ss_xy
     local SS_xy = sum - size*m_x*m_y;
 
+    -- Sum out x*x
     sum = 0;
     for(local i = 0; i < size; i+=1) do
         sum += x[i] * x[i];
     end
 
+    -- Get ss_xx
     local SS_xx = sum - (size*m_x*m_x);
 
+    -- Get the coefficients for x_0 and x_1
     local b_one = SS_xy/SS_xx;
     local b_zero = m_y - b_one*m_x;
 
+    -- Return them as a list
     return [b_zero, b_one];
 end
 
-
+-- Predict a y value for given coefficients and x
 defun predict(coefs, num) as
     println("Predicting for x = " + num);
     println("y = " + (coefs[0] + coefs[1] * num));
 end
 
+-- X/y datasets
 local x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11];
 local y = [1, 3, 2, 5, 7, 8, 8, 9, 10, 12, 11];
 
 local size = 11;
 
+-- Get the coefficients
 local coefs = estimateCoefficient(x,y,size);
 
+-- Predict for x=100
 predict(coefs, 100);
