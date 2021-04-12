@@ -390,33 +390,65 @@ class Parser {
 
         return termval;
     }
-
+    
+    /* Factor level expression parsing */
     ASTNode* factor() {
+        // If accept a number literal, make one
         if(acceptType(NUM_LIT)) {
             return new NumberLiteral(std::stod(m_current.raw()));
         }
 
+        // If accept a string literal, make one
         else if (acceptType(STR_LIT)) {
-            return new StringLiteral(m_current.raw());
+            // Get the string literal value
+            std::string raw = m_current.raw();
+            
+            // If there's a "[" after a string, it's a literal index
+            if(accept("[")) {
+                ASTNode* argument = expr();
+                expect("]");
+
+                return new IndexExpression( new StringLiteral(raw) , argument );
+            }
+            
+            // Otherwhise, return the stringliteral
+            else {
+                return new StringLiteral(raw);
+            }
         }
 
-        // TODO: Fix hanging )
+        // Make a subexpression when encountering a "(" at the factor level
         else if (accept("(")) {
             ASTNode* exprval = expr();
             expect(")");
             return exprval;
         }
 
+        // Make a list factor if encountering a "["
         else if (accept("[")) {
             std::vector<ASTNode*> args = makeArgs();
             expect("]");
 
-            return new ArrayLiteral(args);
+            // If a "[" is encountered after an array, it's a literal indexing
+            if(accept("[")) {
+                ASTNode* argument = expr();
+                expect("]");
+
+                return new IndexExpression( new ArrayLiteral(args) , argument );            
+            }
+
+            // Otherwhise just make the arrayLiteral
+            else {
+                return new ArrayLiteral(args);
+            }
         }
 
+        // Figure out what to do with an identifier
         else if(acceptType(IDENTIFIER)) {
+            // Get the identifier
             std::string id = m_current.raw();
             
+            // If encounter a "(", it's a function call
             if(accept("(")) {
                 std::vector<ASTNode*> args = makeArgs();
 
@@ -424,16 +456,22 @@ class Parser {
                 return new FunctionCall(id, args);
             }
 
-            /*
+            // If you encounter a "[", it's an index expression
             else if(accept("[")) {
-                
+                ASTNode* argument = expr();
+                expect("]");
+
+                return new IndexExpression( new Identifier(id), argument );            
             }
-            */
+            
+            // Otherwhise the factor is just an identifier
             else {
                 return new Identifier(id);
             }
         }
         
+        // Otherwhise, you've encoutnered a unary expression, which in this case is
+        // only negation
         else if (accept("-")) {
             // This needs to be factor as to just negate the next factor
             ASTNode* exprval = factor();
@@ -441,6 +479,7 @@ class Parser {
             return new BinaryExpression(exprval, new NumberLiteral(-1), Operator::MULTIPLY);
         }
 
+        // If nothing has been fulfilled, return a nullptr
         return nullptr;
     }
 };

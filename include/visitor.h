@@ -19,6 +19,7 @@ class ProgramVisitor {
 
         /* Statement nodes */
         Value visit(BinaryExpression& binaryExpression);
+        Value visit(IndexExpression& indexExpression);
         Value visit(ReturnStatement& returnStatement);
         Value visit(ForLoop& forLoop);
         Value visit(Block& block);

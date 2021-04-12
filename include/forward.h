@@ -9,6 +9,7 @@ class NumberLiteral;
 class StringLiteral;
 class ArrayLiteral;
 class BinaryExpression;
+class IndexExpression;
 class Block;
 class ForLoop;
 class ReturnStatement;

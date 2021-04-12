@@ -127,6 +127,27 @@ class BinaryExpression : public ASTNode {
         Operator op()    { return this->m_op;  }
 };
 
+/* Index Expression class */
+class IndexExpression : public ASTNode {
+    ASTNode *m_lhs, *m_rhs;
+
+    public:
+        IndexExpression(ASTNode* lhs, ASTNode* rhs)
+            : m_lhs(lhs), m_rhs(rhs) {}
+        
+        ~IndexExpression() {
+            delete this->m_lhs;
+            delete this->m_rhs;
+        }
+
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        }
+
+        ASTNode* lhs()  { return this->m_lhs; }
+        ASTNode* rhs()  { return this->m_rhs; }
+};
+
 /* Block class (Denotes beginning of new scope) */
 class Block : public ASTNode {
     // Maybe refactor this later to an array to decrease

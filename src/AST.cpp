@@ -37,6 +37,36 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     return result;
 }
 
+// Index expression
+Value ProgramVisitor::visit(IndexExpression& indexExpression) {
+    Value lhs = indexExpression.lhs()->accept(*this);
+    Value rhs = indexExpression.rhs()->accept(*this);
+
+    //TODO: Bounds checking for index
+
+    // Check if index is valid
+    if(rhs.type() != Value_Type::NUMBER) {
+        throw std::runtime_error("Cannot index with value: " + rhs.toString());
+    }
+
+    // If the lhs is a list
+    if(lhs.type() == Value_Type::LIST) {
+        return Value(lhs.asList()[rhs.asNumber()]);
+    }
+
+    // If the lhs is a string
+    else if(lhs.type() == Value_Type::STRING) {
+        char val = (char)lhs.asString()[rhs.asNumber()];
+
+        return Value(std::string(1, val));
+    }
+
+    // Else its not indexable
+    else {
+        throw std::runtime_error("Cannot index this type");
+    }
+}
+
 // Return the literal representation of the Number
 Value ProgramVisitor::visit(NumberLiteral& numberLiteral) {
     return Value(numberLiteral.value());
