@@ -50,6 +50,9 @@ class Context {
             /* Add builtins */
             this->m_functions.insert( {"println", new builtin_Println()} );
             this->m_functions.insert( {"assert", new builtin_Assert()} );
+            this->m_functions.insert( {"input", new builtin_Input() });
+            this->m_functions.insert( {"print", new builtin_Print() });
+            this->m_functions.insert( {"num", new builtin_NumCast() });
         }
         
         ~Context() {

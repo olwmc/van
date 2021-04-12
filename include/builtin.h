@@ -35,6 +35,33 @@ class builtin_Assert : public Builtin {
 
 };
 
+class builtin_Input : public Builtin {
+    public:
+    builtin_Input() {
+        this->m_args = {};
+    }
+
+    virtual Value execute(Context& context) override;
+};
+
+class builtin_Print : public Builtin {
+    public:
+    builtin_Print() {
+        this->m_args = {"__input__"};
+    }
+
+    virtual Value execute(Context& context) override;
+};
+
+class builtin_NumCast : public Builtin {
+    public:
+    builtin_NumCast() {
+        this->m_args = {"__input__"};
+    }
+
+    virtual Value execute(Context& context) override;
+};
+
 /* Builtin casts */
 /*
 class builtin_NumberCast;
