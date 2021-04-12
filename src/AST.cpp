@@ -107,7 +107,6 @@ Value ProgramVisitor::visit(Block& block) {
         // Accept each ASTNode
         value = statement->accept(*this);
 
-        // TODO: FIGURE OUT
         if(value.toString() != "NIL") { return value; }
     }
 
