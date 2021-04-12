@@ -1,6 +1,5 @@
 #include "AST.h"
 #include "value.h"
-#include "err.h"
 
 #include <cmath>
 

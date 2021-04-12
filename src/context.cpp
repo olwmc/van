@@ -1,6 +1,5 @@
 #include "forward.h"
 #include "context.h"
-#include "err.h"
 
 #include <string>
 
@@ -53,7 +52,7 @@ Value Context::resolveVariable(std::string name) {
 
     // Else raise error
     else {
-        raiseLogicError("Could not resolve variable name: " + name);
+        throw std::runtime_error("Could not resolve variable name: " + name);
     }
 
     return Value();
