@@ -57,15 +57,14 @@ Token Lexer::getNextToken() {
         }
     }
 
-    if (isAlpha())            { return makeKeywordOrId();   }
-    else if (isPunctuation()) { return makePunctuation();   }
-    else if (isSeparator())   { return makeSeparator();     }
-    else if (isOperator())    { return makeOperator();      }
-    else if (isDigit())       { return makeNumberLiteral(); }
-    else if (isStringStart()) { return makeStringLiteral(); }
+    if (isAlpha())             { return makeKeywordOrId();   }
+    else if (isPunctuation())  { return makePunctuation();   }
+    else if (isCommentStart()) { return makeComment();       }
+    else if (isSeparator())    { return makeSeparator();     }
+    else if (isOperator())     { return makeOperator();      }
+    else if (isDigit())        { return makeNumberLiteral(); }
+    else if (isStringStart())  { return makeStringLiteral(); }
 
-
-    // TODO: Fix this
     Token t = Token(Token_Type::IDENTIFIER, "BADCHAR", false, this->m_index, this->m_line);
     advance();
     return t;
@@ -128,9 +127,13 @@ bool Lexer::isPunctuation() {
     } 
  }
 
-//  bool Lexer::isCommentStart() {
+ bool Lexer::isCommentStart() {
+     if(this->m_currentChar == '-' && this->peek() == '-') {
+         return true;
+     }
 
-//  }
+     return false;
+ }
  
  bool Lexer::isOperator() {
     switch(this->m_currentChar) {
@@ -185,6 +188,21 @@ Token Lexer::makePunctuation() {
     advance();
 
     return Token(Token_Type::PUNCTUATION, punctuation, false, this->m_index, this->m_line);
+}
+
+Token Lexer::makeComment() {
+    std::string comment = "";
+    advance();
+    advance();
+
+    while(this->m_currentChar != '\n'
+          && this->m_index < (int)this->m_prog.length())
+    {
+        comment += this->m_currentChar;
+        advance();
+    }
+
+    return Token(Token_Type::COMMENT, comment, false,this->m_index, this->m_line);
 }
 
 Token Lexer::makeSeparator() {

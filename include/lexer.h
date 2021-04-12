@@ -93,9 +93,16 @@ class Lexer {
         Token peekToken();
         Token peekNextToken();
 
+
         std::vector<Token> makeTokens() {
             std::vector<Token> tokens;
+            Token next;
             do {
+                // Check if the last token created is a comment, if so
+                // pop it
+                if(tokens.size() > 0 && tokens.back().type() == Token_Type::COMMENT) {
+                    tokens.pop_back();
+                }
                 tokens.push_back(this->getNextToken());
                 
             } while(tokens.back().type() != Token_Type::END_FILE);
