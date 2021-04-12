@@ -12,10 +12,14 @@ defun fib(n) as
     return x;
 end
 
-defun foo(x,y,z) as
-    println(x + "+" + y + "+" + z + "=" + (x+y+z));
+defun foo(x,y) as
+    local arr = [];
+
+    for(local i = x; i <= y; i+=1) do
+        arr += i;
+    end
+
+    return arr;
 end
 
-foo(3,64,11);
-
-println(fib(13));
+println(foo(1,10));
