@@ -199,15 +199,16 @@ class Parser {
                     args.push_back(this->m_next.raw());
                     advance();
                 }
+
+                // TODO: FIX THIS SO MULTIARGS ARE ALLOWED
+                // Get the remaining args
+                // while(accept(",")) {
+                //
+                // }
+
+                expect(")");
             }
 
-            // TODO: FIX THIS SO MULTIARGS ARE ALLOWED
-            // Get the remaining args
-            // while(accept(",")) {
-            //
-            // }
-
-            expect(")");
             expect("as");
             
             std::vector<ASTNode*> block;
@@ -223,6 +224,10 @@ class Parser {
             ASTNode* argument = expr();
             expect(";");
 
+            if(argument == nullptr) {
+                raiseError("Exprected expression to return");
+            }
+            
             return new ReturnStatement(argument);
         }
 
@@ -319,7 +324,8 @@ class Parser {
         ASTNode* exprval = term();
 
         // Accept the binary opertor if available
-        while(accept("+") || accept("-") || accept("==") || accept("!=") || accept("<=") || accept(">=") || accept(">") || accept("<")) {
+        while(accept("+") || accept("-") || accept("==") || accept("!=") 
+              || accept("<=") || accept(">=") || accept(">") || accept("<")) {
 
             // Make a check on the lhs
             if(exprval == nullptr) {
