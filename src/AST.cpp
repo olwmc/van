@@ -69,10 +69,8 @@ Value ProgramVisitor::visit(Block& block) {
         // Accept each ASTNode
         value = statement->accept(*this);
 
-        // TODO: figure out how to check if this is an
-        // actual return because rn this doesnt work if 
-        // its in another block. Maybe annotate value?
-        if(statement->isReturn()) { return value; }
+        // TODO: FIGURE OUT
+        if(value.toString() != "NIL") { return value; }
     }
 
     // Return empty value
