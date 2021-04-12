@@ -12,4 +12,10 @@ defun fib(n) as
     return x;
 end
 
-println(fib(fib(7)));
+defun foo(x,y,z) as
+    println(x + "+" + y + "+" + z + "=" + (x+y+z));
+end
+
+foo(3,64,11);
+
+println(fib(13));
