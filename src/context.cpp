@@ -60,5 +60,11 @@ Value Context::resolveVariable(std::string name) {
 }
 
 Callable* Context::resolveFunction(std::string name) {
-    return this->m_functions[name];
+    if(this->m_functions.find(name) != this->m_functions.end()) {
+        return this->m_functions[name];
+    }
+
+    else {
+        throw std::runtime_error("Unknown function: " + name);
+    }
 }
