@@ -7,6 +7,7 @@ class ASTNode;
 
 class NumberLiteral;
 class StringLiteral;
+class ArrayLiteral;
 class BinaryExpression;
 class Block;
 class ForLoop;

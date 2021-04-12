@@ -407,14 +407,12 @@ class Parser {
             return exprval;
         }
 
-        /*
         else if (accept("[")) {
             std::vector<ASTNode*> args = makeArgs();
             expect("]");
 
             return new ArrayLiteral(args);
         }
-        */
 
         else if(acceptType(IDENTIFIER)) {
             std::string id = m_current.raw();

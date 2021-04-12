@@ -56,19 +56,25 @@ class NumberLiteral : public ASTNode {
         double value() { return this->m_value; };
 };
 
-// /* Array literal class */
-// class ArrayLiteral : public ASTNode {
-//     std::vector<ASTNode*> m_contents;
+/* Array literal class */
+class ArrayLiteral : public ASTNode {
+    std::vector<ASTNode*> m_contents;
 
-//     public:
-//         ArrayLiteral(std::vector<ASTNode*> contents) : m_contents(contents) {}
-    
-//         virtual Value accept(ProgramVisitor& visitor) override {
-//             return visitor.visit(*this);
-//         };
+    public:
+        ArrayLiteral(std::vector<ASTNode*> contents) : m_contents(contents) {}
+        
+        ~ArrayLiteral() {
+            for(ASTNode* val : this->m_contents) {
+                delete val;
+            }
+        }
 
-//         std::vector<ASTNode*> contents() { return this->m_contents; };
-// };
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
+
+        std::vector<ASTNode*> contents() { return this->m_contents; };
+};
 
 /* String literal class */
 class StringLiteral : public ASTNode {

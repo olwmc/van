@@ -47,6 +47,15 @@ Value ProgramVisitor::visit(StringLiteral& stringLiteral) {
     return Value(stringLiteral.value());
 }
 
+Value ProgramVisitor::visit(ArrayLiteral& arrayLiteral ) {
+    std::vector<Value> values;
+    for(ASTNode* arg : arrayLiteral.contents()) {
+        values.push_back(arg->accept(*this));
+    }
+
+    return Value(values);
+}
+
 // Resolve the identifier and return the result
 Value ProgramVisitor::visit(Identifier& identifier) {
     return this->m_context->resolveVariable(identifier.name());

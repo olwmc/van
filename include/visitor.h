@@ -14,6 +14,7 @@ class ProgramVisitor {
         /* Literal nodes */
         Value visit(NumberLiteral& numberLiteral);
         Value visit(StringLiteral& stringLiteral);
+        Value visit(ArrayLiteral& arrayLiteral);
         Value visit(Identifier& identifier);
 
         /* Statement nodes */

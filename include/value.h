@@ -30,11 +30,16 @@ class Value {
         Value(double v)      : m_number(v) { this->m_type = Value_Type::NUMBER; }
         Value(std::string v) : m_string(v) { this->m_type = Value_Type::STRING; }
         Value(Value_Type v)  : m_type(v) {};
+
+        Value(std::vector<Value> vs) : m_list(vs) { this->m_type = Value_Type::LIST; }
+
+
         Value() { this->m_type = NIL; }
 
         /* Return representations */
         double asNumber()           { return this->m_number; }
         std::string asString()      { return this->m_string; }
+        std::vector<Value> asList() { return this->m_list;   }
         Value_Type type()           { return this->m_type;   }
         
         /* ToString as opposed to AsString. Used in casting.*/
