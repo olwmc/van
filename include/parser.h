@@ -124,7 +124,8 @@ class Parser {
                 std::vector<ASTNode*> args = makeArgs();                
                 expect(")");
                 expect(";");
-                return new FunctionCall(id, args );
+
+                return new FunctionCall(id, args);
             }
 
             /* If an assignment operator is accepted, then it's an assignment statement */
@@ -200,11 +201,16 @@ class Parser {
                     advance();
                 }
 
-                // TODO: FIX THIS SO MULTIARGS ARE ALLOWED
-                // Get the remaining args
-                // while(accept(",")) {
-                //
-                // }
+                while(accept(",")) {
+                    if(this->m_next.type() == Token_Type::IDENTIFIER) {
+                        args.push_back(this->m_next.raw());
+                        advance();
+                    }
+
+                    else {
+                        raiseError("Expected Identifier");
+                    }
+                }
 
                 expect(")");
             }
@@ -242,6 +248,7 @@ class Parser {
     
     /* Make variableDeclaration AST node */
     ASTNode* makeVariableDeclaration() {
+        // TODO: Check if local || global
         // Check if local or global
         bool islocal = this->m_current.raw() == "local";
 
@@ -307,14 +314,14 @@ class Parser {
             ASTNode* expression = expr();
 
             if(expression != nullptr) {
-                args.push_back(expr());
+                args.push_back(expression);
             }
 
             else {
                 raiseError("Expected expression");
             }
         }
-        
+
         return args;
     }
 
@@ -329,8 +336,7 @@ class Parser {
 
             // Make a check on the lhs
             if(exprval == nullptr) {
-                std::cout << "Expected term before binary operator\n";
-                this->m_error = true;
+                raiseError("Expected term before binary operator");
             }
 
             // Get the operator 
@@ -412,11 +418,11 @@ class Parser {
 
         else if(acceptType(IDENTIFIER)) {
             std::string id = m_current.raw();
-
+            
             if(accept("(")) {
                 std::vector<ASTNode*> args = makeArgs();
+
                 expect(")");
-                
                 return new FunctionCall(id, args);
             }
 
