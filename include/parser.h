@@ -248,10 +248,11 @@ class Parser {
     
     /* Make variableDeclaration AST node */
     ASTNode* makeVariableDeclaration() {
-        // TODO: Check if local || global
         // Check if local or global
         bool islocal = this->m_current.raw() == "local";
 
+        // TODO: Add support for forward delcaration local x;
+        
         // If accept identifier, parse out the statement and return the node
         if(acceptType(IDENTIFIER)) {
             std::string id = this->m_current.raw();
