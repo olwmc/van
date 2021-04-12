@@ -35,7 +35,6 @@ class ASTNode {
         // String comparisons are costly, this is a simple way
         // of checking if the node is a return w/o having a type
         // string nor clogging up with type enums
-        bool isReturn() { return this->m_return;  }
         ASTNode() {}
         virtual ~ASTNode() {}
 
@@ -147,10 +146,7 @@ class ReturnStatement: public ASTNode {
     ASTNode *m_argument;
 
     public:
-        ReturnStatement(ASTNode *argument) : m_argument(argument) {
-            // Set is_return_statement flag
-            m_return = true;
-        }
+        ReturnStatement(ASTNode *argument) : m_argument(argument) {}
 
         ~ReturnStatement() {
             delete this->m_argument;
