@@ -64,7 +64,6 @@ class builtin_NumCast : public Builtin {
 
 /* Builtin casts */
 /*
-class builtin_NumberCast;
 class builtin_StringCast;
 class builtin_GetKeys;
 class builtin_GetType;
