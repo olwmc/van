@@ -31,7 +31,7 @@ std::string Value::toString() {
         if(this->m_list.size() > 0) {
             out += this->m_list[0].toString();
 
-            for(int i = 1; i < m_list.size(); i++) {
+            for(int i = 1; i < (int)m_list.size(); i++) {
                 out += ", ";
                 out += m_list[i].toString();
             }    
