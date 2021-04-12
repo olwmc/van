@@ -22,4 +22,6 @@ defun foo(x,y) as
     return arr;
 end
 
-println(foo(1,10));
+local x = [1,2,3];
+
+println(x[0] + 5);
