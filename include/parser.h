@@ -333,7 +333,8 @@ class Parser {
 
         // Accept the binary opertor if available
         while(accept("+") || accept("-") || accept("==") || accept("!=") 
-              || accept("<=") || accept(">=") || accept(">") || accept("<")) {
+              || accept("<=") || accept(">=") || accept(">") || accept("<")
+              || accept("%")) {
 
             // Make a check on the lhs
             if(exprval == nullptr) {
@@ -363,6 +364,8 @@ class Parser {
                 exprval = new BinaryExpression(exprval, right, Operator::GREATERTHAN);
             } else if (op == "<") {
                 exprval = new BinaryExpression(exprval, right, Operator::LESSTHAN);
+            } else if (op == "%") {
+                exprval = new BinaryExpression(exprval, right, Operator::MOD);
             }
         }
 
