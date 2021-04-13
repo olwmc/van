@@ -45,7 +45,8 @@ class Parser {
 
     /* Check if assignment operator */
     bool isAssignmentOp() {
-        return this->m_next.raw() == "=" || this->m_next.raw() == "+=";
+        return this->m_next.raw() == "=" || this->m_next.raw() == "+=" \
+            || this->m_next.raw() == "-=" || this->m_next.raw() == "*=";
     }
 
     /* Advance to next token */
@@ -92,12 +93,12 @@ class Parser {
     /* Parse program */
     Block* parse() {
         this->m_next = m_tokens[0];
-        Block* body = makeBlock();
+        Block* body = makeProgram();
         return body;
     }
 
     /* Parse collection of statements */
-    Block* makeBlock() {
+    Block* makeProgram() {
         std::vector<ASTNode*> block;
 
         while(this->m_next.type() != Token_Type::END_FILE) {
@@ -241,7 +242,6 @@ class Parser {
             expect("as");
             
             std::vector<ASTNode*> block;
-
             while(!accept("end")) {
                 block.push_back(makeStatement());
             }
