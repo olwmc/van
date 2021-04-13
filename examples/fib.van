@@ -22,6 +22,105 @@ defun foo(x,y) as
     return arr;
 end
 
-local x = [1,2,3];
+defun bar(x) as
+    for(local i = 0; i < len(x); i+=1) do
+        print(x[i] + " |");
+    end
 
-println(x[0] + 5);
+    println("");
+end
+
+defun evenIndexes(str) as
+    for(local i = 0; i < len(str); i += 2) do
+        print(str[i]);
+    end
+end
+
+defun removeChars(str, n) as
+    local outStr = "";
+
+    for(local i = n; i < len(str); i+=1) do
+        outStr += str[i];
+    end
+
+    return outStr;
+end
+
+defun isFirst_And_Last_Same(list) as
+    return list[0] == list[len(list) - 1];
+end
+
+-- defun findDivisible(list, n) as
+--     for(local i = 0; i < len(list); i+=1) do
+--         if(list[i] % n == 0) then
+--             println(list[i]);
+--         end
+--     end
+-- end
+
+-- https://edabit.com/challenges/python3
+-- FIZZBUZZ!!
+defun stutter(str) as
+    local stut = str[0] + str[1];
+    local out = "";
+
+    out += stut + "... ";
+    out += stut + "... ";
+    out += str  + "?";
+
+    return out;
+end
+
+defun format_date(date) as
+    local month = slice(date,0,1);
+    local day   = slice(date,3,4);
+    local year  = slice(date,6,9);
+
+    return year + " " +  day + " " + month;
+end
+
+defun list_of_multiples(num, length) as
+    local outList = [];
+
+    for(local i = 1; i <= length; i += 1) do
+        outList += num*i;
+    end
+
+    return outList;
+end
+
+defun reverse(str) as
+    -- Loop through the string backwards
+    -- apending to the outstr each index
+    local out = "";
+
+    for(local i = len(str); i >= 0; i -= 1) do
+        out += str[i];
+    end
+
+    return out;
+end
+
+defun slice(list, start, stop) as
+    local out = [];
+    for(local i = start; i < stop; i+=1) do
+        out += list[i];
+    end
+
+    return out;
+end
+
+defun pop(list) as
+    return slice(list, 0, len(list) - 1);
+end
+
+defun push(list, n) as
+    return list + n;
+end
+
+local x = 0;
+
+while(x < 100) do
+    println(x);
+    x += 1;
+end
