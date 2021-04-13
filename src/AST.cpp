@@ -51,12 +51,18 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
 
     // If the lhs is a list
     if(lhs.type() == Value_Type::LIST) {
-        return Value(lhs.asList()[rhs.asNumber()]);
+        int index = rhs.asNumber();
+        index = (index > 0) ? index : lhs.asList().size() + index;
+
+        return Value(lhs.asList()[index]);
     }
 
     // If the lhs is a string
     else if(lhs.type() == Value_Type::STRING) {
-        char val = (char)lhs.asString()[rhs.asNumber()];
+        int index = rhs.asNumber();
+        index = (index > 0) ? index : lhs.asString().size() + index;
+
+        char val = (char)lhs.asString()[index];
 
         return Value(std::string(1, val));
     }
