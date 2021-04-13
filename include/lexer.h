@@ -14,7 +14,11 @@ enum Token_Type {
     AS, BEGIN, END,
     COMMENT,
 
-    UNDEF
+    UNDEF,
+
+    IF, THEN, ELSE, ELIF,
+
+    WHILE
 };
 
 /* Holds data about each token recovered from the lexer */
@@ -36,8 +40,6 @@ class Token {
         }
         ~Token() {}
         
-        bool isKeyword()     { return this->m_keyword; }
-
         Token_Type type()    { return this->m_type;    }
         std::string raw()    { return this->m_raw;     }
         int line()             { return this->m_line;    }

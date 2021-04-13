@@ -300,4 +300,23 @@ class FunctionDeclaration : public ASTNode {
         Block* body()                   { return this->m_body; }
 };
 
+class WhileLoop : public ASTNode {
+    ASTNode *m_test;
+    Block *m_block;
+
+    public:
+        WhileLoop(ASTNode *test, Block* block)
+            : m_test(test), m_block(block) {}
+        
+        ~WhileLoop() {
+            delete this->m_test;
+            delete this->m_block;
+        }
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
+
+        ASTNode *test()    { return this->m_test;   }
+        Block* block()     { return this->m_block;  }
+};
 #endif /* AST_H */

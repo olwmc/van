@@ -151,6 +151,29 @@ class Parser {
             return varDec;
         }
 
+        /* While loop branch */
+        else if(acceptType(Token_Type::WHILE)) {
+            expect("(");
+            
+            // TODO CHECK IF NULLPTR
+            ASTNode* test = expr();
+
+            expect(")");
+            
+            // Block to hold statements
+            std::vector<ASTNode*> block;
+
+            // Expect beginning of do block
+            expect("do");
+
+            while(this->m_next.type() != Token_Type::END) {
+                block.push_back(makeStatement());
+            }
+            expect("end");
+
+            return new WhileLoop(test, new Block(block));
+        }
+
         /* For loop branch */
         else if(acceptType(Token_Type::FOR)) {
             // Get past first open parenthesis

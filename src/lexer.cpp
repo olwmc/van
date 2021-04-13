@@ -15,16 +15,22 @@ std::vector<std::string> token_string = {
     "AS", "BEGIN", "END",
     "COMMENT",
 
-    "UNDEF"
+    "UNDEF",
+
+    "IF", "THEN", "ELSE", "ELIF",
+    "WHILE"
 };
 
 /* Maps keywords to Token_Type enum */
 std::unordered_map<std::string, Token_Type> type_map {
-    {"true",   Token_Type::TRUE_LIT}, {"false",  Token_Type::FALSE_LIT},
-    {"for",    Token_Type::FOR},      {"return", Token_Type::RETURN},
-    {"defun",  Token_Type::DEFUN},    {"local",  Token_Type::LOCAL},
-    {"global", Token_Type::GLOBAL},   {"as",     Token_Type::AS},
-    {"begin",  Token_Type::FOR},      {"end",    Token_Type::END}
+    {"true",   Token_Type::TRUE_LIT},  {"false",  Token_Type::FALSE_LIT},
+    {"for",    Token_Type::FOR},       {"return", Token_Type::RETURN},
+    {"defun",  Token_Type::DEFUN},     {"local",  Token_Type::LOCAL},
+    {"global", Token_Type::GLOBAL},    {"as",     Token_Type::AS},
+    {"begin",  Token_Type::FOR},       {"end",    Token_Type::END},
+    {"if",    Token_Type::IF},         {"then",    Token_Type::THEN},
+    {"else",    Token_Type::ELSE},     {"elif",    Token_Type::ELIF},
+    {"while",    Token_Type::WHILE}
 };
 
 std::string Token::toString() {
@@ -141,6 +147,7 @@ bool Lexer::isPunctuation() {
        case '-': case '/':
        case '*': case '<':
        case '>': case '!':
+       case '%':
            return true;
        break;
     

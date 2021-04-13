@@ -52,7 +52,7 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
     // If the lhs is a list
     if(lhs.type() == Value_Type::LIST) {
         int index = rhs.asNumber();
-        index = (index > 0) ? index : lhs.asList().size() + index;
+        index = (index >= 0) ? index : lhs.asList().size() + index;
 
         return Value(lhs.asList()[index]);
     }
@@ -60,7 +60,7 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
     // If the lhs is a string
     else if(lhs.type() == Value_Type::STRING) {
         int index = rhs.asNumber();
-        index = (index > 0) ? index : lhs.asString().size() + index;
+        index = (index >= 0) ? index : lhs.asString().size() + index;
 
         char val = (char)lhs.asString()[index];
 
@@ -211,4 +211,21 @@ Value ProgramVisitor::visit(FunctionDeclaration& functionDeclaration) {
     this->m_context->bindFunction(functionDeclaration.id(), userFunc);
 
     return Value();
+}
+
+Value ProgramVisitor::visit(WhileLoop& whileLoop) {
+    Value value;
+
+    this->m_context->pushScope();
+
+    // While test != False (0)
+    while(whileLoop.test()->accept(*this).asNumber() != false) {
+        
+        // Execute body and set return value
+        value = whileLoop.block()->accept(*this);
+    }
+
+    this->m_context->popScope();
+    
+    return value;
 }
