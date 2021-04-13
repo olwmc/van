@@ -53,6 +53,15 @@ class Van_Interpreter {
     void setContext(Context* context) {
         this->m_context = context;
     }
+
+    void run() {
+        try {
+            this->interpret();
+        }
+        catch(const std::runtime_error& error) {
+            std::cout << error.what() << "\n";
+        }
+    }
 };
 
 #endif
