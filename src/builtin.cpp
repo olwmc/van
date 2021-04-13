@@ -67,3 +67,20 @@ Value builtin_NumCast::execute(Context& context) {
   
   return Value(num);
 }
+
+/* Length of a list/string */
+Value builtin_Len::execute(Context& context) {
+  // Check if arr or str
+  Value val = context.resolveVariable(this->m_args[0]);
+
+  if(val.type() == Value_Type::LIST) {
+    return val.asList().size();
+  } 
+
+  else if(val.type() == Value_Type::STRING) {
+    return val.asString().size();
+  }
+  else {
+    throw std::runtime_error("Cannot get length of: " + val.toString());
+  }
+}
