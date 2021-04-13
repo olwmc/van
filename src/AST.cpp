@@ -229,3 +229,62 @@ Value ProgramVisitor::visit(WhileLoop& whileLoop) {
     
     return value;
 }
+
+Value ProgramVisitor::visit(ConditionalStatement& conditionalStatement) {
+    // Starting index
+    int index = -1;
+
+    // Cursor index for tests
+    int cursor = 0;
+    
+    // Loop through tests, checking if any of them are true
+    for(ASTNode* test : conditionalStatement.tests()) {
+        Value res = test->accept(*this);
+
+        // If one is true, set the index and break
+        if(res.asNumber() == 1) {
+            index = cursor;
+            break;
+        }
+        cursor += 1;
+    }
+
+    // Output value
+    Value outVal;
+
+    // If one of the tests was found
+    if(index != -1) {
+        // Push a new scope
+        this->m_context->pushScope();
+        
+        // Get the block
+        Block* runBlock = conditionalStatement.blocks()[index];
+
+        // Run the block
+        outVal = runBlock->accept(*this);
+
+        // Pop scope
+        this->m_context->popScope();
+    }
+
+    // Else if no tests were true and there's an else block
+    else if(index == -1 
+            && conditionalStatement.tests().size() < conditionalStatement.blocks().size()) {
+        
+        // Push a new scope
+        this->m_context->pushScope();
+
+        // Get the last block
+        Block* runBlock = conditionalStatement.blocks().back();
+
+        // Run the block
+        outVal = runBlock->accept(*this);
+
+        // Pop scope
+        this->m_context->popScope();
+    }
+
+
+    // Return the value
+    return outVal;
+}

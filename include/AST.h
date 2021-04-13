@@ -11,7 +11,6 @@
 #define AST_H
 
 #include "forward.h"
-
 #include "visitor.h"
 #include "value.h"
 #include "context.h"
@@ -319,4 +318,32 @@ class WhileLoop : public ASTNode {
         ASTNode *test()    { return this->m_test;   }
         Block* block()     { return this->m_block;  }
 };
+
+class ConditionalStatement : public ASTNode {
+    std::vector<ASTNode*> m_tests;
+    std::vector<Block*> m_blocks;
+
+    public:
+        ConditionalStatement(std::vector<ASTNode*> tests, std::vector<Block*> blocks)
+        : m_tests(tests), m_blocks(blocks) {}
+
+        ~ConditionalStatement() {
+            for(ASTNode* test : this->m_tests) {
+                delete test;
+            }
+
+            for(Block* block : this->m_blocks) {
+                delete block;
+            }
+        }
+        
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        };
+        
+        std::vector<ASTNode*> tests() { return this->m_tests;  }
+        std::vector<Block*> blocks()  { return this->m_blocks; }
+
+};
+
 #endif /* AST_H */

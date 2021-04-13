@@ -260,6 +260,36 @@ class Parser {
             return new ReturnStatement(argument);
         }
 
+        /* If statement branch */
+
+        else if(acceptType(Token_Type::IF)) {
+            expect("(");
+            std::vector<ASTNode*> tests;
+            std::vector<Block*> blocks;
+            std::vector<ASTNode*> block;
+
+            // TODO nullptr check
+            tests.push_back(expr());
+            expect(")");
+            expect("then");
+
+            while(!accept("end") && !accept("else")) {
+                block.push_back(makeStatement());
+            }
+
+            if (this->m_current.raw() == "else") {
+                blocks.push_back(new Block(block));
+                block.clear();
+
+                while(!accept("end")) {
+                    block.push_back(makeStatement());
+                }
+            }
+
+            blocks.push_back(new Block(block));
+            return new ConditionalStatement(tests, blocks);
+
+        }
         /* Otherwhise, it's an unexpected token and shouldn't be there */
         else {
             advance();

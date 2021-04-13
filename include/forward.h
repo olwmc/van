@@ -19,6 +19,7 @@ class AssignmentStatement;
 class VariableDeclaration;
 class FunctionDeclaration;
 class WhileLoop;
+class ConditionalStatement;
 
 class Context;
 
