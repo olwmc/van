@@ -17,10 +17,9 @@ Group
 Topic Overview
 * Dynamic Array <= Value list type
 * Hashtable/Map
-* Stacks <= Custom callstack type later
 * Recursive Algorithms <= Visitor
-* Recursive Backtracking <= Recursive descent parser
-
-Immediate questions:
-1. *"Why did you implement xyz data structure?"*
-    * This is my final project for my data structures class. 
+* Stacks
+    I use a std::vector much in the same way that you would use a stack,
+    but in this case it's just indexable. I find this particularly useful
+    because it gives me all the fifo proporties of a stack, with the
+    indexabiliy and searchability of a dynamic array.
