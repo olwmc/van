@@ -478,8 +478,16 @@ class Parser {
             // If encounter a "(", it's a function call
             if(accept("(")) {
                 std::vector<ASTNode*> args = makeArgs();
-
                 expect(")");
+
+                // Indexing a function call
+                if(accept("[")) {
+                    ASTNode* argument = expr();
+                    expect("]");
+                    
+                    return new IndexExpression(new FunctionCall(id, args), argument);
+                }
+
                 return new FunctionCall(id, args);
             }
 
