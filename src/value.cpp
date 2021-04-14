@@ -105,16 +105,33 @@ Value Value::operator%(Value other) {
 }
 
 /* Comparators */
+// TODO: Clean this up
 Value Value::operator==(Value other) {
     if(this->m_type == other.m_type) {
         if(this->m_type == Value_Type::STRING) {
             return Value(this->m_string == other.m_string);
         }
 
+        if(this->m_type == Value_Type::LIST) {
+            bool same = true;
+
+            if(this->asList().size() != other.asList().size()) {
+                return Value(!same);
+            } 
+
+            for(int i = 0; i < (int)this->asList().size(); i++) {
+                if( (this->asList()[i] != other.asList()[i]).asNumber() ) {
+                    return Value(!same);
+                }
+            }
+
+            return Value(same);
+        }
+
         return Value(this->m_number == other.m_number);
     }
 
-    return Value(Value_Type::ERR);
+    return Value(0);
 }
 
 Value Value::operator<=(Value other) {
