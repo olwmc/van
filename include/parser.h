@@ -160,8 +160,10 @@ class Parser {
         else if(acceptType(Token_Type::WHILE)) {
             expect("(");
             
-            // TODO CHECK IF NULLPTR
             ASTNode* test = expr();
+            if(test == nullptr) {
+                raiseError("Expected expression for while loop");
+            }
 
             expect(")");
             
@@ -203,6 +205,7 @@ class Parser {
             // Expect beginning of do block
             expect("do");
 
+            // TODO: SEE IF YOU WANT TO DO EXPECT BASED HERE
             while(!accept("end") && notEOF()) {
                 block.push_back(makeStatement());
             }
@@ -237,7 +240,6 @@ class Parser {
                         raiseError("Expected Identifier");
                     }
                 }
-
                 expect(")");
             }
 
@@ -288,8 +290,7 @@ class Parser {
 
                 // Check for "elif"
                 if(accept("elif")) {
-                    // If elif, push the new block and clear the
-                    // temp block
+                    // If elif, push the new block and clear the temp block
                     blocks.push_back(new Block(block));
                     block.clear();
 
