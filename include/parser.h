@@ -272,10 +272,30 @@ class Parser {
             tests.push_back(expr());
             expect(")");
             expect("then");
-
+            
+            // While we haven't encountered an "end" or "else"
             while(!accept("end") && !accept("else")) {
+                // Push a new statement
                 block.push_back(makeStatement());
+
+                // Check for "elif"
+                if(accept("elif")) {
+                    // If elif, push the new block and clear the
+                    // temp block
+                    blocks.push_back(new Block(block));
+                    block.clear();
+
+                    // Expect ( expr )
+                    expect("(");
+                    tests.push_back(expr());
+                    expect(")");
+                    expect("then");
+                }
             }
+
+            // while(!accept("end") && !accept("else")) {
+            //     block.push_back(makeStatement());
+            // }
 
             if (this->m_current.raw() == "else") {
                 blocks.push_back(new Block(block));
