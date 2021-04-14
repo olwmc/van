@@ -253,15 +253,26 @@ defun countVowels(str) as
     return count;
 end
 
-defun fact(n) as
-    local total = 1;
-    for(local i = 1; i <= n; i+=1) do
-        total *= i;
+defun double_char(str) as
+    local i = 0;
+    local outStr = "";
+
+    while(i < len(str)) do
+        outStr += str[i] + str[i];
+        i+=1;
     end
 
-    return total;
+    return outStr;
 end
 
+
+defun fact(n) as
+    if(n == 0) then
+        return 1;
+    else
+        return n * fact(n-1);
+    end
+end
 
 defun fizzbuzz(n) as
     -- Loop from i => n
@@ -284,4 +295,84 @@ defun fizzbuzz(n) as
     end
 end
 
-fizzbuzz(15);
+defun sum(list) as
+    local out = 0;
+    for(local i = 0; i < len(list); i+=1) do
+        out += list[i];
+    end
+
+    return out;
+end
+
+defun contains(list, n) as
+    for(local i = 0; i < len(list); i+=1) do
+        if(list[i] == n) then
+            return 1;
+        end
+    end
+
+    return 0;
+end
+
+defun max(list) as
+    local max = 0;
+
+    for(local i = 0; i < len(list); i+=1) do
+        if(list[i] > max) then
+            max = list[i];
+        end
+    end
+
+    return max;
+end
+
+defun min(list) as
+    local min = max(list);
+
+    for(local i = 0; i < len(list); i+=1) do
+        if(list[i] < min) then
+            min = list[i];
+        end
+    end
+
+    return min;
+end
+
+defun sum_missing_numbers(list) as
+    local missing = [];
+
+    for(local i = min(list); i < max(list); i+=1) do
+        if(contains(list,i) == 0) then
+            missing += i;
+        end
+    end
+
+    return sum(missing);
+end
+
+defun makeMatrix(n,m) as
+    local matrix = [];
+    local temp = [];
+
+    for(local i = 0; i < n; i+=1) do
+        for(local j = 0; j < m; j+=1) do
+            temp += 0;
+        end
+        matrix += temp;
+        temp = [];
+    end
+
+    return matrix;
+end
+
+defun printMatrix(matrix) as
+    for(local i = 0; i < len(matrix); i+=1) do
+        println(matrix[i]);
+    end
+end
+
+println(sum_missing_numbers([4, 3, 8, 1, 2]));
+println(sum_missing_numbers([17, 16, 15, 10, 11, 12]));
+println(sum_missing_numbers([1, 2, 3, 4, 5]));
+
+printMatrix(makeMatrix(3,3));
