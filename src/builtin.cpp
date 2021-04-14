@@ -47,6 +47,8 @@ Value builtin_Assert::execute(Context& context) {
 
 /* Takes in input and returns it as a string */
 Value builtin_Input::execute(Context& context) {
+  (void)context;
+  
   std::string input;
   std::getline(std::cin, input);
 
@@ -83,4 +85,30 @@ Value builtin_Len::execute(Context& context) {
   else {
     throw std::runtime_error("Cannot get length of: " + val.toString());
   }
+}
+
+Value builtin_Type::execute(Context& context) {
+  Value val = context.resolveVariable(this->m_args[0]);
+
+  std::string type;
+
+  switch(val.type()) {
+    // number string list nil
+    case NUMBER:
+      type = "number";
+    break;
+
+    case STRING:
+      type = "string";
+    break;
+
+    case LIST:
+      type = "list";
+    break;
+
+    default:
+      type = "nil";
+  }
+
+  return Value(type);
 }

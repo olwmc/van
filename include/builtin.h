@@ -70,6 +70,16 @@ class builtin_Len : public Builtin {
 
   virtual Value execute(Context& context) override;
 };
+
+class builtin_Type : public Builtin {
+  public:
+  builtin_Type() {
+    this->m_args = {"__input__"};
+  }
+
+  virtual Value execute(Context& context) override; 
+};
+
 /* Builtin casts */
 /*
 class builtin_StringCast;

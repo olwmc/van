@@ -54,6 +54,7 @@ class Context {
             this->m_functions.insert( {"print",     new builtin_Print()   });
             this->m_functions.insert( {"num",       new builtin_NumCast() });
             this->m_functions.insert( {"len",       new builtin_Len()     });
+            this->m_functions.insert( {"type",      new builtin_Type()    });
         }
         
         ~Context() {
