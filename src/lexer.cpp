@@ -18,7 +18,9 @@ std::vector<std::string> token_string = {
     "UNDEF",
 
     "IF", "THEN", "ELSE", "ELIF",
-    "WHILE"
+    "WHILE",
+
+    "OR", "AND"
 };
 
 /* Maps keywords to Token_Type enum */

@@ -18,7 +18,9 @@ enum Token_Type {
 
     IF, THEN, ELSE, ELIF,
 
-    WHILE
+    WHILE,
+
+    L_OR, L_AND
 };
 
 /* Holds data about each token recovered from the lexer */
