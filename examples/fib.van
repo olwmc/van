@@ -12,16 +12,6 @@ defun fib(n) as
     return x;
 end
 
-defun foo(x,y) as
-    local arr = [];
-
-    for(local i = x; i <= y; i+=1) do
-        arr += i;
-    end
-
-    return arr;
-end
-
 defun bar(x) as
     for(local i = 0; i < len(x); i+=1) do
         print(x[i] + " |");
@@ -118,9 +108,180 @@ defun push(list, n) as
     return list + n;
 end
 
-local x = 0;
+-- local count = 0;
+-- local myList = [];
 
-while(x < 100) do
-    println(x);
-    x += 1;
+-- while(len(myList) < 5) do
+--     myList += count;
+--     count += 1;
+--     println(myList);
+-- end
+
+-- while(len(myList) > 0) do
+--     println(myList);
+--     myList = pop(myList);
+-- end
+
+defun join(list) as
+    local outStr = "";
+
+    for(local i = 0; i < len(list); i+=1) do
+        outStr += list[i];
+    end
+
+    return outStr;
 end
+
+defun first_n_fib(n) as
+    local x = 0;
+    local y = 1;
+    local z = 0;
+    local out = [];
+
+    for(local i = 1; i < n; i += 1) do
+        out += x;
+        z = x + y;
+        x = y;
+        y = z;
+    end
+    
+    return out;
+end
+
+defun foo(x,y) as
+    local arr = [];
+
+    for(local i = x; i <= y; i+=1) do
+        arr += i;
+    end
+
+    return arr;
+end
+
+-- [5, 6, 7, 8, 9, 10]
+-- println(foo(5,10));
+
+-- println(foo(5,10)[len(foo(5,10)) - 1]);
+-- println(foo(5,10)[5]);
+-- println(foo(5,10)[-1]);
+
+-- if(1==1) then
+--     println("WOPOOO");
+-- end
+
+
+defun rfib(n) as
+    if(n<=1) then
+        return n;
+    else
+        return rfib(n-1) + rfib(n-2);
+    end
+end
+
+defun calc(x, op, y) as
+    if(op == "+") then return x+y; end
+    if(op == "-") then return x-y; end
+    if(op == "*") then return x*y; end
+    if(op == "/") then return x/y; end
+
+    return "ERROR";
+end
+
+
+defun split(str, delim) as
+    -- Temporary string and output array
+    local tempStr = "";
+    local outArr = [];
+
+    -- Loop through the string
+    for(local i = 0; i < len(str); i+=1) do
+
+        -- If the index == the delimiter, 
+        -- then add it to the array
+        if(str[i] == delim) then
+            outArr += tempStr;
+            tempStr = "";
+        
+        else 
+            -- Otherwhise, just add the index
+            tempStr += str[i];
+        end
+    end
+
+    -- Add the last string
+    outArr += tempStr;
+
+    -- Return the array
+    return outArr;
+end
+
+defun find(list, item) as
+    for(local i = 0; i < len(list); i += 1) do
+        if(list[i] == item) then return i; end
+    end
+
+    return -1;
+end
+
+defun pow(x,y) as
+    local sum = x;
+
+    for(local i = 1; i < y; i+=1) do
+        sum *= x;
+    end
+
+    return sum;
+end
+
+defun countVowels(str) as
+    local count = 0;
+
+    for(local i = 0; i < len(str); i+=1) do
+        if(str[i] == "a") then
+            count += 1;
+        elif(str[i] == "e") then
+            count += 1;
+        elif(str[i] == "i") then
+            count +=1;
+        elif(str[i] == "o") then
+            count += 1;
+        elif(str[i] == "u") then
+            count += 1;
+        end
+    end
+
+    return count;
+end
+
+defun fact(n) as
+    local total = 1;
+    for(local i = 1; i <= n; i+=1) do
+        total *= i;
+    end
+
+    return total;
+end
+
+
+defun fizzbuzz(n) as
+    -- Loop from i => n
+    for(local i = 1; i <=n; i+=1) do
+        -- First check if i is a multiple of
+        -- 3 and 5
+        if(i % 15 == 0) then
+            println("Fizzbuzz");
+
+        -- Then check if i is a multiple of 5
+        elif(i%5==0) then
+            println("Buzz");
+
+        -- Or a multiple of 3
+        elif(i%3==0) then
+            println("Fizz");
+
+        -- Otherwhise just print i
+        else println(i); end
+    end
+end
+
+fizzbuzz(15);
