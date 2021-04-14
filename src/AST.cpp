@@ -134,6 +134,8 @@ Value ProgramVisitor::visit(ForLoop& forLoop) {
         // Execute body and set return value
         value = forLoop.block()->accept(*this);
 
+        if(value.toString() != "NIL") { break; }
+        
         // Update value
         forLoop.update()->accept(*this);
     }
