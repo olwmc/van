@@ -90,6 +90,10 @@ class Parser {
         }
     }
 
+    bool notEOF() {
+        return this->m_current.type() != Token_Type::END_FILE;
+    }
+
     /* Parse program */
     Block* parse() {
         this->m_next = m_tokens[0];
@@ -167,10 +171,9 @@ class Parser {
             // Expect beginning of do block
             expect("do");
 
-            while(this->m_next.type() != Token_Type::END) {
+            while(!accept("end") && notEOF()) {
                 block.push_back(makeStatement());
             }
-            expect("end");
 
             return new WhileLoop(test, new Block(block));
         }
@@ -200,10 +203,9 @@ class Parser {
             // Expect beginning of do block
             expect("do");
 
-            while(this->m_next.type() != Token_Type::END) {
+            while(!accept("end") && notEOF()) {
                 block.push_back(makeStatement());
             }
-            expect("end");
 
             return new ForLoop(init, update, test, new Block(block));
         }
@@ -242,7 +244,7 @@ class Parser {
             expect("as");
             
             std::vector<ASTNode*> block;
-            while(!accept("end")) {
+            while(!accept("end") && notEOF()) {
                 block.push_back(makeStatement());
             }
 
@@ -268,13 +270,19 @@ class Parser {
             std::vector<Block*> blocks;
             std::vector<ASTNode*> block;
 
-            // TODO nullptr check
-            tests.push_back(expr());
+            ASTNode* test = expr();
+
+            // Test for nullptr
+            if(test == nullptr) {
+                raiseError("Expected expression in if statement");
+            }
+
+            tests.push_back(test);
             expect(")");
             expect("then");
             
             // While we haven't encountered an "end" or "else"
-            while(!accept("end") && !accept("else")) {
+            while(!accept("end") && !accept("else") && notEOF()) {
                 // Push a new statement
                 block.push_back(makeStatement());
 
@@ -285,23 +293,27 @@ class Parser {
                     blocks.push_back(new Block(block));
                     block.clear();
 
-                    // Expect ( expr )
+                    // Expect ( expr ) then
                     expect("(");
-                    tests.push_back(expr());
+
+                    // Get inner expression and check for null
+                    test = expr();
+                    if(test == nullptr) {
+                        raiseError("Expected expression in if statement");
+                    }
+
+                    tests.push_back(test);
                     expect(")");
                     expect("then");
                 }
             }
 
-            // while(!accept("end") && !accept("else")) {
-            //     block.push_back(makeStatement());
-            // }
-
+            // If there's an else clause, add it
             if (this->m_current.raw() == "else") {
                 blocks.push_back(new Block(block));
                 block.clear();
 
-                while(!accept("end")) {
+                while(!accept("end") && notEOF()) {
                     block.push_back(makeStatement());
                 }
             }
@@ -384,7 +396,7 @@ class Parser {
         }
         
         // While there's still ",", push a new argument
-        while(accept(",")) {
+        while(accept(",") && notEOF()) {
             ASTNode* expression = expr();
 
             if(expression != nullptr) {
@@ -420,6 +432,10 @@ class Parser {
             // Get the right term
             ASTNode* right = term();
 
+            if(right == nullptr) {
+                raiseError("Expected term after binary operator");
+            }
+
             // Figure out what to do with the operator
             if(op == "+") {
                 exprval = new BinaryExpression(exprval, right, Operator::ADD);
@@ -453,9 +469,17 @@ class Parser {
 
         // If accept operator
         while(accept("*") || accept("/")) {
+            if(termval == nullptr) {
+                raiseError("Expected term before binary operator");
+            }
+
             // Get the operator and rhs
             std::string op = m_current.raw();
             ASTNode* right = factor();
+
+            if(right == nullptr) {
+                raiseError("Expected term after binary operator");
+            }
 
             // Figure out what to do with the operator
             if(op == "*") {
