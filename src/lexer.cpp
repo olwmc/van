@@ -253,7 +253,18 @@ Token Lexer::makeStringLiteral() {
     while(!isStringStart()) {
         if(this->m_currentChar == '\\') {
             advance();
-            str += this->m_currentChar;
+
+            // Check next char after \, see if it needs
+            // to be escaped
+            switch(this->m_currentChar) {
+                case 't': str += '\t'; break;
+                case 'n': str += '\n'; break;
+
+                default:
+                    str += this->m_currentChar;
+            }
+
+            //else { str += this->m_currentChar; }
             advance();
         }
 
