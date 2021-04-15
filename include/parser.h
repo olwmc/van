@@ -504,6 +504,10 @@ class Parser {
             ASTNode* rhs = expr();
             expect("]");
             
+            if(subfact == nullptr) {
+                raiseError("Expected expression before index");    
+            }
+
             if(rhs == nullptr) {
                 raiseError("Exprected expression in index");
             }
