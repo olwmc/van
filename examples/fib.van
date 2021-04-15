@@ -178,16 +178,6 @@ defun rfib(n) as
     end
 end
 
-defun calc(x, op, y) as
-    if(op == "+") then return x+y; end
-    if(op == "-") then return x-y; end
-    if(op == "*") then return x*y; end
-    if(op == "/") then return x/y; end
-
-    return "ERROR";
-end
-
-
 defun split(str, delim) as
     -- Temporary string and output array
     local tempStr = "";
@@ -274,27 +264,6 @@ defun fact(n) as
     end
 end
 
-defun fizzbuzz(n) as
-    -- Loop from i => n
-    for(local i = 1; i <=n; i+=1) do
-        -- First check if i is a multiple of
-        -- 3 and 5
-        if(i % 15 == 0) then
-            println("Fizzbuzz");
-
-        -- Then check if i is a multiple of 5
-        elif(i%5==0) then
-            println("Buzz");
-
-        -- Or a multiple of 3
-        elif(i%3==0) then
-            println("Fizz");
-
-        -- Otherwhise just print i
-        else println(i); end
-    end
-end
-
 defun sum(list) as
     local out = 0;
     for(local i = 0; i < len(list); i+=1) do
@@ -371,8 +340,46 @@ defun printMatrix(matrix) as
     end
 end
 
-println(sum_missing_numbers([4, 3, 8, 1, 2]));
-println(sum_missing_numbers([17, 16, 15, 10, 11, 12]));
-println(sum_missing_numbers([1, 2, 3, 4, 5]));
+defun validPal(str) as
+    for(local i = 0; i < len(str); i+=1) do        
+        if(str[i] != str[-i - 1]) then
+            return 0;
+        end
+    end
 
-printMatrix(makeMatrix(3,3));
+    return 1;
+end
+
+defun fizzbuzz(n) as
+    -- Loop from i => n
+    for(local i = 1; i <=n; i+=1) do
+        -- First check if i is a multiple of
+        -- 3 and 5
+        if(i % 15 == 0) then
+            println("Fizzbuzz");
+
+        -- Then check if i is a multiple of 5
+        elif(i%5==0) then
+            println("Buzz");
+
+        -- Or a multiple of 3
+        elif(i%3==0) then
+            println("Fizz");
+
+        -- Otherwhise just print i
+        else println(i); end
+    end
+end
+
+defun calc(x, op, y) as
+    if(op == "+")   then return x+y;
+    elif(op == "-") then return x-y;
+    elif(op == "*") then return x*y;
+    elif(op == "/") then return x/y;
+
+    else
+        return "ERROR";
+    end
+end
+
+println( ([1,2] + [3])[2][0] );
