@@ -411,15 +411,51 @@ class Parser {
 
         return args;
     }
+/*
+ else if (op == "and") {
+                exprval = new BinaryExpression(exprval, right, Operator::AND);
+            } else if (op == "or") {
+                exprval = new BinaryExpression(exprval, right, Operator::OR);
+            }
+            */
 
     /* Expression parser */
     ASTNode* expr() {
+        ASTNode* subval = subexpr();
+
+        while(accept("and") || accept("or")) {
+            // Make a check on the lhs
+            if(subval == nullptr) {
+                raiseError("Expected term before binary operator");
+            }
+
+            // Get the operator 
+            std::string op = m_current.raw();
+
+            // Get the right term
+            ASTNode* right = subexpr();
+
+            if(right == nullptr) {
+                raiseError("Expected term after binary operator");
+            }
+
+            if (op == "and") {
+                subval = new BinaryExpression(subval, right, Operator::AND);
+            } else if (op == "or") {
+                subval = new BinaryExpression(subval, right, Operator::OR);
+            }
+        }
+
+        return subval;
+    }
+
+    ASTNode* subexpr() {
         // Get first term  
         ASTNode* exprval = term();
 
         // Accept the binary opertor if available
-        while(accept("+") || accept("-") || accept("==") || accept("!=") 
-              || accept("<=") || accept(">=") || accept(">") || accept("<")
+        while(accept("+")     || accept("-")  || accept("==") || accept("!=") 
+              || accept("<=") || accept(">=") || accept(">")  || accept("<")
               || accept("%")) {
 
             // Make a check on the lhs
@@ -438,6 +474,7 @@ class Parser {
             }
 
             // Figure out what to do with the operator
+            /* MIGHT REFACTOR THIS LATER B/C STRING COMPS */
             if(op == "+") {
                 exprval = new BinaryExpression(exprval, right, Operator::ADD);
             } else if(op == "-") {
