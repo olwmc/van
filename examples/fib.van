@@ -170,41 +170,6 @@ end
 -- end
 
 
-defun rfib(n) as
-    if(n<=1) then
-        return n;
-    else
-        return rfib(n-1) + rfib(n-2);
-    end
-end
-
-defun split(str, delim) as
-    -- Temporary string and output array
-    local tempStr = "";
-    local outArr = [];
-
-    -- Loop through the string
-    for(local i = 0; i < len(str); i+=1) do
-
-        -- If the index == the delimiter, 
-        -- then add it to the array
-        if(str[i] == delim) then
-            outArr += tempStr;
-            tempStr = "";
-        
-        else 
-            -- Otherwhise, just add the index
-            tempStr += str[i];
-        end
-    end
-
-    -- Add the last string
-    outArr += tempStr;
-
-    -- Return the array
-    return outArr;
-end
-
 defun find(list, item) as
     for(local i = 0; i < len(list); i += 1) do
         if(list[i] == item) then return i; end
@@ -255,14 +220,6 @@ defun double_char(str) as
     return outStr;
 end
 
-
-defun fact(n) as
-    if(n == 0) then
-        return 1;
-    else
-        return n * fact(n-1);
-    end
-end
 
 defun sum(list) as
     local out = 0;
@@ -340,6 +297,7 @@ defun printMatrix(matrix) as
     end
 end
 
+---------------------------------------------------------------------
 defun validPal(str) as
     for(local i = 0; i < len(str); i+=1) do        
         if(str[i] != str[-i - 1]) then
@@ -371,15 +329,82 @@ defun fizzbuzz(n) as
     end
 end
 
-defun calc(x, op, y) as
-    if(op == "+")   then return x+y;
-    elif(op == "-") then return x-y;
-    elif(op == "*") then return x*y;
-    elif(op == "/") then return x/y;
-
+defun rfib(n) as
+    if(n<=1) then
+        return n;
     else
-        return "ERROR";
+        return rfib(n-1) + rfib(n-2);
     end
 end
 
-println( ([1,2] + [3])[2][0] );
+defun fact(n) as
+    if(n == 0) then
+        return 1;
+    else
+        return n * fact(n-1);
+    end
+end
+
+
+defun split(str, delim) as
+    -- Temporary string and output array
+    local tempStr = "";
+    local outArr = [];
+
+    -- Loop through the string
+    for(local i = 0; i < len(str); i+=1) do
+
+        -- If the index == the delimiter, 
+        -- then add it to the array
+        if(str[i] == delim) then
+            outArr += tempStr;
+            tempStr = "";
+        
+        else 
+            -- Otherwhise, just add the index
+            tempStr += str[i];
+        end
+    end
+
+    -- Add the last string
+    outArr += tempStr;
+
+    -- Return the array
+    return outArr;
+end
+
+
+if(1 and 1) then
+    println("1 and 1");
+end
+
+if(1 and 0) then
+    println("Error");
+end
+
+if(1 or 1) then
+    println("1 or 1");
+end
+
+if(1 or 0) then
+    println("1 or 0");
+end
+
+if(0 or 0) then
+    println("Error");
+end
+
+if(3*2==6 and 4*8 != 33) then
+    println("3*2==6 and 4*8 != 33");
+end
+
+
+defun not(term) as
+    if(term != 0) then
+        return 0;
+    else
+        return 1;
+    end
+end
+
+println(not(5));
