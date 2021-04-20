@@ -32,7 +32,8 @@ std::unordered_map<std::string, Token_Type> type_map {
     {"begin",  Token_Type::FOR},       {"end",    Token_Type::END},
     {"if",    Token_Type::IF},         {"then",    Token_Type::THEN},
     {"else",    Token_Type::ELSE},     {"elif",    Token_Type::ELIF},
-    {"while",    Token_Type::WHILE}
+    {"while",    Token_Type::WHILE},   {"and",    Token_Type::WHILE},
+    {"or",    Token_Type::WHILE}
 };
 
 std::string Token::toString() {
