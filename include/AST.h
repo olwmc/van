@@ -109,7 +109,17 @@ class StringLiteral : public ASTNode {
         std::string value() { return this->m_value; }
 
         virtual void toJson() override {
-            std::cout <<  "{\"stringLiteral\": \"" << this->m_value << "\"}";
+            std::cout <<  "{\"stringLiteral\": \"";
+            for(char c : m_value) {
+                switch(c) {
+                    case '\n': std::cout << "(newline)"; break;
+                    case '\t': std::cout << "(tab)"; break;
+                    default:
+                        std::cout << c;
+                } 
+            }
+
+            std::cout << "\"}";
         }   
 };
 
@@ -307,19 +317,37 @@ class FunctionCall : public ASTNode {
         std::string callee() { return this->m_callee; }
         std::vector<ASTNode*> args()   { return this->m_args; }
 
-        virtual void toJson() override {}
+        virtual void toJson() override {
+            std::cout <<  "{\"functionCall\": {\"callee\": \"" \
+                      << m_callee << "\", \"args\":[";
+
+            for(int i = 0; i < (int)m_args.size() - 1; i++) {
+                m_args[i]->toJson();
+                std::cout << ",";
+            }
+
+            if(m_args.size() > 0) {
+                m_args.back()->toJson();
+            }
+            std::cout << "]}}";
+        }
 };
 
 class AssignmentStatement : public ASTNode {
     std::string m_id;
     ASTNode* m_rhs;
+    ASTNode* m_index;
 
     public:
         AssignmentStatement(std::string id, ASTNode* rhs) 
-            : m_id(id), m_rhs(rhs) {}
+            : m_id(id), m_rhs(rhs), m_index(nullptr) {}
+        
+        AssignmentStatement(std::string id, ASTNode* rhs, ASTNode* index) 
+            : m_id(id), m_rhs(rhs), m_index(index) {}
         
         ~AssignmentStatement() {
             delete this->m_rhs;
+            delete this->m_index;
         }
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
@@ -327,12 +355,19 @@ class AssignmentStatement : public ASTNode {
 
         std::string id() { return this->m_id;  }
         ASTNode* rhs()   { return this->m_rhs; }
+        ASTNode* index() { return this->m_index; }
 
         virtual void toJson() override {
             std::cout <<  "{\"assignmentStatement\": { \"id\":";
             std::cout << "\"" << m_id << "\"";
             std::cout << ", \"rhs\":";
-            m_rhs->toJson(); std::cout << "}}";
+            m_rhs->toJson(); 
+            
+            if(m_index != nullptr) {
+                std::cout << ", \"index\":";
+                m_index->toJson();
+            }
+            std::cout << "}}";
         }
 };
 
@@ -386,7 +421,23 @@ class FunctionDeclaration : public ASTNode {
         std::vector<std::string> args() { return this->m_args; }
         Block* body()                   { return this->m_body; }
 
-        virtual void toJson() override {}
+        virtual void toJson() override {
+            std::cout <<  "{\"funcDeclaration\": { \"id\":";
+            std::cout << "\"" << m_id << "\", ";
+            std::cout << "\"args\": [";
+
+            for(int i = 0; i < (int)m_args.size() - 1; i++) {
+                std::cout << "\"" << m_args[i] << "\", ";
+            }
+
+            if(m_args.size() > 0) {
+                std::cout << "\"" << m_args.back() << "\"";
+            }
+
+            std::cout << "], \"body\": ";
+            m_body->toJson();
+            std::cout << "}}";
+        }
 };
 
 class WhileLoop : public ASTNode {
@@ -439,27 +490,4 @@ class ConditionalStatement : public ASTNode {
         virtual void toJson() override {}
 
 };
-
-class IndexAssignment : public ASTNode {
-    std::string m_id;
-    ASTNode *index, *m_rhs;
-
-    public:
-        IndexAssignment(std::string id, ASTNode* lhs, ASTNode* rhs) 
-            : m_id(id), index(lhs), m_rhs(rhs) {}
-        
-        ~IndexAssignment() {
-            delete this->index;
-            delete this->m_rhs;
-        }
-        virtual Value accept(ProgramVisitor& visitor) override {
-            return visitor.visit(*this);
-        }
-
-        std::string id() { return this->m_id;  }
-        ASTNode* rhs()   { return this->m_rhs; }
-
-        virtual void toJson() override {}
-};
-
 #endif /* AST_H */
