@@ -37,6 +37,8 @@ class ASTNode {
         ASTNode() {}
         virtual ~ASTNode() {}
 
+        virtual void toJson() = 0;
+
     protected:
         bool m_return = false;
 };
@@ -53,6 +55,10 @@ class NumberLiteral : public ASTNode {
         };
 
         double value() { return this->m_value; };
+
+        virtual void toJson() override {
+            std::cout <<  "{\"numericLiteral\":" << this->m_value << "}"; 
+        }        
 };
 
 /* Array literal class */
@@ -73,6 +79,20 @@ class ArrayLiteral : public ASTNode {
         };
 
         std::vector<ASTNode*> contents() { return this->m_contents; };
+
+        virtual void toJson() override {
+            std::cout <<  "{\"arrayLiteral\": [";
+
+            for(int i = 0; i < (int)m_contents.size() - 1; i++) {
+                m_contents[i]->toJson();
+                std::cout << ",";
+            }
+            
+            if(m_contents.size() > 0) {
+                m_contents.back()->toJson();
+            }
+            std::cout << "]}";
+        }     
 };
 
 /* String literal class */
@@ -87,6 +107,10 @@ class StringLiteral : public ASTNode {
         }
 
         std::string value() { return this->m_value; }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"stringLiteral\": \"" << this->m_value << "\"}";
+        }   
 };
 
 /* Identifier class */
@@ -101,6 +125,10 @@ class Identifier : public ASTNode {
         }
 
         std::string name() { return this->m_name; }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"identifier\": { \"id\": \"" << this->m_name << "\"}}";
+        }  
 };
 
 /* BinaryExpression class */
@@ -124,6 +152,13 @@ class BinaryExpression : public ASTNode {
         ASTNode *lhs()   { return this->m_lhs; }
         ASTNode *rhs()   { return this->m_rhs; }
         Operator op()    { return this->m_op;  }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"binaryExpression\": {\"lhs\":";
+            m_lhs->toJson(); std::cout << ",\"rhs\":";
+            m_rhs->toJson(); std::cout << ",\"op\":" << this->m_op;
+            std::cout << "}}";
+        }  
 };
 
 /* Index Expression class */
@@ -145,6 +180,13 @@ class IndexExpression : public ASTNode {
 
         ASTNode* lhs()  { return this->m_lhs; }
         ASTNode* rhs()  { return this->m_rhs; }
+
+        virtual void toJson() override {
+            std::cout << "{\"indexExpression\":{ \"lhs\":";
+            m_lhs->toJson(); std::cout << ",\"arg\":";
+            m_rhs->toJson(); std::cout << "}}";
+        }
+
 };
 
 /* Block class (Denotes beginning of new scope) */
@@ -165,6 +207,21 @@ class Block : public ASTNode {
             return visitor.visit(*this);
         };
         std::vector<ASTNode*> body() { return this->m_body; }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"block\": [";
+
+            for(int i = 0; i < (int)m_body.size() - 1; i++) {
+                m_body[i]->toJson();
+                std::cout << ",";
+            }
+
+            if(m_body.size() > 0) {
+                m_body.back()->toJson();
+            }
+            std::cout << "]}";
+        } 
+
 };
 
 
@@ -182,6 +239,12 @@ class ReturnStatement: public ASTNode {
         };
 
         ASTNode *argument() { return this->m_argument; }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"returnStatement\": { \"arg\":";
+            m_argument->toJson();
+            std::cout << "}}";
+        }
 };
 
 
@@ -213,6 +276,14 @@ class ForLoop : public ASTNode {
         ASTNode *init()    { return this->m_init;   }
         ASTNode *update()  { return this->m_update; }
         Block* block()     { return this->m_block;  }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"forLoop\": { \"init\":";
+            m_init->toJson();   std::cout << ", \"update\":";
+            m_update->toJson(); std::cout << ", \"test\":";
+            m_test->toJson();   std::cout << ", \"body\":";
+            m_block->toJson();  std::cout << "}}";
+        }
 };
 
 class FunctionCall : public ASTNode {
@@ -235,6 +306,8 @@ class FunctionCall : public ASTNode {
 
         std::string callee() { return this->m_callee; }
         std::vector<ASTNode*> args()   { return this->m_args; }
+
+        virtual void toJson() override {}
 };
 
 class AssignmentStatement : public ASTNode {
@@ -254,6 +327,13 @@ class AssignmentStatement : public ASTNode {
 
         std::string id() { return this->m_id;  }
         ASTNode* rhs()   { return this->m_rhs; }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"assignmentStatement\": { \"id\":";
+            std::cout << "\"" << m_id << "\"";
+            std::cout << ", \"rhs\":";
+            m_rhs->toJson(); std::cout << "}}";
+        }
 };
 
 class VariableDeclaration: public ASTNode {
@@ -275,6 +355,14 @@ class VariableDeclaration: public ASTNode {
         std::string id() { return this->m_id;    }
         ASTNode* init()  { return this->m_init;  }
         bool isLocal()   { return this->m_local; }
+
+        virtual void toJson() override {
+            std::cout <<  "{\"varDeclaration\": { \"id\":";
+            std::cout << "\"" << m_id << "\"";
+            std::cout << ", \"init\":";
+            m_init->toJson(); std::cout << ", \"isLocal\":";
+            std::cout << m_local << "}}";
+        }
 };
 
 class FunctionDeclaration : public ASTNode {
@@ -297,6 +385,8 @@ class FunctionDeclaration : public ASTNode {
         std::string id()                { return this->m_id;   }
         std::vector<std::string> args() { return this->m_args; }
         Block* body()                   { return this->m_body; }
+
+        virtual void toJson() override {}
 };
 
 class WhileLoop : public ASTNode {
@@ -317,6 +407,8 @@ class WhileLoop : public ASTNode {
 
         ASTNode *test()    { return this->m_test;   }
         Block* block()     { return this->m_block;  }
+
+        virtual void toJson() override {}
 };
 
 class ConditionalStatement : public ASTNode {
@@ -344,6 +436,30 @@ class ConditionalStatement : public ASTNode {
         std::vector<ASTNode*> tests() { return this->m_tests;  }
         std::vector<Block*> blocks()  { return this->m_blocks; }
 
+        virtual void toJson() override {}
+
+};
+
+class IndexAssignment : public ASTNode {
+    std::string m_id;
+    ASTNode *index, *m_rhs;
+
+    public:
+        IndexAssignment(std::string id, ASTNode* lhs, ASTNode* rhs) 
+            : m_id(id), index(lhs), m_rhs(rhs) {}
+        
+        ~IndexAssignment() {
+            delete this->index;
+            delete this->m_rhs;
+        }
+        virtual Value accept(ProgramVisitor& visitor) override {
+            return visitor.visit(*this);
+        }
+
+        std::string id() { return this->m_id;  }
+        ASTNode* rhs()   { return this->m_rhs; }
+
+        virtual void toJson() override {}
 };
 
 #endif /* AST_H */
