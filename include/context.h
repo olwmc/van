@@ -32,7 +32,6 @@ Function:
 #include "builtin.h"
 
 #include <unordered_map>
-#include <stack>
 #include <utility>
 
 // Typedef Scope to improve readability
@@ -40,7 +39,7 @@ typedef std::unordered_map<std::string, Value> Scope;
 
 class Context {
     Scope m_globalScope;
-    std::vector<Scope> m_callStack;
+    std::vector<Scope> m_scopeStack;
 
     // Holds functions and buitins
     std::unordered_map<std::string, Callable*> m_functions;
@@ -75,6 +74,7 @@ class Context {
         void bindGlobalVariable(std::string name, Value v);
 
         void updateVariable(std::string name, Value v);
+        void updateIndex(std::string name, Value v, int index);
         
         // Resolves a variable name to its associated Value
         Value resolveVariable(std::string name);
@@ -82,8 +82,8 @@ class Context {
         // ResolveFunction passes an ASTNode* to our visitor
         Callable* resolveFunction(std::string name);
 
-        void pushScope()   { this->m_callStack.push_back(Scope()); }
-        void popScope()    { this->m_callStack.pop_back(); };
+        void pushScope()   { this->m_scopeStack.push_back(Scope()); }
+        void popScope()    { this->m_scopeStack.pop_back(); };
 };
 
 #endif /* CONTEXT_H */
