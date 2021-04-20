@@ -183,8 +183,22 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
 Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     std::string id = assignmentStatement.id();
     Value init = assignmentStatement.rhs()->accept(*this);
+    
+    if(assignmentStatement.index() != nullptr) {
+        Value tempIndex = assignmentStatement.index()->accept(*this);
 
-    this->m_context->updateVariable(id, init);
+        if(tempIndex.type() == Value_Type::NUMBER) {
+            this->m_context->updateIndex(id, init, tempIndex.asNumber());
+        }
+
+        else {
+            throw std::runtime_error("Indexes must evaluate to a number");
+        }
+    }
+
+    else {
+        this->m_context->updateVariable(id, init);
+    }
 
     return Value();
 }
