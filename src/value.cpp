@@ -56,7 +56,7 @@ Value Value::operator+(Value other) {
 
     else if(other.type() == Value_Type::LIST) {
         std::vector<Value> outVector = other.asList();
-        outVector.push_back(this->m_list);
+        outVector.push_back(*this);
 
         return Value(outVector);
     }
@@ -142,9 +142,15 @@ Value Value::operator<=(Value other) {
     return Value(Value_Type::ERR);
 }
 
+#include <iostream>
+
 Value Value::operator!=(Value other) {
     if(bothNumber(*this, other)) {
         return Value(this->m_number != other.m_number);
+    }
+
+    else if (this->type() == other.type() && this->type() == Value_Type::STRING) {
+        return Value(this->asString() != other.asString());
     }
 
     return Value(Value_Type::ERR);
