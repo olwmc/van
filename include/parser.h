@@ -133,14 +133,12 @@ class Parser {
                 return new FunctionCall(id, args);
             }
 
-            /* If an assignment operator is accepted, then it's an assignment statement */
-            else if(isAssignmentOp()) {
-                ASTNode *assign = makeAssignmentStatement();
+            else if (isAssignmentOp() || this->m_next.raw() == "[") {
+                ASTNode* assign = makeAssignmentStatement();
                 expect(";");
-
                 return assign;
             }
-            
+        
             /* Otherwhise, it's an unexpected identifier */
             else {
                 raiseError("Unexpected identifer: " + this->m_current.raw());
@@ -353,12 +351,34 @@ class Parser {
 
     /* Make assignmentStatement AST node */
     ASTNode* makeAssignmentStatement() {
+        bool isIndex = false;
+        ASTNode* index;
+        std::string op;
+
         // Get the identifier
         std::string id = this->m_current.raw();
-        advance();
 
-        // Get the operator
-        std::string op = this->m_current.raw();
+        if(accept("[")) {
+            // Check off that an indexexpression is coming
+            isIndex = true;
+
+            // Get the index and expect a closing bracker
+            index = expr();
+            expect("]");
+
+            // Get the operator and advance
+            op = this->m_next.raw();
+            advance();
+            
+            // Check if the index is null
+            if(index == nullptr) {
+                raiseError("Expected expression in index");
+            }
+        } else {
+            advance();
+            // Get the operator
+            op = this->m_current.raw();
+        }
 
         // Get the expression
         ASTNode* expression = expr();
@@ -366,20 +386,39 @@ class Parser {
         // Decide what to do with the operator
         if(op == "+=") {
             ASTNode *addExpr = new BinaryExpression(new Identifier(id), expression, Operator::ADD);
+
+            if(isIndex) {
+                return new AssignmentStatement(id, addExpr, index);
+            }
+
             return new AssignmentStatement(id, addExpr);
         }
 
         else if (op == "-=") {
             ASTNode *subExpr = new BinaryExpression(new Identifier(id), expression, Operator::SUBTRACT);
+            
+            if(isIndex) {
+                return new AssignmentStatement(id, subExpr, index);
+            }
+
             return new AssignmentStatement(id, subExpr);
         }
         
         else if (op == "*=") {
             ASTNode *multExpr = new BinaryExpression(new Identifier(id), expression, Operator::MULTIPLY);
+
+            if(isIndex) {
+                return new AssignmentStatement(id, multExpr, index);
+            }
+
             return new AssignmentStatement(id, multExpr);
         }
 
         // Basic "=" operator
+        if(isIndex) {
+            return new AssignmentStatement(id, expression, index);
+        }
+
         return new AssignmentStatement(id, expression);
     }
 
