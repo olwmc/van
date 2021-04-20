@@ -17,10 +17,9 @@ class Van_Interpreter {
 
     ~Van_Interpreter() {
         delete this->m_context;
-        delete this->m_start;
     }
 
-    Value interpret() {
+    Value interpret(bool jsonify) {
         // Lexer and tokens
         Lexer lexer(this->m_program);
         std::vector<Token> tokens = lexer.makeTokens();
@@ -40,9 +39,16 @@ class Van_Interpreter {
             ProgramVisitor vis(this->m_context);
             
             // Accept start node (This can throw an exception error)
-            v = m_start->accept(vis);
+            if(jsonify) {
+                m_start->toJson();
+            } else {
+                v = m_start->accept(vis);
+            }
+
+            this->m_context->popScope();
         }
 
+        delete this->m_start;
         return v;
     }
 
@@ -56,7 +62,16 @@ class Van_Interpreter {
 
     void run() {
         try {
-            this->interpret();
+            this->interpret(false);
+        }
+        catch(const std::runtime_error& error) {
+            std::cout << error.what() << "\n";
+        }
+    }
+    
+    void showJson() {
+        try {
+            this->interpret(true);
         }
         catch(const std::runtime_error& error) {
             std::cout << error.what() << "\n";
