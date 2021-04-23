@@ -99,7 +99,10 @@ Value ProgramVisitor::visit(Identifier& identifier) {
 
 // Return the expressed argument
 Value ProgramVisitor::visit(ReturnStatement& returnStatement) {
-    return returnStatement.argument()->accept(*this);
+    Value ret = returnStatement.argument()->accept(*this);
+    ret.setReturn(true);
+
+    return ret;
 }
 
 Value ProgramVisitor::visit(Block& block) {
@@ -113,7 +116,11 @@ Value ProgramVisitor::visit(Block& block) {
         // Accept each ASTNode
         value = statement->accept(*this);
 
-        if(value.toString() != "NIL") { return value; }
+        if(value.isReturn() && value.type() != Value_Type::NIL) {
+            value.setReturn(false);
+
+            return value;
+        }
     }
 
     // Return empty value
