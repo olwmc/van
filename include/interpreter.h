@@ -39,16 +39,12 @@ class Van_Interpreter {
             ProgramVisitor vis(this->m_context);
             
             // Accept start node (This can throw an exception error)
-            if(jsonify) {
-                m_start->toJson();
-            } else {
-                v = m_start->accept(vis);
-            }
+            if(jsonify) { m_start->toJson();}
+            else { v = m_start->accept(vis); }
 
             this->m_context->popScope();
         }
 
-        delete this->m_start;
         return v;
     }
 
@@ -67,6 +63,8 @@ class Van_Interpreter {
         catch(const std::runtime_error& error) {
             std::cout << error.what() << "\n";
         }
+        
+        delete this->m_start;
     }
     
     void showJson() {
@@ -76,6 +74,8 @@ class Van_Interpreter {
         catch(const std::runtime_error& error) {
             std::cout << error.what() << "\n";
         }
+
+        delete this->m_start;
     }
 };
 
