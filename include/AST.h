@@ -465,7 +465,9 @@ class WhileLoop : public ASTNode {
         Block* block()     { return this->m_block;  }
 
         virtual void toJson() override {
-            // std::cout << "{\"whileLoop\": "
+            std::cout << "{\"whileLoop\" : { \"test\" : ";
+            m_test->toJson(); std::cout << ", \"body\" : ";
+            m_block->toJson(); std::cout << "}}";
         }
 };
 
@@ -494,7 +496,31 @@ class ConditionalStatement : public ASTNode {
         std::vector<ASTNode*> tests() { return this->m_tests;  }
         std::vector<Block*> blocks()  { return this->m_blocks; }
 
-        virtual void toJson() override {}
+        virtual void toJson() override {
+            std::cout <<  "{\"conditionalStatement\": { \"tests\": [";
+
+            for(int i = 0; i < (int)m_tests.size() - 1; i++) {
+                m_tests[i]->toJson();
+                std::cout << ",";
+            }
+            
+            if(m_tests.size() > 0) {
+                m_tests.back()->toJson();
+            }
+
+
+            std::cout << "], \"blocks\" : [";
+                for(int i = 0; i < (int)m_blocks.size() - 1; i++) {
+                m_blocks[i]->toJson();
+                std::cout << ",";
+            }
+            
+            if(m_blocks.size() > 0) {
+                m_blocks.back()->toJson();
+            }
+
+            std::cout << "]}}";
+        }
 
 };
 #endif /* AST_H */
