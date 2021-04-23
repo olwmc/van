@@ -394,8 +394,13 @@ class VariableDeclaration: public ASTNode {
         virtual void toJson() override {
             std::cout <<  "{\"varDeclaration\": { \"id\":";
             std::cout << "\"" << m_id << "\"";
-            std::cout << ", \"init\":";
-            m_init->toJson(); std::cout << ", \"isLocal\":";
+            
+            if(m_init != nullptr) {
+                std::cout << ", \"init\":";
+                m_init->toJson(); 
+            }
+
+            std::cout << ", \"isLocal\":";
             std::cout << m_local << "}}";
         }
 };
@@ -459,7 +464,9 @@ class WhileLoop : public ASTNode {
         ASTNode *test()    { return this->m_test;   }
         Block* block()     { return this->m_block;  }
 
-        virtual void toJson() override {}
+        virtual void toJson() override {
+            // std::cout << "{\"whileLoop\": "
+        }
 };
 
 class ConditionalStatement : public ASTNode {
