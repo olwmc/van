@@ -1,0 +1,20 @@
+defun bubbleSort(list) as
+    local temp;
+    local n = len(list);
+
+    for(local i = 0; i < n-2; i += 1) do
+        for(local j = 0; j < n-i-1; j += 1) do
+            if(list[j] > list[j+1]) then
+                temp = list[j];
+                list[j] = list[j + 1];
+                list[j + 1] = temp;
+            end
+        end
+    end
+
+    return list;
+end
+
+println(bubbleSort([3,2,1, 8, 9, 6]));
+
+println(1*2+3);

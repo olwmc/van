@@ -397,14 +397,3 @@ end
 if(3*2==6 and 4*8 != 33) then
     println("3*2==6 and 4*8 != 33");
 end
-
-
-defun not(term) as
-    if(term != 0) then
-        return 0;
-    else
-        return 1;
-    end
-end
-
-println(not(5));

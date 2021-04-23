@@ -58,5 +58,9 @@ local size = 11;
 -- Get the coefficients
 local coefs = estimateCoefficient(x,y,size);
 
+println("Given values:");
+println("\tx = " + str(x));
+println("\ty = " + str(y) + "\n");
+
 -- Predict for x=100
 predict(coefs, 100);
