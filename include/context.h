@@ -75,6 +75,7 @@ class Context {
 
         void updateVariable(std::string name, Value v);
         void updateIndex(std::string name, Value v, int index);
+        Value* getValue(std::string name);
         
         // Resolves a variable name to its associated Value
         Value resolveVariable(std::string name);
