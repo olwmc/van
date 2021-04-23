@@ -107,30 +107,37 @@ Value Value::operator%(Value other) {
 /* Comparators */
 // TODO: Clean this up
 Value Value::operator==(Value other) {
+    // If the types are equal, compare them
     if(this->m_type == other.m_type) {
+
+        // Check if the strings are the same
         if(this->m_type == Value_Type::STRING) {
             return Value(this->m_string == other.m_string);
         }
 
+        // Iterate through the lists and check them
         if(this->m_type == Value_Type::LIST) {
-            bool same = true;
-
+            // Check if the size is the same
             if(this->asList().size() != other.asList().size()) {
-                return Value(!same);
+                return Value(false);
             } 
 
+            // If it is, check if the values are the same
             for(int i = 0; i < (int)this->asList().size(); i++) {
                 if( (this->asList()[i] != other.asList()[i]).asNumber() ) {
-                    return Value(!same);
+                    return Value(false);
                 }
             }
 
-            return Value(same);
+            // If it passes everything, return true
+            return Value(true);
         }
 
+        // Or, number
         return Value(this->m_number == other.m_number);
     }
 
+    // Otherwhise return false
     return Value(0);
 }
 
@@ -141,8 +148,6 @@ Value Value::operator<=(Value other) {
 
     return Value(Value_Type::ERR);
 }
-
-#include <iostream>
 
 Value Value::operator!=(Value other) {
     if(bothNumber(*this, other)) {
