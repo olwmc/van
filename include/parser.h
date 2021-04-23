@@ -596,6 +596,17 @@ class Parser {
             
             return new StringLiteral(raw);
         }
+        
+        // If accept a boolean literal, make one
+        else if(acceptType(TRUE_LIT) || acceptType(FALSE_LIT)) {
+            if(m_current.type() == Token_Type::TRUE_LIT) {
+                return new NumberLiteral(1);
+            }
+
+            else {
+                return new NumberLiteral(0);
+            }
+        }
 
         // Make a subexpression when encountering a "(" at the factor level
         else if (accept("(")) {
