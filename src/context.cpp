@@ -15,7 +15,6 @@ void Context::bindGlobalVariable(std::string name, Value v) {
 }
 
 Value* Context::getValue(std::string name) {
-    // Loop through each index of the scopeStack, looking for the variable
     for(int i = (int)this->m_scopeStack.size(); i--;) {
 
         // If the variable is found in the map, set the new value and return
@@ -24,7 +23,6 @@ Value* Context::getValue(std::string name) {
         }
     }
 
-    // If the variable isn't in the scopeStack, check the global scope and set if possible
     if(this->m_globalScope.find(name) != this->m_globalScope.end()) {
         return &this->m_globalScope[name];
     }
