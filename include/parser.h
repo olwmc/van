@@ -203,7 +203,6 @@ class Parser {
             // Expect beginning of do block
             expect("do");
 
-            // TODO: SEE IF YOU WANT TO DO EXPECT BASED HERE
             while(!accept("end") && notEOF()) {
                 block.push_back(makeStatement());
             }
@@ -251,6 +250,7 @@ class Parser {
             return new FunctionDeclaration(id, args, new Block(block));
         }
 
+        /* Return branch */
         else if(acceptType(Token_Type::RETURN)) {
             ASTNode* argument = expr();
             expect(";");
@@ -263,25 +263,28 @@ class Parser {
         }
 
         /* If statement branch */
-
         else if(acceptType(Token_Type::IF)) {
             expect("(");
+
+            // List of tests, blocks, and current block
             std::vector<ASTNode*> tests;
             std::vector<Block*> blocks;
             std::vector<ASTNode*> block;
 
+            // Get the first test
             ASTNode* test = expr();
 
             // Test for nullptr
             if(test == nullptr) {
                 raiseError("Expected expression in if statement");
             }
-
+            
+            // Push back the first test and expect ~) then
             tests.push_back(test);
             expect(")");
             expect("then");
             
-            // While we haven't encountered an "end" or "else"
+            // While we haven't encountered an "end" or "else" or EOF
             while(!accept("end") && !accept("else") && notEOF()) {
                 // Push a new statement
                 block.push_back(makeStatement());
@@ -334,14 +337,15 @@ class Parser {
     ASTNode* makeVariableDeclaration() {
         // Check if local or global
         bool islocal = this->m_current.raw() == "local";
-
-        // TODO: Add support for forward delcaration local x;
         
         // If accept identifier, parse out the statement and return the node
         if(acceptType(IDENTIFIER)) {
             std::string id = this->m_current.raw();
-            expect("=");
-            ASTNode *expression = expr();
+            ASTNode *expression = nullptr;
+
+            if(accept("=")) {
+                expression = expr();
+            }
 
             return new VariableDeclaration(id, expression, islocal);
         }
@@ -387,19 +391,15 @@ class Parser {
         if(op == "+=") {
             ASTNode *addExpr = new BinaryExpression(new Identifier(id), expression, Operator::ADD);
 
-            if(isIndex) {
-                return new AssignmentStatement(id, addExpr, index);
-            }
+            if(isIndex) { return new AssignmentStatement(id, addExpr, index); }
 
             return new AssignmentStatement(id, addExpr);
         }
 
         else if (op == "-=") {
             ASTNode *subExpr = new BinaryExpression(new Identifier(id), expression, Operator::SUBTRACT);
-            
-            if(isIndex) {
-                return new AssignmentStatement(id, subExpr, index);
-            }
+
+            if(isIndex) { return new AssignmentStatement(id, subExpr, index); }
 
             return new AssignmentStatement(id, subExpr);
         }
@@ -407,17 +407,13 @@ class Parser {
         else if (op == "*=") {
             ASTNode *multExpr = new BinaryExpression(new Identifier(id), expression, Operator::MULTIPLY);
 
-            if(isIndex) {
-                return new AssignmentStatement(id, multExpr, index);
-            }
+            if(isIndex) { return new AssignmentStatement(id, multExpr, index); }
 
             return new AssignmentStatement(id, multExpr);
         }
 
         // Basic "=" operator
-        if(isIndex) {
-            return new AssignmentStatement(id, expression, index);
-        }
+        if(isIndex) { return new AssignmentStatement(id, expression, index); }
 
         return new AssignmentStatement(id, expression);
     }
@@ -450,13 +446,6 @@ class Parser {
 
         return args;
     }
-/*
- else if (op == "and") {
-                exprval = new BinaryExpression(exprval, right, Operator::AND);
-            } else if (op == "or") {
-                exprval = new BinaryExpression(exprval, right, Operator::OR);
-            }
-            */
 
     /* Expression parser */
     ASTNode* expr() {
