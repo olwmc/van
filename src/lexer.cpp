@@ -269,7 +269,7 @@ Token Lexer::makeStringLiteral() {
             advance();
         }
 
-        // Else juat add the char
+        // Else just add the char
         else {
             str += this->m_currentChar;
             advance();
