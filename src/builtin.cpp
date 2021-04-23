@@ -63,9 +63,15 @@ Value builtin_Print::execute(Context& context) {
 
 /* Casts to number if possible */
 Value builtin_NumCast::execute(Context& context) {
-  // TODO: ADD CHECK HERE
-  std::string str = context.resolveVariable(this->m_args[0]).asString();
-  double num = std::stod(str);
+  std::string str = context.resolveVariable(this->m_args[0]).toString();
+
+  double num;
+
+  try {
+    num = std::stod(str);
+  } catch(...) {
+    throw std::runtime_error("Only strings can be cast to numbers");
+  }
   
   return Value(num);
 }
