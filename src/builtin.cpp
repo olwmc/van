@@ -118,3 +118,9 @@ Value builtin_Type::execute(Context& context) {
 
   return Value(type);
 }
+
+Value builtin_StrCast::execute(Context& context) {
+  Value val = context.resolveVariable(this->m_args[0]);
+
+  return Value(val.toString());
+}
