@@ -207,7 +207,11 @@ Value ProgramVisitor::visit(VariableDeclaration& variableDeclaration) {
     std::string id = variableDeclaration.id();
     ASTNode *init = variableDeclaration.init();
 
-    Value v = init->accept(*this);
+    Value v;
+    
+    if(init != nullptr) {
+        v = init->accept(*this);
+    }
     
     if(variableDeclaration.isLocal()) {
         this->m_context->bindLocalVariable(id, v);
