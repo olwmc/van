@@ -451,7 +451,8 @@ class Parser {
     ASTNode* expr() {
         ASTNode* subval = subexpr();
 
-        while(accept("and") || accept("or")) {
+        while(accept("and") || accept("or") || accept("==") || accept("!=") 
+            || accept("<=") || accept(">=") || accept(">")  || accept("<")) {
             // Make a check on the lhs
             if(subval == nullptr) {
                 raiseError("Expected term before binary operator");
@@ -471,7 +472,19 @@ class Parser {
                 subval = new BinaryExpression(subval, right, Operator::AND);
             } else if (op == "or") {
                 subval = new BinaryExpression(subval, right, Operator::OR);
-            }
+            } else if (op == "==") {
+                subval = new BinaryExpression(subval, right, Operator::EQUALS);
+            } else if (op == "!=") {
+                subval = new BinaryExpression(subval, right, Operator::NOTEQUAL);
+            } else if (op == "<=") {
+                subval = new BinaryExpression(subval, right, Operator::LESSEQUAL);
+            } else if (op == ">=") {
+                subval = new BinaryExpression(subval, right, Operator::GREATEQUAL);
+            } else if (op == ">") {
+                subval = new BinaryExpression(subval, right, Operator::GREATERTHAN);
+            } else if (op == "<") {
+                subval = new BinaryExpression(subval, right, Operator::LESSTHAN);
+            } 
         }
 
         return subval;
@@ -482,9 +495,7 @@ class Parser {
         ASTNode* exprval = term();
 
         // Accept the binary opertor if available
-        while(accept("+")     || accept("-")  || accept("==") || accept("!=") 
-              || accept("<=") || accept(">=") || accept(">")  || accept("<")
-              || accept("%")) {
+        while(accept("+") || accept("-") || accept("%")) {
 
             // Make a check on the lhs
             if(exprval == nullptr) {
@@ -507,18 +518,6 @@ class Parser {
                 exprval = new BinaryExpression(exprval, right, Operator::ADD);
             } else if(op == "-") {
                 exprval = new BinaryExpression(exprval, right, Operator::SUBTRACT);
-            } else if (op == "==") {
-                exprval = new BinaryExpression(exprval, right, Operator::EQUALS);
-            } else if (op == "!=") {
-                exprval = new BinaryExpression(exprval, right, Operator::NOTEQUAL);
-            } else if (op == "<=") {
-                exprval = new BinaryExpression(exprval, right, Operator::LESSEQUAL);
-            } else if (op == ">=") {
-                exprval = new BinaryExpression(exprval, right, Operator::GREATEQUAL);
-            } else if (op == ">") {
-                exprval = new BinaryExpression(exprval, right, Operator::GREATERTHAN);
-            } else if (op == "<") {
-                exprval = new BinaryExpression(exprval, right, Operator::LESSTHAN);
             } else if (op == "%") {
                 exprval = new BinaryExpression(exprval, right, Operator::MOD);
             }
