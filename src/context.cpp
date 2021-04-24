@@ -3,8 +3,6 @@
 
 #include <string>
 
-// TODO: Refactor variable update to return a 
-// pointer from a helper function
 
 void Context::bindLocalVariable(std::string name, Value v) {
     this->m_scopeStack.back()[name] = v;
