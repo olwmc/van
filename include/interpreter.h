@@ -61,7 +61,7 @@ class Van_Interpreter {
             this->interpret(false);
         }
         catch(const std::runtime_error& error) {
-            std::cout << error.what() << "\n";
+            std::cout << "Runtime error : " << error.what() << "\n";
         }
         
         delete this->m_start;
@@ -72,7 +72,7 @@ class Van_Interpreter {
             this->interpret(true);
         }
         catch(const std::runtime_error& error) {
-            std::cout << error.what() << "\n";
+            std::cout << "Runtime error : " << error.what() << "\n";
         }
 
         delete this->m_start;
