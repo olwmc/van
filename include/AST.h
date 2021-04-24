@@ -299,10 +299,11 @@ class ForLoop : public ASTNode {
 class FunctionCall : public ASTNode {
     std::string m_callee;
     std::vector<ASTNode*> m_args;
+    bool m_statement;
 
     public:
-        FunctionCall(std::string callee, std::vector<ASTNode*> args)
-            : m_callee(callee), m_args(args) {}
+        FunctionCall(std::string callee, std::vector<ASTNode*> args, bool isStatement)
+            : m_callee(callee), m_args(args), m_statement(isStatement) {}
 
         ~FunctionCall() {
             for(ASTNode* node : m_args) {
@@ -316,6 +317,9 @@ class FunctionCall : public ASTNode {
 
         std::string callee() { return this->m_callee; }
         std::vector<ASTNode*> args()   { return this->m_args; }
+
+        // Check if a function call or function expression
+        bool isStatement() { return this->m_statement; }
 
         virtual void toJson() override {
             std::cout <<  "{\"functionCall\": {\"callee\": \"" \

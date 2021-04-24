@@ -23,26 +23,16 @@ class Value {
     Value_Type m_type;
 
     // Const specifier
-    bool m_isReturn;
+    bool m_const;
 
     public:
         /* Constructors */
-        Value(double v)      : m_number(v) {
-            this->m_type = Value_Type::NUMBER; this->m_isReturn = false;
-        }
+        Value(double v)      : m_number(v) { this->m_type = Value_Type::NUMBER; }
+        Value(std::string v) : m_string(v) { this->m_type = Value_Type::STRING; }
+        Value(Value_Type v)  : m_type(v) {};
 
-        Value(std::string v) : m_string(v) {
-            this->m_type = Value_Type::STRING; this->m_isReturn = false;
-        }
+        Value(std::vector<Value> vs) : m_list(vs) { this->m_type = Value_Type::LIST; }
 
-        Value(Value_Type v)  : m_type(v) {
-            this->m_isReturn = false;
-        };
-
-        Value(std::vector<Value> vs) : m_list(vs) {
-            this->m_type = Value_Type::LIST;
-            this->m_isReturn = false;
-        }
 
         Value() { this->m_type = NIL; }
 
@@ -56,9 +46,7 @@ class Value {
         std::string toString(); 
         
         /* Check const state */
-        bool isReturn() { return this->m_isReturn; }
-
-        void setReturn(bool is) { this->m_isReturn = is; }
+        bool isConst() { return this->m_const; }
 
         /* Arithmetic operations */
         Value operator+(Value other);

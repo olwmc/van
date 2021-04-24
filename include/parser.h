@@ -130,7 +130,8 @@ class Parser {
                 expect(")");
                 expect(";");
 
-                return new FunctionCall(id, args);
+                // Return a new functioncall object and set statement to true
+                return new FunctionCall(id, args, true);
             }
 
             else if (isAssignmentOp() || this->m_next.raw() == "[") {
@@ -632,7 +633,8 @@ class Parser {
                 std::vector<ASTNode*> args = makeArgs();
                 expect(")");
 
-                return new FunctionCall(id, args);
+                // Return a new functioncall object and set statement to false
+                return new FunctionCall(id, args, false);
             }
             
             // Otherwhise the factor is just an identifier

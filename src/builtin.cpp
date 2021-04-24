@@ -37,7 +37,7 @@ Value builtin_Assert::execute(Context& context) {
   Value condition = context.resolveVariable(this->args()[0]);
 
   if(condition.type() == Value_Type::NUMBER && condition.asNumber() == 1) {
-    return Value("SUCCESSFULLY ASSERTED");
+    return Value("ASSERTION PASSED");
   }
 
   else {

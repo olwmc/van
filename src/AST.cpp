@@ -99,10 +99,7 @@ Value ProgramVisitor::visit(Identifier& identifier) {
 
 // Return the expressed argument
 Value ProgramVisitor::visit(ReturnStatement& returnStatement) {
-    Value ret = returnStatement.argument()->accept(*this);
-    ret.setReturn(true);
-
-    return ret;
+    return returnStatement.argument()->accept(*this);
 }
 
 Value ProgramVisitor::visit(Block& block) {
@@ -116,9 +113,7 @@ Value ProgramVisitor::visit(Block& block) {
         // Accept each ASTNode
         value = statement->accept(*this);
 
-        if(value.isReturn() && value.type() != Value_Type::NIL) {
-            value.setReturn(false);
-
+        if(value.type() != Value_Type::NIL) {
             return value;
         }
     }
@@ -126,7 +121,6 @@ Value ProgramVisitor::visit(Block& block) {
     // Return empty value
     return Value();
 }
-
 
 Value ProgramVisitor::visit(ForLoop& forLoop) {
     Value value;
@@ -184,6 +178,10 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     // Pop the scope
     this->m_context->popScope();
 
+    if(functionCall.isStatement()) {
+        return Value();
+    }
+    
     return v;
 }
 
@@ -310,7 +308,6 @@ Value ProgramVisitor::visit(ConditionalStatement& conditionalStatement) {
         // Pop scope
         this->m_context->popScope();
     }
-
 
     // Return the value
     return outVal;
