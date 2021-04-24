@@ -90,6 +90,10 @@ Value Value::operator*(Value other) {
 
 Value Value::operator/(Value other) {
     if(bothNumber(*this, other)) {
+        if(other.m_number == 0) {
+            return Value(Value_Type::ERR);
+        }
+
         return Value(this->m_number / other.m_number);
     }
 
