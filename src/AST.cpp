@@ -99,6 +99,9 @@ Value ProgramVisitor::visit(Identifier& identifier) {
 
 // Return the expressed argument
 Value ProgramVisitor::visit(ReturnStatement& returnStatement) {
+    // This is the only statement that can return something
+    // on it's own, values can only be returned here at the
+    // statement level
     return returnStatement.argument()->accept(*this);
 }
 
@@ -178,6 +181,9 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     // Pop the scope
     this->m_context->popScope();
 
+    // Check if the functioncall is a statement or an expression
+    // this distinction is necessary because one expresses values
+    // and the other, although it may return one, does not
     if(functionCall.isStatement()) {
         return Value();
     }
@@ -248,6 +254,9 @@ Value ProgramVisitor::visit(WhileLoop& whileLoop) {
         
         // Execute body and set return value
         value = whileLoop.block()->accept(*this);
+        
+        // Check if something has been returned
+        if(value.type() != Value_Type::NIL) { break; }
     }
 
     this->m_context->popScope();
