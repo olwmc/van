@@ -355,6 +355,11 @@ class Parser {
     }
 
     /* Make assignmentStatement AST node */
+    // TODO: ADD MULTIDIMENSIONAL ASSIGNMENT
+    /*
+        Going to need to add a way of tracking those indexes
+        and a way to index them at the AST level
+    */
     ASTNode* makeAssignmentStatement() {
         bool isIndex = false;
         ASTNode* index;
@@ -379,6 +384,7 @@ class Parser {
             if(index == nullptr) {
                 raiseError("Expected expression in index");
             }
+
         } else {
             advance();
             // Get the operator
@@ -450,9 +456,38 @@ class Parser {
 
     /* Expression parser */
     ASTNode* expr() {
+        ASTNode* subval = compExpr();
+
+        while(accept("and") || accept("or")) {
+            // Make a check on the lhs
+            if(subval == nullptr) {
+                raiseError("Expected term before binary operator");
+            }
+
+            // Get the operator 
+            std::string op = m_current.raw();
+
+            // Get the right term
+            ASTNode* right = compExpr();
+
+            if(right == nullptr) {
+                raiseError("Expected term after binary operator");
+            }
+
+            if (op == "and") {
+                subval = new BinaryExpression(subval, right, Operator::AND);
+            } else if (op == "or") {
+                subval = new BinaryExpression(subval, right, Operator::OR);
+            }
+        }
+
+        return subval;
+    }
+
+    ASTNode* compExpr() { 
         ASTNode* subval = subexpr();
 
-        while(accept("and") || accept("or") || accept("==") || accept("!=") 
+        while(accept("==") || accept("!=") 
             || accept("<=") || accept(">=") || accept(">")  || accept("<")) {
             // Make a check on the lhs
             if(subval == nullptr) {
@@ -469,11 +504,7 @@ class Parser {
                 raiseError("Expected term after binary operator");
             }
 
-            if (op == "and") {
-                subval = new BinaryExpression(subval, right, Operator::AND);
-            } else if (op == "or") {
-                subval = new BinaryExpression(subval, right, Operator::OR);
-            } else if (op == "==") {
+            if (op == "==") {
                 subval = new BinaryExpression(subval, right, Operator::EQUALS);
             } else if (op == "!=") {
                 subval = new BinaryExpression(subval, right, Operator::NOTEQUAL);
