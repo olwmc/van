@@ -40,16 +40,6 @@ defun isFirst_And_Last_Same(list) as
     return list[0] == list[len(list) - 1];
 end
 
--- defun findDivisible(list, n) as
---     for(local i = 0; i < len(list); i+=1) do
---         if(list[i] % n == 0) then
---             println(list[i]);
---         end
---     end
--- end
-
--- https://edabit.com/challenges/python3
--- FIZZBUZZ!!
 defun stutter(str) as
     local stut = str[0] + str[1];
     local out = "";
@@ -230,16 +220,6 @@ defun sum(list) as
     return out;
 end
 
-defun contains(list, n) as
-    for(local i = 0; i < len(list); i+=1) do
-        if(list[i] == n) then
-            return 1;
-        end
-    end
-
-    return 0;
-end
-
 defun max(list) as
     local max = 0;
 
@@ -373,27 +353,22 @@ defun split(str, delim) as
     return outArr;
 end
 
-
-if(1 and 1) then
-    println("1 and 1");
+defun massert(condition, message) as
+    if(condition == false) then
+        println("MASSERT: `" + message + "`");
+        assert(0);
+    end
 end
 
-if(1 and 0) then
-    println("Error");
+defun contains(list, n) as
+    massert(type(list) == "list", "contains only works on lists");
+    for(local i = 0; i < len(list); i+=1) do
+        if(list[i] == n) then
+            return 1;
+        end
+    end
+
+    return 0;
 end
 
-if(1 or 1) then
-    println("1 or 1");
-end
-
-if(1 or 0) then
-    println("1 or 0");
-end
-
-if(0 or 0) then
-    println("Error");
-end
-
-if(3*2==6 and 4*8 != 33) then
-    println("3*2==6 and 4*8 != 33");
-end
+println(contains(1, "ee"));
