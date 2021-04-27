@@ -9,7 +9,6 @@ typedef std::unordered_map<std::string, bool> Options;
 
 Options parseOptions(int argc, char** argv) {
     Options optionsMap = {
-        {"-h",  false},
         {"-j",  false},
         {"err", false}
     };
@@ -25,7 +24,6 @@ Options parseOptions(int argc, char** argv) {
         // If it is, then set the options
         else {
             switch(argv[i][1]) {
-                case 'h': optionsMap["-h"] = true; break;
                 case 'j': optionsMap["-j"] = true; break;
 
                 default:
@@ -54,17 +52,21 @@ int main(int argc, char** argv) {
         std::istreambuf_iterator<char>()
     };
 
-    if(options["err"]) {
-        std::cout << "Please provide correct options if any\n";
-    }
 
-    else if(options["-h"]) {
+    if(argc == 1) {
         std::cout << "The Van Programming Language interpreter\n";
         std::cout << "\tUsage: filename [-j|-h]\n";
         std::cout << "\tRepo link: https://github.com/olwmc/Van\n";
+
+        return 0;
+    }
+
+    if(options["err"]) {
+        std::cout << "Please provide correct options if any\n";
+        return 1;
     }
     
-    else if(infile.good()) {
+    if(infile.good()) {
         Van_Interpreter interpreter(file_contents);
 
         if(options["-j"]) {
@@ -72,9 +74,12 @@ int main(int argc, char** argv) {
         } else {
             interpreter.run();
         }
+
+        return 0;
     }
-    
+
     else {
-        std::cout << "Please provide a valid file to run. Run with -h for help\n";
+        std::cout << "Please provide a file to execute. Run with no options for help.\n";
+        return 1;
     }
 }
