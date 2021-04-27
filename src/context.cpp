@@ -59,8 +59,8 @@ void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
 
             case LIST:
                 // Check for length
-                i = (i >= 0) ? i : valPtr->asString().size() + i;
-                if(i > (int)valPtr->asString().size() || i < 0) { throw std::runtime_error("Invalid index"); }
+                i = (i >= 0) ? i : valPtr->asList().size() + i;
+                if(i > (int)valPtr->asList().size() || i < 0) { throw std::runtime_error("Invalid index"); }
 
                 // Set the index
                 (*valPtr->getList())[i] = v;
