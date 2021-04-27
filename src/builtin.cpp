@@ -5,6 +5,8 @@
 #include "builtin.h"
 
 #include <iostream>
+#include <stdlib.h>
+#include <ctime>
 
 /* User defined function */
 Value ProgramVisitor::visit(UserFunction& userFunction) {
@@ -123,4 +125,10 @@ Value builtin_StrCast::execute(Context& context) {
   Value val = context.resolveVariable(this->m_args[0]);
 
   return Value(val.toString());
+}
+
+Value builtin_Rand::execute(Context& context) {
+  (void)context;
+
+  return Value(rand());
 }

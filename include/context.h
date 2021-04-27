@@ -55,6 +55,10 @@ class Context {
             this->m_functions.insert( {"len",     new builtin_Len()     });
             this->m_functions.insert( {"type",    new builtin_Type()    });
             this->m_functions.insert( {"str",     new builtin_StrCast() });
+            this->m_functions.insert( {"rand",    new builtin_Rand() });
+
+            // Seed the RNG
+            srand(time(NULL));
         }
         
         ~Context() {

@@ -89,4 +89,13 @@ class builtin_StrCast : public Builtin {
 
     virtual Value execute(Context& context) override;
 };
+
+class builtin_Rand : public Builtin {
+    public:
+    builtin_Rand() {
+        this->m_args = {};
+    }
+
+    virtual Value execute(Context& context) override;
+};
 #endif /* BUILTIN_H */
