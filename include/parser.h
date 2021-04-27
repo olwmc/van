@@ -357,17 +357,19 @@ class Parser {
     /* Make assignmentStatement AST node */
     ASTNode* makeAssignmentStatement() {
         bool isIndex = false;
-        std::vector<ASTNode*> indexes;
+        std::vector<ASTNode*> indexes = {};
         std::string op;
 
         // Get the identifier
         std::string id = this->m_current.raw();
+
+        ASTNode* indexpr = new Identifier(id);
         
         if(this->m_next.raw() == "[") {
+            // Check off that an indexexpression is coming
+            isIndex = true;
+            
             while(accept("[")) {
-                // Check off that an indexexpression is coming
-                isIndex = true;
-
                 // Get the index and expect a closing bracker
                 indexes.push_back(expr());
                 expect("]");
@@ -376,6 +378,8 @@ class Parser {
                 if(indexes.back() == nullptr) {
                     raiseError("Expected expression in index");
                 }
+
+                indexpr = new IndexExpression(indexpr, indexes.back());
             }
 
             // Get the operator and advance
@@ -393,15 +397,17 @@ class Parser {
 
         // Decide what to do with the operator
         if(op == "+=") {
-            ASTNode *addExpr = new BinaryExpression(new Identifier(id), expression, Operator::ADD);
+            ASTNode *addExpr = new BinaryExpression(indexpr, expression, Operator::ADD);
 
-            if(isIndex) { return new AssignmentStatement(id, addExpr, indexes); }
+            if(isIndex) {
+                return new AssignmentStatement(id, addExpr, indexes);
+            }
 
             return new AssignmentStatement(id, addExpr);
         }
 
         else if (op == "-=") {
-            ASTNode *subExpr = new BinaryExpression(new Identifier(id), expression, Operator::SUBTRACT);
+            ASTNode *subExpr = new BinaryExpression(indexpr, expression, Operator::SUBTRACT);
 
             if(isIndex) { return new AssignmentStatement(id, subExpr, indexes); }
 
@@ -409,7 +415,7 @@ class Parser {
         }
         
         else if (op == "*=") {
-            ASTNode *multExpr = new BinaryExpression(new Identifier(id), expression, Operator::MULTIPLY);
+            ASTNode *multExpr = new BinaryExpression(indexpr, expression, Operator::MULTIPLY);
 
             if(isIndex) { return new AssignmentStatement(id, multExpr, indexes); }
 
@@ -417,9 +423,10 @@ class Parser {
         }
 
         // Basic "=" operator
-        if(isIndex) { return new AssignmentStatement(id, expression, indexes); }
-
-        return new AssignmentStatement(id, expression);
+        // Hacky solution here to solve indexpr memory leak
+        if(isIndex) { return new AssignmentStatement(id, expression, indexes, indexpr); }
+        
+        return new AssignmentStatement(id, expression, {}, indexpr);
     }
 
     /* Make arguments (Function call or array) */
