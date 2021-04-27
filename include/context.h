@@ -75,7 +75,9 @@ class Context {
         void bindGlobalVariable(std::string name, Value v);
 
         void updateVariable(std::string name, Value v);
-        void updateIndex(std::string name, Value v, int index);
+        void updateIndex(std::string name, Value v, std::vector<int> indexes);
+        void updateIndex(Value* valPtr, Value v, std::vector<int> indexes);
+
         Value* getValue(std::string name);
         
         // Resolves a variable name to its associated Value

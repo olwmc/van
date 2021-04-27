@@ -109,7 +109,6 @@ Value Value::operator%(Value other) {
 }
 
 /* Comparators */
-// TODO: Clean this up
 Value Value::operator==(Value other) {
     // If the types are equal, compare them
     if(this->m_type == other.m_type) {

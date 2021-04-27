@@ -355,36 +355,33 @@ class Parser {
     }
 
     /* Make assignmentStatement AST node */
-    // TODO: ADD MULTIDIMENSIONAL ASSIGNMENT
-    /*
-        Going to need to add a way of tracking those indexes
-        and a way to index them at the AST level
-    */
     ASTNode* makeAssignmentStatement() {
         bool isIndex = false;
-        ASTNode* index;
+        std::vector<ASTNode*> indexes;
         std::string op;
 
         // Get the identifier
         std::string id = this->m_current.raw();
+        
+        if(this->m_next.raw() == "[") {
+            while(accept("[")) {
+                // Check off that an indexexpression is coming
+                isIndex = true;
 
-        if(accept("[")) {
-            // Check off that an indexexpression is coming
-            isIndex = true;
+                // Get the index and expect a closing bracker
+                indexes.push_back(expr());
+                expect("]");
 
-            // Get the index and expect a closing bracker
-            index = expr();
-            expect("]");
+                // Check if the index is null
+                if(indexes.back() == nullptr) {
+                    raiseError("Expected expression in index");
+                }
+            }
 
             // Get the operator and advance
             op = this->m_next.raw();
             advance();
-            
-            // Check if the index is null
-            if(index == nullptr) {
-                raiseError("Expected expression in index");
-            }
-
+                
         } else {
             advance();
             // Get the operator
@@ -398,7 +395,7 @@ class Parser {
         if(op == "+=") {
             ASTNode *addExpr = new BinaryExpression(new Identifier(id), expression, Operator::ADD);
 
-            if(isIndex) { return new AssignmentStatement(id, addExpr, index); }
+            if(isIndex) { return new AssignmentStatement(id, addExpr, indexes); }
 
             return new AssignmentStatement(id, addExpr);
         }
@@ -406,7 +403,7 @@ class Parser {
         else if (op == "-=") {
             ASTNode *subExpr = new BinaryExpression(new Identifier(id), expression, Operator::SUBTRACT);
 
-            if(isIndex) { return new AssignmentStatement(id, subExpr, index); }
+            if(isIndex) { return new AssignmentStatement(id, subExpr, indexes); }
 
             return new AssignmentStatement(id, subExpr);
         }
@@ -414,13 +411,13 @@ class Parser {
         else if (op == "*=") {
             ASTNode *multExpr = new BinaryExpression(new Identifier(id), expression, Operator::MULTIPLY);
 
-            if(isIndex) { return new AssignmentStatement(id, multExpr, index); }
+            if(isIndex) { return new AssignmentStatement(id, multExpr, indexes); }
 
             return new AssignmentStatement(id, multExpr);
         }
 
         // Basic "=" operator
-        if(isIndex) { return new AssignmentStatement(id, expression, index); }
+        if(isIndex) { return new AssignmentStatement(id, expression, indexes); }
 
         return new AssignmentStatement(id, expression);
     }
@@ -456,8 +453,11 @@ class Parser {
 
     /* Expression parser */
     ASTNode* expr() {
+        // Get the subexpression with next lowest
+        // precedence (comparator level)
         ASTNode* subval = compExpr();
 
+        // While accepting and/or 
         while(accept("and") || accept("or")) {
             // Make a check on the lhs
             if(subval == nullptr) {
@@ -467,13 +467,15 @@ class Parser {
             // Get the operator 
             std::string op = m_current.raw();
 
-            // Get the right term
+            // Get the right compExpression
             ASTNode* right = compExpr();
 
+            // Check if it's null
             if(right == nullptr) {
                 raiseError("Expected term after binary operator");
             }
 
+            // Make the expression accordingly
             if (op == "and") {
                 subval = new BinaryExpression(subval, right, Operator::AND);
             } else if (op == "or") {
@@ -681,6 +683,14 @@ class Parser {
             ASTNode* exprval = factor();
             
             return new BinaryExpression(exprval, new NumberLiteral(-1), Operator::MULTIPLY);
+        }
+
+        // Finally, the unary !
+        else if(accept("!")) {
+            // Here, I just use a binaryexpression with a dummy value because it's simpler than
+            // implementing an entirely new ASTNode
+            ASTNode* exprval = factor();
+            return new BinaryExpression(exprval, new NumberLiteral(0), Operator::NOT);
         }
 
         // If nothing has been fulfilled, return a nullptr

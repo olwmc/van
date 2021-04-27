@@ -23,7 +23,7 @@
 enum Operator {
     ADD, SUBTRACT, MULTIPLY, DIVIDE, MOD,
     EQUALS, LESSEQUAL, GREATEQUAL, NOTEQUAL, AND, OR,
-    LESSTHAN, GREATERTHAN
+    LESSTHAN, GREATERTHAN, NOT
 };
 
 /* AST Node abstract class */
@@ -340,37 +340,41 @@ class FunctionCall : public ASTNode {
 class AssignmentStatement : public ASTNode {
     std::string m_id;
     ASTNode* m_rhs;
-    ASTNode* m_index;
+    std::vector<ASTNode*> m_indexes;
 
     public:
         AssignmentStatement(std::string id, ASTNode* rhs) 
-            : m_id(id), m_rhs(rhs), m_index(nullptr) {}
-        
-        AssignmentStatement(std::string id, ASTNode* rhs, ASTNode* index) 
-            : m_id(id), m_rhs(rhs), m_index(index) {}
+            : m_id(id), m_rhs(rhs), m_indexes({}) {}
+
+        AssignmentStatement(std::string id, ASTNode* rhs, std::vector<ASTNode*> indexes) 
+            : m_id(id), m_rhs(rhs), m_indexes(indexes) {}
         
         ~AssignmentStatement() {
             delete this->m_rhs;
-            delete this->m_index;
+
+            for(ASTNode* index : m_indexes) {
+                delete index;
+            }
         }
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         }
 
-        std::string id() { return this->m_id;  }
-        ASTNode* rhs()   { return this->m_rhs; }
-        ASTNode* index() { return this->m_index; }
+        std::string id()    { return this->m_id;  }
+        ASTNode* rhs()      { return this->m_rhs; }
+        std::vector<ASTNode*> indexes() { return this->m_indexes; }
 
         virtual void toJson() override {
             std::cout <<  "{\"assignmentStatement\": { \"id\":";
             std::cout << "\"" << m_id << "\"";
             std::cout << ", \"rhs\":";
             m_rhs->toJson(); 
-            
-            if(m_index != nullptr) {
-                std::cout << ", \"index\":";
-                m_index->toJson();
-            }
+
+            // TODO: THIS            
+            // if(m_index != nullptr) {
+            //     std::cout << ", \"index\":";
+            //     m_index->toJson();
+            // }
             std::cout << "}}";
         }
 };

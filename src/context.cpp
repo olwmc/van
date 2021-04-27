@@ -34,34 +34,45 @@ void Context::updateVariable(std::string name, Value v) {
     *(getValue(name)) = v;
 }
 
-void Context::updateIndex(std::string name, Value v, int index) {
+// Update the index by recursively iterating downwards until the last index is achieved
+void Context::updateIndex(std::string name, Value v, std::vector<int> indexes) {
     Value* val = getValue(name);
+    updateIndex(val, v, indexes);
+}
 
-    if(val->type() == Value_Type::LIST) {
-        std::vector<Value> alterated = val->asList();
+void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
+    // BASE CASE: There's only one index to set
+    if(indexes.size() == 1) {
+        switch(valPtr->type()) {
+            case STRING:
+                // Set the index
+                (*valPtr->getString())[indexes.back()] = v.toString()[0];
+            break;
 
-        index = (index < 0) ? alterated.size() + index : index;
-        alterated[index] = v;
+            case LIST:
+                // Set the index
+                (*valPtr->getList())[indexes.back()] = v;
+            break;
 
-        *val = Value(alterated);
+            default:
+                throw std::runtime_error("Only strings and lists can have indexes assigned");
+        }
 
         return;
     }
-
-    else if(val->type() == Value_Type::STRING) {
-        std::string alterated = val->asString();
-
-        index = (index < 0) ? alterated.size() + index : index;
-        alterated[index] = (v.toString())[0];
-
-        *val = Value(alterated);
+    
+    // Auxillary case, the value is a list, then recurse
+    if(valPtr->type() == Value_Type::LIST) {
+        valPtr = &(valPtr->getList())->at(indexes.front());
+        
+        // TODO: Maybe rework this into a queue lmao
+        updateIndex(valPtr, v, std::vector<int>(indexes.begin() + 1, indexes.end()));
         return;
     }
 
-    else {
-        throw std::runtime_error("Only lists and strings can be index assigned");
-    }
-
+    // Otherwhise just throw an error
+    throw std::runtime_error("Only strings and lists can have indexes assigned");
+    
 }
 
 Value Context::resolveVariable(std::string name) {

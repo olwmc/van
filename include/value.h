@@ -22,9 +22,6 @@ class Value {
     // Value type
     Value_Type m_type;
 
-    // Const specifier
-    bool m_const;
-
     public:
         /* Constructors */
         Value(double v)      : m_number(v) { this->m_type = Value_Type::NUMBER; }
@@ -32,10 +29,9 @@ class Value {
         Value(Value_Type v)  : m_type(v) {};
 
         Value(std::vector<Value> vs) : m_list(vs) { this->m_type = Value_Type::LIST; }
-
-
         Value() { this->m_type = NIL; }
 
+        
         /* Return representations */
         double asNumber()           { return this->m_number; }
         std::string asString()      { return this->m_string; }
@@ -44,10 +40,11 @@ class Value {
         
         /* ToString as opposed to AsString. Used in casting.*/
         std::string toString(); 
-        
-        /* Check const state */
-        bool isConst() { return this->m_const; }
 
+        /* Pointer to internal list */
+        std::vector<Value>* getList() { return &this->m_list; }
+        std::string* getString() { return &this->m_string; }
+        
         /* Arithmetic operations */
         Value operator+(Value other);
         Value operator-(Value other);
@@ -66,6 +63,7 @@ class Value {
         /* Logical Operations */
         Value operator&&(Value other);
         Value operator||(Value other);
+
 };
 
 #endif /* VALUE_H */

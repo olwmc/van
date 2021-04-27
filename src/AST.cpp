@@ -28,6 +28,15 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
         case Operator::AND:         result = lhs && rhs; break;
         case Operator::LESSTHAN:    result = lhs < rhs;  break;
         case Operator::GREATERTHAN: result = lhs > rhs;  break;
+        
+        case Operator::NOT:
+            if(lhs.type() == Value_Type::NUMBER) {
+                result = !lhs.asNumber();
+            } else {
+                result = Value(0);
+            }
+        break;
+
     }
 
     if(result.type() == Value_Type::ERR) {
@@ -191,20 +200,51 @@ Value ProgramVisitor::visit(FunctionCall& functionCall) {
     return v;
 }
 
+// Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
+//     std::string id = assignmentStatement.id();
+//     Value init = assignmentStatement.rhs()->accept(*this);
+    
+//     if(assignmentStatement.index() != nullptr) {
+//         Value tempIndex = assignmentStatement.index()->accept(*this);
+
+//         if(tempIndex.type() == Value_Type::NUMBER) {
+//             this->m_context->updateIndex(id, init, tempIndex.asNumber());
+//         }
+
+//         else {
+//             throw std::runtime_error("Indexes must evaluate to a number");
+//         }
+//     }
+
+//     else {
+//         this->m_context->updateVariable(id, init);
+//     }
+
+//     return Value();
+// }
+
 Value ProgramVisitor::visit(AssignmentStatement& assignmentStatement) {
     std::string id = assignmentStatement.id();
     Value init = assignmentStatement.rhs()->accept(*this);
     
-    if(assignmentStatement.index() != nullptr) {
-        Value tempIndex = assignmentStatement.index()->accept(*this);
+    if(assignmentStatement.indexes().size() != 0) {
+        std::vector<int> indexes;
+        Value temp;
 
-        if(tempIndex.type() == Value_Type::NUMBER) {
-            this->m_context->updateIndex(id, init, tempIndex.asNumber());
-        }
+        // Don't need to check for nullptr b/c I already do that in the 
+        // parser
+        for(int i = 0; i < (int)assignmentStatement.indexes().size(); i++) {
+            temp = assignmentStatement.indexes()[i]->accept(*this);
 
-        else {
-            throw std::runtime_error("Indexes must evaluate to a number");
+            if(temp.type() != Value_Type::NUMBER) {
+                throw std::runtime_error("Indexes can only be numbers, got " + temp.toString());
+            }
+
+            else {
+                indexes.push_back(temp.asNumber());
+            }
         }
+        this->m_context->updateIndex(id, init, indexes);
     }
 
     else {
