@@ -342,20 +342,26 @@ class AssignmentStatement : public ASTNode {
     ASTNode* m_rhs;
     std::vector<ASTNode*> m_indexes;
 
+    // When calculating the index, there is an old index expression
+    // left behind that holds important pointers, this is how it gets
+    // deleted later
+    ASTNode* m_oldexpr;
+
     public:
         AssignmentStatement(std::string id, ASTNode* rhs) 
-            : m_id(id), m_rhs(rhs), m_indexes({}) {}
+            : m_id(id), m_rhs(rhs), m_indexes({}), m_oldexpr(nullptr) {}
 
         AssignmentStatement(std::string id, ASTNode* rhs, std::vector<ASTNode*> indexes) 
-            : m_id(id), m_rhs(rhs), m_indexes(indexes) {}
+            : m_id(id), m_rhs(rhs), m_indexes(indexes), m_oldexpr(nullptr) {}
+
+        AssignmentStatement(std::string id, ASTNode* rhs, std::vector<ASTNode*> indexes, ASTNode* oldExpr) 
+            : m_id(id), m_rhs(rhs), m_indexes(indexes), m_oldexpr(oldExpr) {}
         
         ~AssignmentStatement() {
             delete this->m_rhs;
-
-            for(ASTNode* index : m_indexes) {
-                delete index;
-            }
+            delete this->m_oldexpr;
         }
+
         virtual Value accept(ProgramVisitor& visitor) override {
             return visitor.visit(*this);
         }
