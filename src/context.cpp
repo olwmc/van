@@ -43,15 +43,27 @@ void Context::updateIndex(std::string name, Value v, std::vector<int> indexes) {
 void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
     // BASE CASE: There's only one index to set
     if(indexes.size() == 1) {
+
+        // First store the index
+        int i = indexes.back();
+
         switch(valPtr->type()) {
             case STRING:
+                // Check for length
+                i = (i >= 0) ? i : valPtr->asString().size() + i;
+                if(i > (int)valPtr->asString().size() || i < 0) { throw std::runtime_error("Invalid index"); }
+
                 // Set the index
-                (*valPtr->getString())[indexes.back()] = v.toString()[0];
+                (*valPtr->getString())[i] = v.toString()[0];
             break;
 
             case LIST:
+                // Check for length
+                i = (i >= 0) ? i : valPtr->asString().size() + i;
+                if(i > (int)valPtr->asString().size() || i < 0) { throw std::runtime_error("Invalid index"); }
+
                 // Set the index
-                (*valPtr->getList())[indexes.back()] = v;
+                (*valPtr->getList())[i] = v;
             break;
 
             default:
