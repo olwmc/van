@@ -43,7 +43,7 @@ void Context::updateIndex(std::string name, Value v, std::vector<int> indexes) {
 void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
     // BASE CASE: There's only one index to set
     if(indexes.size() == 1) {
-
+        
         // First store the index
         int i = indexes.back();
 
@@ -77,7 +77,6 @@ void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
     if(valPtr->type() == Value_Type::LIST) {
         valPtr = &(valPtr->getList())->at(indexes.front());
         
-        // TODO: Maybe rework this into a queue lmao
         updateIndex(valPtr, v, std::vector<int>(indexes.begin() + 1, indexes.end()));
         return;
     }
