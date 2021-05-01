@@ -169,6 +169,7 @@ Value Value::operator>=(Value other) {
         return Value(this->m_number >= other.m_number);
     }
 
+
     return Value(Value_Type::ERR);
 }
 
@@ -176,12 +177,20 @@ Value Value::operator>(Value other) {
     if(bothNumber(*this, other)) {
         return Value(this->m_number > other.m_number);
     }
-    
+    else if(this->type() == other.type() &&
+            this->type() == Value_Type::STRING) {
+        return Value(this->asString() > other.asString());
+    }
     return Value(Value_Type::ERR);
 }
 Value Value::operator<(Value other) {
     if(bothNumber(*this, other)) {
         return Value(this->m_number < other.m_number);
+    }
+
+    else if(this->type() == other.type() &&
+            this->type() == Value_Type::STRING) {
+        return Value(this->asString() < other.asString());
     }
     
     return Value(Value_Type::ERR);
