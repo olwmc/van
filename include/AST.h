@@ -376,11 +376,20 @@ class AssignmentStatement : public ASTNode {
             std::cout << ", \"rhs\":";
             m_rhs->toJson(); 
 
-            // TODO: THIS            
-            // if(m_index != nullptr) {
-            //     std::cout << ", \"index\":";
-            //     m_index->toJson();
-            // }
+
+            if(m_indexes.size() > 0) {
+                std::cout << ", \"indexes\": {";
+
+                std::cout << "\"0\":";
+                m_indexes[0]->toJson();
+                
+                for(int i = 1; i < (int)m_indexes.size(); i++) {
+                    std::cout << ", \"" << i << "\":";       
+                    m_indexes[i]->toJson();
+                }
+                
+                std::cout << "}";
+            }
             std::cout << "}}";
         }
 };
