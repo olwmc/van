@@ -123,13 +123,17 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
     Parsing: Unknown length of basically any number of things
     at runtime provide a perfect place for dynamic arrays.
         - Reason why you would use a dynamic array is if the size
-          of your input in unknown at runtime.
+          of your input in unknown at runtime. Parsing user input with as diverse of a range as a programming language is the perfect use case for dynamic arrays because I have no idea about *any length of anything* at compile time.
 
 * **Maps (NN)**
 
     I used maps in several ways in my project. The underlying reason for
     their use is when I need to associate names for things like functions
     and variable names with their associated pointers and values respectively.
+
+    I used `std::unordered_map` for this project for the quicker average search/deletion/insertion. Additionally, I don't need ordering for variables nor functions, so taking advantage of unordered map's time complexity was useful here.
+
+    There's not really a simpler way of associating user input (identifiers) with complex data structures (pointers to callable objects and values), so using a map here was cruical.
 
 * **Binary Search (NN)**
 
