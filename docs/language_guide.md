@@ -5,6 +5,11 @@ Van is an imperative programming language with embedding capabilities. It has al
 
 Van is similar to Lua and Python, if you have any experience in those, then you'll find programming in Van easy and fun.
 
+### Quick facts
+* Van is an interpreted language, meaning it is run on the spot and not compiled into an executable.
+
+* Identifiers in Van can contain letters and '_', but not numbers or any other characters.
+
 ### Hello... you!
 ```lua
 local name;
@@ -160,4 +165,4 @@ As you can see, we loop through the string looking for the delimiter, if it's fo
 
 `str`: Returns the input as a string
 
-`rand`: Returns a random integer between 0 and RAND_MAX (Compiler dependent).
+`rand`: Returns a random integer between 0 and RAND_MAX (C++ compiler dependent).
