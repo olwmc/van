@@ -1,4 +1,4 @@
-# Oliver McLaughlin : CSC212 Final Project "The Van Programming Language"
+# Oliver McLaughlin : CSC212 Final Project
 
 ## Purpose Overview
 The purpose of this project was to expand my knowledge of programming languages, parsers, and writing large projects. It also gave me the opportunity to really test both myself and the data structures presented within this course.
