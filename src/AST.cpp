@@ -61,7 +61,7 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
         int index = rhs.asNumber();
         index = (index >= 0) ? index : lhs.asList().size() + index;
 
-        if(index >= (int)lhs.asList().size()) {
+        if(index >= (int)lhs.asList().size() || index < 0) {
             throw std::runtime_error("Invalid index");
         }
 
@@ -73,7 +73,7 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
         int index = rhs.asNumber();
         index = (index >= 0) ? index : lhs.asString().size() + index;
 
-        if(index >= (int)lhs.asString().size()) {
+        if(index >= (int)lhs.asString().size() || index < 0) {
             throw std::runtime_error("Invalid index");
         }
 
