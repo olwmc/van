@@ -55,8 +55,11 @@ Value Value::operator+(Value other) {
     }
 
     else if(other.type() == Value_Type::LIST) {
-        std::vector<Value> outVector = other.asList();
-        outVector.push_back(*this);
+        std::vector<Value> outVector = {*this};
+        
+        for(Value v : other.asList()) {
+            outVector.push_back(v);
+        }
 
         return Value(outVector);
     }
