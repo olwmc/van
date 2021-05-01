@@ -105,6 +105,8 @@ a small issue that's purely cosmetic.
 - Using the -j option after your filename, like `./bin/van examples/myfile.van -j`
 will print out the AST for your program in JSON. You can copy that JSON into [this website](https://vanya.jp.net/vtree/index.html) to see it as a tree.
 
+- I realized I could have an API for the user to add their own custom builtin functions written in C++, much like how Lua does. So I added a little guide in `./docs/` on how to do this.
+
 ## Group
 - I did this project alone.
 
