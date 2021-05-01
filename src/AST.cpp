@@ -51,8 +51,6 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
     Value lhs = indexExpression.lhs()->accept(*this);
     Value rhs = indexExpression.rhs()->accept(*this);
 
-    //TODO: Bounds checking for index
-
     // Check if index is valid
     if(rhs.type() != Value_Type::NUMBER) {
         throw std::runtime_error("Cannot index with value: " + rhs.toString());
@@ -63,6 +61,10 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
         int index = rhs.asNumber();
         index = (index >= 0) ? index : lhs.asList().size() + index;
 
+        if(index >= (int)lhs.asList().size()) {
+            throw std::runtime_error("Invalid index");
+        }
+
         return Value(lhs.asList()[index]);
     }
 
@@ -71,8 +73,12 @@ Value ProgramVisitor::visit(IndexExpression& indexExpression) {
         int index = rhs.asNumber();
         index = (index >= 0) ? index : lhs.asString().size() + index;
 
-        char val = (char)lhs.asString()[index];
+        if(index >= (int)lhs.asString().size()) {
+            throw std::runtime_error("Invalid index");
+        }
 
+        char val = (char)lhs.asString()[index];
+        
         return Value(std::string(1, val));
     }
 
