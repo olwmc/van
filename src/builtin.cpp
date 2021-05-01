@@ -72,7 +72,7 @@ Value builtin_NumCast::execute(Context& context) {
   try {
     num = std::stod(str);
   } catch(...) {
-    throw std::runtime_error("Only strings can be cast to numbers");
+    throw std::runtime_error("Invalid input for number cast");
   }
   
   return Value(num);
@@ -102,17 +102,9 @@ Value builtin_Type::execute(Context& context) {
 
   switch(val.type()) {
     // number string list nil
-    case NUMBER:
-      type = "number";
-    break;
-
-    case STRING:
-      type = "string";
-    break;
-
-    case LIST:
-      type = "list";
-    break;
+    case NUMBER: type = "number"; break;
+    case STRING: type = "string"; break;
+    case LIST:   type = "list";   break;
 
     default:
       type = "nil";
@@ -129,6 +121,11 @@ Value builtin_StrCast::execute(Context& context) {
 
 Value builtin_Rand::execute(Context& context) {
   (void)context;
-
   return Value(rand());
+}
+
+Value builtin_Contains::execute(Context& context) {
+  (void)context;
+
+  return Value(false);
 }
