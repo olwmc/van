@@ -1,3 +1,5 @@
+--- This is an example of single linear regression being done in Van
+
 -- Get mean of a list
 defun getMean(list, size) as
     local sum = 0;

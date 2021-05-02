@@ -1,3 +1,5 @@
+--- Many of these examples are challenges from https://edabit.com/challenges/python3
+
 defun fib(n) as
     local x = 0;
     local y = 1;
@@ -10,14 +12,6 @@ defun fib(n) as
     end
 
     return x;
-end
-
-defun bar(x) as
-    for(local i = 0; i < len(x); i+=1) do
-        print(x[i] + " |");
-    end
-
-    println("");
 end
 
 defun evenIndexes(str) as
@@ -34,21 +28,6 @@ defun removeChars(str, n) as
     end
 
     return outStr;
-end
-
-defun isFirst_And_Last_Same(list) as
-    return list[0] == list[len(list) - 1];
-end
-
-defun stutter(str) as
-    local stut = str[0] + str[1];
-    local out = "";
-
-    out += stut + "... ";
-    out += stut + "... ";
-    out += str  + "?";
-
-    return out;
 end
 
 defun format_date(date) as
@@ -98,20 +77,6 @@ defun push(list, n) as
     return list + n;
 end
 
--- local count = 0;
--- local myList = [];
-
--- while(len(myList) < 5) do
---     myList += count;
---     count += 1;
---     println(myList);
--- end
-
--- while(len(myList) > 0) do
---     println(myList);
---     myList = pop(myList);
--- end
-
 defun join(list) as
     local outStr = "";
 
@@ -148,18 +113,6 @@ defun foo(x,y) as
     return arr;
 end
 
--- [5, 6, 7, 8, 9, 10]
--- println(foo(5,10));
-
--- println(foo(5,10)[len(foo(5,10)) - 1]);
--- println(foo(5,10)[5]);
--- println(foo(5,10)[-1]);
-
--- if(1==1) then
---     println("WOPOOO");
--- end
-
-
 defun find(list, item) as
     for(local i = 0; i < len(list); i += 1) do
         if(list[i] == item) then return i; end
@@ -182,15 +135,15 @@ defun countVowels(str) as
     local count = 0;
 
     for(local i = 0; i < len(str); i+=1) do
-        if(str[i] == "a") then
+        if(str[i] == "a" or str[i] == "A") then
             count += 1;
-        elif(str[i] == "e") then
+        elif(str[i] == "e" or str[i] == "E") then
             count += 1;
-        elif(str[i] == "i") then
+        elif(str[i] == "i" or str[i] == "I") then
             count +=1;
-        elif(str[i] == "o") then
+        elif(str[i] == "o" or str[i] == "O") then
             count += 1;
-        elif(str[i] == "u") then
+        elif(str[i] == "u" or str[i] == "U") then
             count += 1;
         end
     end
@@ -371,4 +324,28 @@ defun contains(list, n) as
     return 0;
 end
 
-println(contains(1, "ee"));
+defun distViz(n, m) as
+-- See how n values distribute over m times
+    local counts = [];
+    local val = 0;
+
+    for(local i = 0; i < n; i += 1) do counts += []; end
+    
+    for(local i = 0; i < m; i += 1) do
+        val = rand() % n;
+        counts[val] += "#";
+    end
+
+    -- Print out the distribution
+    for(local i = 0; i < len(counts); i += 1) do
+        if(i < 9) then
+            println(i + 1 + " => " + str(counts[i]));
+        else
+            println(i + 1 + "=> " + str(counts[i]));
+        end
+    end
+end
+
+local word = "Beans";
+
+println("There are " + countVowels(word) + " vowels in \"" + word + "\"");
