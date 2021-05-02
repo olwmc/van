@@ -98,4 +98,32 @@ class builtin_Rand : public Builtin {
 
     virtual Value execute(Context& context) override;
 };
+
+// Quicksort implementation
+class builtin_Sort : public Builtin {
+    public:
+    builtin_Sort() {
+        this->m_args = {"__list__"};
+    }
+
+    int partition (Value arr[], int low, int high);
+    void quickSort(Value arr[], int low, int high);
+    virtual Value execute(Context &context) override;
+
+    friend class LinkedList;
+};
+
+// Binary search
+class builtin_Contains : public Builtin {
+    // Do a check to see if all numbers, if so, sort
+    // else do a linear search
+    public:
+    builtin_Contains() {
+        this->m_args = {"__list__", "__element__"};
+    }
+
+    int binarySearch(std::vector<Value> arr, int l, int r, Value v);
+    virtual Value execute(Context &context) override;
+};
+
 #endif /* BUILTIN_H */

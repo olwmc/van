@@ -55,7 +55,9 @@ class Context {
             this->m_functions.insert( {"len",     new builtin_Len()     });
             this->m_functions.insert( {"type",    new builtin_Type()    });
             this->m_functions.insert( {"str",     new builtin_StrCast() });
-            this->m_functions.insert( {"rand",    new builtin_Rand() });
+            this->m_functions.insert( {"rand",    new builtin_Rand()    });
+            this->m_functions.insert( {"sort",    new builtin_Sort()    });
+            this->m_functions.insert( {"contains",new builtin_Contains()});
 
             // Seed the RNG
             srand(time(NULL));
