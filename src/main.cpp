@@ -37,22 +37,24 @@ Options parseOptions(int argc, char** argv) {
 }
 
 int main(int argc, char** argv) {
-
     std::string fileName = "";
 
+    // Get the filename
     if(argc > 1) {
         fileName = std::string(argv[1]);
     }
     
+    // Parse out the options
     Options options = parseOptions(argc, argv);
 
+    // Open the file and read the contents
     std::ifstream infile(fileName);
     std::string file_contents { 
         std::istreambuf_iterator<char>(infile),
         std::istreambuf_iterator<char>()
     };
 
-
+    // If there's no file, just print out the usage
     if(argc == 1) {
         std::cout << "The Van Programming Language interpreter\n";
         std::cout << "\tUsage: filename [-j|-h]\n";
@@ -61,11 +63,13 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+    // If there's an options error print error
     if(options["err"]) {
         std::cout << "Please provide correct options if any\n";
         return 1;
     }
     
+    // If the file is good, make an interpreter and check if JSON
     if(infile.good()) {
         Van_Interpreter interpreter(file_contents);
 
@@ -78,6 +82,7 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+    // Otherwhise if the file is bad tell the user
     else {
         std::cout << "Please provide a file to execute. Run with no options for help.\n";
         return 1;
