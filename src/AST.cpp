@@ -40,7 +40,7 @@ Value ProgramVisitor::visit(BinaryExpression& binaryExpression) {
     }
 
     if(result.type() == Value_Type::ERR) {
-        throw std::runtime_error("Incorrect types on values: " + lhs.toString() + " & " + rhs.toString());
+        throw std::runtime_error("Incorrect types on values: " + lhs.toString() + " and " + rhs.toString());
     }
 
     return result;
