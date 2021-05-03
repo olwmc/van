@@ -1,3 +1,7 @@
+/*
+Oliver Wendell McLaughlin CSC212 Fall 2021
+*/
+
 #ifndef FORWARD_H
 #define FORWARD_H
 

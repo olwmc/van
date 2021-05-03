@@ -1,3 +1,7 @@
+/*
+Oliver Wendell McLaughlin CSC212 Fall 2021
+*/
+
 #ifndef VISITOR_H
 #define VISITOR_H
 

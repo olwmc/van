@@ -1,4 +1,8 @@
 /*
+Oliver Wendell McLaughlin CSC212 Fall 2021
+*/
+
+/*
 Basically, variable resolution works as such
 
 Variable:
