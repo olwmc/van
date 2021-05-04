@@ -212,19 +212,11 @@ int builtin_Sort::partition(Value arr[], int low, int high)
 void builtin_Sort::quickSort(Value arr[], int low, int high)
 {
     //base case, takes care of the same case we hinted on in mergesort
-    if (low >= high)
-    {
-        return;
-    }
-    //find a pivot item, run the partition on the array according to what the pivot is
-    //like merge sort, we make a variable to keep track of this
-    int pivdex = partition(arr, low, high);
+    if (low >= high) { return; }
+    int pivotIndex = partition(arr, low, high);
 
-    //call this sort method recursively on left array
-    quickSort(arr, low, pivdex - 1);
-
-    //call this sort method recursively on right array
-    quickSort(arr, pivdex + 1, high);
+    quickSort(arr, low, pivotIndex - 1);
+    quickSort(arr, pivotIndex + 1, high);
 }
 
 Value builtin_Contains::execute(Context &context)
@@ -247,26 +239,20 @@ Value builtin_Contains::execute(Context &context)
     return -1;
 }
 
-int builtin_Contains::binarySearch(std::vector<Value> arr, int l, int r, Value v) {
-    if (r >= l) {
-        int mid = l + (r - l) / 2;
-        
-        // If the element is present at the middle
-        // itself
-        if ( (arr[mid] == v).asNumber() )
-            return mid;
- 
-        // If element is smaller than mid, then
-        // it can only be present in left subarray
-        if ( (arr[mid] > v).asNumber() )
-            return binarySearch(arr, l, mid - 1, v);
- 
-        // Else the element can only be present
-        // in right subarray
-        return binarySearch(arr, mid + 1, r, v);
+int builtin_Contains::binarySearch(std::vector<Value> arr, int low, int high, Value v) {
+    if (high < low) { return -1; }
+
+    int mid = (low + high) / 2;
+    
+    if ( (arr[mid] == v).asNumber() ) {
+        return mid;
     }
+
+    else if ( (arr[mid] > v).asNumber() ) {
+        return binarySearch(arr, low, mid - 1, v);
+    }
+
+    return binarySearch(arr, mid + 1, high, v);
  
-    // We reach here when element is not
-    // present in array
     return -1;
 }
