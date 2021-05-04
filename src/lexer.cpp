@@ -255,7 +255,7 @@ Token Lexer::makeStringLiteral() {
     std::string str;
     advance();
 
-    while(!isStringStart()) {
+    while(!isStringStart() && this->m_index < (int)this->m_prog.length()) {
         if(this->m_currentChar == '\\') {
             advance();
 
