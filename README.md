@@ -16,12 +16,13 @@ for usage
 read the documentation, it's located in `./docs/`. The [language guide](docs/language_guide.md) is realtively terse. Otherwhise, look
 through and run some of the example programs.
 
-
 ## Design Overview
+**Design overview: How did you choose to represent the aspects of your program (i.e., what data structures did you choose and why)?**
+
 
 
 ## Code Overview
-Much like any interpreter, this program takes input from a file and then goes through a set of stages
+Like any interpreter, this program takes input from a file and then goes through a set of stages
 
 1. Firstly, the lexer takes the program and splits it into individual lexemes.
 2. Next, the parser takes those lexemes and turns them into nodes on an AST.
@@ -37,7 +38,9 @@ For execution I decided to use the [visitor](https://en.wikipedia.org/wiki/Visit
 
 Each AST node inherits from a base class but every node implements the "accept" method, necessary for the visitor to work.
 
+---
 
+Short overview for each file containing code:
 * *AST.h*
     - Contains all the classes for the AST nodes as well as their associated information and JSON representation.
 
@@ -91,11 +94,9 @@ Each AST node inherits from a base class but every node implements the "accept" 
     - Implements and handles all the necessary methods for the `value` type.
 
 ## Potential Bugs
-- This is a large program and I wouldn't be surprised if there's some glaring issues I haven't been able to see yet.
+- There are without a doubt errors and segfaults for things I haven't found yet. This is a relatively large project (In terms of what I've written in the past), and it's difficult to know what to even test. I've tried my best to get most of the basic errors/segfaults out of the way, but there are definitely more I have yet to find.
 
 - There's some hacky fixes for memory leaks (most notably in assignment statements which lack a compound expression). 
-
-- There are without a doubt errors and segfaults for things I haven't found yet. This is a relatively large project (In terms of what I've written in the past), and it's difficult to know what to even test. I've tried my best to get most of the basic errors/segfaults out of the way, but there are definitely more I have yet to find.
 
 * I know for a fact that mismatched quotes, although they don't produce a memory leak,
 are UB. Sometimes the resulting error prints mojibake, sometimes it doesn't. It's
@@ -114,9 +115,9 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
 
 - Mastery, to me, is:
 
-    A. Understanding of the topic
+    1. Understanding of the topic
 
-    B. Ability to correctly apply the topic &| its functionality
+    2. Ability to correctly apply the topic &| its functionality
 
 * **Dynamic Array (NN)**
 
@@ -125,22 +126,26 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
         - Reason why you would use a dynamic array is if the size
           of your input in unknown at runtime. Parsing user input with as diverse of a range as a programming language is the perfect use case for dynamic arrays because I have no idea about *any length of anything* at compile time.
 
-* **Maps (NN)**
+    A great example would be in `parser.h` line 109, the function `makeProgram`. `makeProgram` collects all the *statements* that comprise the program into a vector which is then passed to a `Block` which serves as the root node of the program. Using a dynamic array here is the cleanest and most logical solution to solving the dynamic and unpredictable nature of the length of a program. By using a dynamic array, I offload all the memory complexity and work to the vector implementation. Using a vector allows me to collect programs with an unknown number of statements. 
+
+* **Sets & Maps (NN)**
 
     I used maps in several ways in my project. The underlying reason for
     their use is when I need to associate names for things like functions
     and variable names with their associated pointers and values respectively.
+
+    Specifically, in `context.h` on line 46 I represent different levels of scope as a vector of maps which accept a string and return a Value. This works because the back of the vector always contains a map with the current scope, from which I can associate names with variables and resolve unknown identifers easily.
 
     I used `std::unordered_map` for this project for the quicker average search/deletion/insertion. Additionally, I don't need ordering for variables nor functions, so taking advantage of unordered map's time complexity was useful here.
 
     There's not really a simpler way of associating user input (identifiers) with complex data structures (pointers to callable objects and values), so using a map here was cruical.
 
 * **Binary Search (NN)**
-
+    `The code for this can be found in builtin.cpp, line 250`
     I have a builtin function in my language called "contains", it returns true
     if a list contains a value. I used binary search here for two main reasons.
 
-    A) It decreases time complexity O(n) (linear search) to O(log n)
+    A) It improves time complexity O(n) (linear search) to O(log n) for sorted lists
 
     B) It was the simplest way for me to implement a good sorting algorithm.
         * Due to the nature of my Value class, it would be difficult to
@@ -148,16 +153,9 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
           allowed me to take advantage of O(log n) search times without
           increasing the complexity of my overall program.
 
-* **Sorting Algos (Implementation and Analysis) (NN)**
-
-    I implemented a version of Quicksort as a builtin function for my language.
-    This is for two main reasons.
-
-    1. Efficiency. This language is interpreted and thus lacks the performance
-    of a compiled language. I can aide this along by keeping sorting to C++.
-
-    2. Having some sort of builtin sorting function is pretty necessary to
-    get any real work done.
+    I slightly modified my base method such that there's compatability for unsorted
+    lists as well, but adding binary search here allows for very fast searches on
+    sorted lists. And when paired with my quicksort implementation, it increases overall performance when compared to a simple linear search.
 
 * **DFS (NN)**
 
@@ -171,6 +169,19 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
     gets the terminal node on the left, executes upwards, then gets the terminal
     node on the right, executes upwards, and finally applies the binary operation
     to the two values.
+
+    Looking at the code for the `BinaryExpression` AST node in AST.cpp line 11, we can see that in a binary expression, the left most node is always evaluated until termination, then the right node, then the operation is applied and the expression returns a Value. Using a DFS-style approach here is essential because in order to execute the AST in the way which preserves the intended precedence, we must go to the bottom of the tree first, then resolve the nodes upwards towards the root.
+
+* **Sorting Algos (Implementation and Analysis) (NN)**
+
+    I implemented a version of Quicksort as a builtin function for my language.
+    This is for two main reasons.
+
+    1. Efficiency. This language is interpreted and thus lacks the performance
+    of a compiled language. I can aide this along by keeping sorting to C++.
+
+    2. Having some sort of builtin sorting function is pretty necessary to
+    get any real work done.
 
 * **Recursive Algorithms**
     The biggest way I use recursive algorithms in my project is for the recursive
