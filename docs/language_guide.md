@@ -166,3 +166,7 @@ As you can see, we loop through the string looking for the delimiter, if it's fo
 `str`: Returns the input as a string
 
 `rand`: Returns a random integer between 0 and RAND_MAX (C++ compiler dependent).
+
+`sort`: Sorts a given list.
+
+`contains`: Check if a list contains a value, returns the index if found and -1 if not.
