@@ -33,11 +33,22 @@ std::string Value::toString() {
         std::string out = "[";
 
         if(this->m_list.size() > 0) {
-            out += this->m_list[0].toString();
+            if(m_list[0].type() == Value_Type::STRING) {
+                out += "\"" + m_list[0].toString() + "\"";
+            }
+            
+            else { out += m_list[0].toString(); }
 
             for(int i = 1; i < (int)m_list.size(); i++) {
                 out += ", ";
-                out += m_list[i].toString();
+
+                if(m_list[i].type() == Value_Type::STRING) {
+                    out += "\"";
+                    out += m_list[i].toString();
+                    out += "\"";
+                }
+                
+                else { out += m_list[i].toString(); }
             }    
         }
 
