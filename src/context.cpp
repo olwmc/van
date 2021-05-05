@@ -50,12 +50,12 @@ void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
         
         // First store the index
         int i = indexes.back();
-
+        
         switch(valPtr->type()) {
             case STRING:
                 // Check for length
                 i = (i >= 0) ? i : valPtr->asString().size() + i;
-                if(i > (int)valPtr->asString().size() || i < 0) { throw std::runtime_error("Invalid index"); }
+                if(i >= (int)valPtr->asString().size() || i < 0) { throw std::runtime_error("Invalid index"); }
 
                 // Set the index
                 (*valPtr->getString())[i] = v.toString()[0];
@@ -64,7 +64,7 @@ void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
             case LIST:
                 // Check for length
                 i = (i >= 0) ? i : valPtr->asList().size() + i;
-                if(i > (int)valPtr->asList().size() || i < 0) { throw std::runtime_error("Invalid index"); }
+                if(i >= (int)valPtr->asList().size() || i < 0) { throw std::runtime_error("Invalid index"); }
 
                 // Set the index
                 (*valPtr->getList())[i] = v;
@@ -79,8 +79,17 @@ void Context::updateIndex(Value* valPtr, Value v, std::vector<int> indexes) {
     
     // Auxillary case, the value is a list, then recurse
     if(valPtr->type() == Value_Type::LIST) {
-        valPtr = &(valPtr->getList())->at(indexes.front());
+        // Get the index and check if it's negative
+        int i = indexes.front();
+        i = (i >= 0) ? i : valPtr->asList().size() + i;
+
+        // Throw an error if it's an invalid index
+        if(i >= (int)valPtr->asList().size() || i < 0) { throw std::runtime_error("Invalid index"); }
+
+        // Set the valPtr to the pointer at 
+        valPtr = &(valPtr->getList())->at(i);
         
+        // Update the index
         updateIndex(valPtr, v, std::vector<int>(indexes.begin() + 1, indexes.end()));
         return;
     }
