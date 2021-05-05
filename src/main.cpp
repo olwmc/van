@@ -11,6 +11,7 @@ Oliver Wendell McLaughlin CSC212 Fall 2021
 
 typedef std::unordered_map<std::string, bool> Options;
 
+// This is overengineered because  I might want to add new options later
 Options parseOptions(int argc, char** argv) {
     Options optionsMap = {
         {"-j",  false},
@@ -61,7 +62,7 @@ int main(int argc, char** argv) {
     // If there's no file, just print out the usage
     if(argc == 1) {
         std::cout << "The Van Programming Language interpreter\n";
-        std::cout << "\tUsage: filename [-j|-h]\n";
+        std::cout << "\tUsage: filename [-j(son output)]\n";
         std::cout << "\tRepo link: https://github.com/olwmc/Van\n";
 
         return 0;

@@ -244,14 +244,17 @@ int builtin_Contains::binarySearch(std::vector<Value> arr, int low, int high, Va
 
     int mid = (low + high) / 2;
     
+    // Check if mid == v
     if ( (arr[mid] == v).asNumber() ) {
         return mid;
     }
 
+    // Check if mid > v
     else if ( (arr[mid] > v).asNumber() ) {
         return binarySearch(arr, low, mid - 1, v);
     }
 
+    // Otherwhise mid < v
     return binarySearch(arr, mid + 1, high, v);
  
     return -1;
