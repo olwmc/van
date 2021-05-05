@@ -1,4 +1,19 @@
---- Many of these examples are challenges from https://edabit.com/challenges/python3
+-- Little function to break blocks up
+defun pause() as
+    println("Press enter to continue");
+    input();
+end
+
+defun rfib(n) as
+    -- Recursive fibonacci
+    if(n<=1) then
+        return n;
+    else
+        return rfib(n-1) + rfib(n-2);
+    end
+end
+
+println("The 8th fibonacci number is " + rfib(8));
 
 defun fib(n) as
     local x = 0;
@@ -14,51 +29,36 @@ defun fib(n) as
     return x;
 end
 
-defun evenIndexes(str) as
-    for(local i = 0; i < len(str); i += 2) do
-        print(str[i]);
+println("The 15th fibonacci number is " + fib(15));
+pause();
+
+defun fact(n) as
+    -- Recursive factorial
+    if(n == 0) then
+        return 1;
+    else
+        return n * fact(n-1);
     end
 end
 
-defun removeChars(str, n) as
-    local outStr = "";
-
-    for(local i = n; i < len(str); i+=1) do
-        outStr += str[i];
-    end
-
-    return outStr;
-end
-
-defun format_date(date) as
-    local month = slice(date,0,1);
-    local day   = slice(date,3,4);
-    local year  = slice(date,6,9);
-
-    return year + " " +  day + " " + month;
-end
-
-defun list_of_multiples(num, length) as
-    local outList = [];
-
-    for(local i = 1; i <= length; i += 1) do
-        outList += num*i;
-    end
-
-    return outList;
-end
+println("8! = " + fact(8));
+pause();
 
 defun reverse(str) as
     -- Loop through the string backwards
     -- apending to the outstr each index
     local out = "";
 
-    for(local i = len(str); i >= 0; i -= 1) do
+    for(local i = len(str) - 1; i >= 0; i -= 1) do
         out += str[i];
     end
 
     return out;
 end
+
+print("Enter a string to be reversed: ");
+println(reverse(input()));
+pause();
 
 defun slice(list, start, stop) as
     local out = [];
@@ -69,13 +69,8 @@ defun slice(list, start, stop) as
     return out;
 end
 
-defun pop(list) as
-    return slice(list, 0, len(list) - 1);
-end
-
-defun push(list, n) as
-    return list + n;
-end
+println("In python this would be [1,2,3][0:1] => " + str(slice([1,2,3],0,1)));
+pause();
 
 defun join(list) as
     local outStr = "";
@@ -87,159 +82,9 @@ defun join(list) as
     return outStr;
 end
 
-defun first_n_fib(n) as
-    local x = 0;
-    local y = 1;
-    local z = 0;
-    local out = [];
+println(str(['T','e','s','t']) + " <= this joined is: " + join(['T','e','s','t']));
+pause();
 
-    for(local i = 1; i < n; i += 1) do
-        out += x;
-        z = x + y;
-        x = y;
-        y = z;
-    end
-    
-    return out;
-end
-
-defun foo(x,y) as
-    local arr = [];
-
-    for(local i = x; i <= y; i+=1) do
-        arr += i;
-    end
-
-    return arr;
-end
-
-defun find(list, item) as
-    for(local i = 0; i < len(list); i += 1) do
-        if(list[i] == item) then return i; end
-    end
-
-    return -1;
-end
-
-defun pow(x,y) as
-    local sum = x;
-
-    for(local i = 1; i < y; i+=1) do
-        sum *= x;
-    end
-
-    return sum;
-end
-
-defun countVowels(str) as
-    local count = 0;
-
-    for(local i = 0; i < len(str); i+=1) do
-        if(str[i] == "a" or str[i] == "A") then
-            count += 1;
-        elif(str[i] == "e" or str[i] == "E") then
-            count += 1;
-        elif(str[i] == "i" or str[i] == "I") then
-            count +=1;
-        elif(str[i] == "o" or str[i] == "O") then
-            count += 1;
-        elif(str[i] == "u" or str[i] == "U") then
-            count += 1;
-        end
-    end
-
-    return count;
-end
-
-defun double_char(str) as
-    local i = 0;
-    local outStr = "";
-
-    while(i < len(str)) do
-        outStr += str[i] + str[i];
-        i+=1;
-    end
-
-    return outStr;
-end
-
-
-defun sum(list) as
-    local out = 0;
-    for(local i = 0; i < len(list); i+=1) do
-        out += list[i];
-    end
-
-    return out;
-end
-
-defun max(list) as
-    local max = 0;
-
-    for(local i = 0; i < len(list); i+=1) do
-        if(list[i] > max) then
-            max = list[i];
-        end
-    end
-
-    return max;
-end
-
-defun min(list) as
-    local min = max(list);
-
-    for(local i = 0; i < len(list); i+=1) do
-        if(list[i] < min) then
-            min = list[i];
-        end
-    end
-
-    return min;
-end
-
-defun sum_missing_numbers(list) as
-    local missing = [];
-
-    for(local i = min(list); i < max(list); i+=1) do
-        if(contains(list,i) == 0) then
-            missing += i;
-        end
-    end
-
-    return sum(missing);
-end
-
-defun makeMatrix(n,m) as
-    local matrix = [];
-    local temp = [];
-
-    for(local i = 0; i < n; i+=1) do
-        for(local j = 0; j < m; j+=1) do
-            temp += 0;
-        end
-        matrix += temp;
-        temp = [];
-    end
-
-    return matrix;
-end
-
-defun printMatrix(matrix) as
-    for(local i = 0; i < len(matrix); i+=1) do
-        println(matrix[i]);
-    end
-end
-
----------------------------------------------------------------------
-defun validPal(str) as
-    for(local i = 0; i < len(str); i+=1) do        
-        if(str[i] != str[-i - 1]) then
-            return 0;
-        end
-    end
-
-    return 1;
-end
 
 defun fizzbuzz(n) as
     -- Loop from i => n
@@ -262,22 +107,9 @@ defun fizzbuzz(n) as
     end
 end
 
-defun rfib(n) as
-    if(n<=1) then
-        return n;
-    else
-        return rfib(n-1) + rfib(n-2);
-    end
-end
-
-defun fact(n) as
-    if(n == 0) then
-        return 1;
-    else
-        return n * fact(n-1);
-    end
-end
-
+println("Let\'s print out the first 15 fizbuzz numbers:");
+fizzbuzz(15);
+pause();
 
 defun split(str, delim) as
     -- Temporary string and output array
@@ -292,7 +124,6 @@ defun split(str, delim) as
         if(str[i] == delim) then
             outArr += tempStr;
             tempStr = "";
-        
         else 
             -- Otherwhise, just add the index
             tempStr += str[i];
@@ -306,23 +137,9 @@ defun split(str, delim) as
     return outArr;
 end
 
-defun massert(condition, message) as
-    if(condition == false) then
-        println("MASSERT: `" + message + "`");
-        assert(0);
-    end
-end
-
-defun contains(list, n) as
-    massert(type(list) == "list", "contains only works on lists");
-    for(local i = 0; i < len(list); i+=1) do
-        if(list[i] == n) then
-            return 1;
-        end
-    end
-
-    return 0;
-end
+println("Let\'s split the phrase \"Good morning!\" by the letter \'o\': " + str(split("Good morning!","o") ));
+println("\t^ Yes this is consistent with the JavaScript implementation of split");
+pause();
 
 defun distViz(n, m) as
 -- See how n values distribute over m times
@@ -346,6 +163,18 @@ defun distViz(n, m) as
     end
 end
 
-local word = "Beans";
+println("How about seeing how random the RNG is? Here\'s a distribution visualization \nof 15 random numbers between 1 and 10");
+distViz(10,15);
+pause();
 
-println("There are " + countVowels(word) + " vowels in \"" + word + "\"");
+defun massert(condition, msg) as
+    if(!condition) then
+        println("FAILED ASSERTION: " + msg);
+        assert(0);
+    end
+end
+
+println("And finally, let\'s do an assert!");
+massert(1==1, "1 doesn\'t equal 1... apparently");
+println("If you\'re seeing this, assert worked! Have a nice day");
+pause();

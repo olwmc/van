@@ -17,4 +17,7 @@ defun bubbleSort(list) as
   return list;
 end
 
-println(bubbleSort([3,2,1, 8, 9, 6]));
+local x = [3,2,1, 8, 9, 6];
+println("Original list: " + str(x));
+println("Bubblesorted: " + str(bubbleSort(x)));
+println("Quicksorted: " + str(sort(x)));
