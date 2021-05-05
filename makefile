@@ -14,7 +14,7 @@ run: clean all
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	@echo "🚧..."
-	@$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+	@$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $@
 
 clean:
 	@echo "🧹..."

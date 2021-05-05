@@ -5,13 +5,15 @@ My project is a simple programming language which looks and feels similar to som
 
 The purpose of this project was to expand my knowledge of programming languages, parsers, and writing large projects. It also gave me the opportunity to really test both myself and the data structures presented within this course.
 
-The name "Van" comes from Willard Van Orman Quine, a logician who is best known for his name being used to denote programs whose output is its own source code.
+The name "Van" comes from Willard Van Orman Quine, a logician who is best known for his name being used to denote programs whose output is their own source code.
 
 ## Instructions For Use
-1. Type `make` into your console where this project is stored.
+0. Make sure `g++` and `make` are installed
+1. Type `make clean all` into your console where this project is stored.
 2. The binary is located in `./bin/`. Run it without any options
 for usage
 3. Feel free to run and modify any of the programs in `./examples/`. To run a program, type `./bin/van examples/myProgram.van`
+4. I have an example program that is meant to be run and read through at the same time, it is located under `./examples/examples.van`
 4. This is a fully fledged programming language, if you'd like to
 read the documentation, it's located in `./docs/`. The [language guide](docs/language_guide.md) is realtively terse. Otherwhise, look
 through and run some of the example programs.
@@ -19,7 +21,13 @@ through and run some of the example programs.
 ## Design Overview
 **Design overview: How did you choose to represent the aspects of your program (i.e., what data structures did you choose and why)?**
 
+The most important data structure I used in this project was a tree. The AST (Abstract syntax tree) serves as the only way my program can execute the user input. Although there are other ways to represent programs, some of which have benifits over trees, trees offer a simple and easy to construct way to represent a program.
 
+The AST is comprised of individual nodes which inherit from a base class and all implement the `accept` method, which accepts a visitor which executes the desired funtionality from the node.
+
+For the AST to interact with variables and functions, it has to talk to the context. The context is represented as a class which contains maps which relate strings to data and functions. Speficially, there's a vector of maps (string, `Value`) which associate variable names to their data. Additionally, there is a map which associates strings and pointers to `Callable` objects, which serve the purpose of functions.
+
+All throughout the program I use vectors because they provide the most straightforward solution to variable and unknown user input at almost every conceviable stage of the program. Basically every structure in the language can be recursed, listed, etc. so using vectors helped offload the memory/location logic to a simple dynamic array.
 
 ## Code Overview
 Like any interpreter, this program takes input from a file and then goes through a set of stages
@@ -96,11 +104,13 @@ Short overview for each file containing code:
 ## Potential Bugs
 - There are without a doubt errors and segfaults for things I haven't found yet. This is a relatively large project (In terms of what I've written in the past), and it's difficult to know what to even test. I've tried my best to get most of the basic errors/segfaults out of the way, but there are definitely more I have yet to find.
 
-- There's some hacky fixes for memory leaks (most notably in assignment statements which lack a compound expression). 
-
 * I know for a fact that mismatched quotes, although they don't produce a memory leak,
-are UB. Sometimes the resulting error prints mojibake, sometimes it doesn't. It's
+are UB. Sometimes the resulting error prints garbage, sometimes it doesn't. It's
 a small issue that's purely cosmetic.
+
+* I can't promise this interpreter is in any way perfect, I can only promise that I tried my best to fix everything I could and use the data structures learned in this class.
+
+* (Not a bug just unhappy) There's no real way to debug when something is invalid syntax within a Van program, the parser spits out errors but they're pretty unhelpful for the user.
 
 ## Easter Eggs
 - Using the -j option after your filename, like `./bin/van examples/myfile.van -j`
@@ -121,9 +131,8 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
 
 * **Dynamic Array (NN)**
 
-    Parsing: Unknown length of basically any number of things
-    at runtime provide a perfect place for dynamic arrays.
-        - Reason why you would use a dynamic array is if the size
+    Parsing presents a situation with an unknown length of basically any number of things at runtime provides a perfect place for dynamic arrays.
+        - The reason why you would use a dynamic array is if the size
           of your input in unknown at runtime. Parsing user input with as diverse of a range as a programming language is the perfect use case for dynamic arrays because I have no idea about *any length of anything* at compile time.
 
     A great example would be in `parser.h` line 109, the function `makeProgram`. `makeProgram` collects all the *statements* that comprise the program into a vector which is then passed to a `Block` which serves as the root node of the program. Using a dynamic array here is the cleanest and most logical solution to solving the dynamic and unpredictable nature of the length of a program. By using a dynamic array, I offload all the memory complexity and work to the vector implementation. Using a vector allows me to collect programs with an unknown number of statements. 
@@ -145,13 +154,7 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
     I have a builtin function in my language called "contains", it returns true
     if a list contains a value. I used binary search here for two main reasons.
 
-    A) It improves time complexity O(n) (linear search) to O(log n) for sorted lists
-
-    B) It was the simplest way for me to implement a good sorting algorithm.
-        * Due to the nature of my Value class, it would be difficult to
-          use C++'s STL search features. Thus, implementing binary search
-          allowed me to take advantage of O(log n) search times without
-          increasing the complexity of my overall program.
+    * It improves time complexity O(n) (linear search) to O(log n) for sorted lists
 
     I slightly modified my base method such that there's compatability for unsorted
     lists as well, but adding binary search here allows for very fast searches on
@@ -171,17 +174,6 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
     to the two values.
 
     Looking at the code for the `BinaryExpression` AST node in AST.cpp line 11, we can see that in a binary expression, the left most node is always evaluated until termination, then the right node, then the operation is applied and the expression returns a Value. Using a DFS-style approach here is essential because in order to execute the AST in the way which preserves the intended precedence, we must go to the bottom of the tree first, then resolve the nodes upwards towards the root.
-
-* **Sorting Algos (Implementation and Analysis) (NN)**
-
-    I implemented a version of Quicksort as a builtin function for my language.
-    This is for two main reasons.
-
-    1. Efficiency. This language is interpreted and thus lacks the performance
-    of a compiled language. I can aide this along by keeping sorting to C++.
-
-    2. Having some sort of builtin sorting function is pretty necessary to
-    get any real work done.
 
 * **Recursive Algorithms**
     The biggest way I use recursive algorithms in my project is for the recursive
