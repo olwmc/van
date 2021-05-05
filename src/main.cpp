@@ -8,6 +8,7 @@ Oliver Wendell McLaughlin CSC212 Fall 2021
 #include <iostream>
 #include <unordered_map>
 
+#include <cmath>
 
 typedef std::unordered_map<std::string, bool> Options;
 

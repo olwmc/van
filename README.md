@@ -21,7 +21,7 @@ through and run some of the example programs.
 ## Design Overview
 **Design overview: How did you choose to represent the aspects of your program (i.e., what data structures did you choose and why)?**
 
-The most important data structure I used in this project was a tree. The AST (Abstract syntax tree) serves as the only way my program can execute the user input. Although there are other ways to represent programs, some of which have benifits over trees, trees offer a simple and easy to construct way to represent a program.
+The most important data structure I used in this project was a tree. The AST (Abstract syntax tree) serves as the only way my program can execute the user input. Although there are other ways to represent programs, some of which have benefits over trees, trees offer a simple and easy to construct way to represent a program.
 
 The AST is comprised of individual nodes which inherit from a base class and all implement the `accept` method, which accepts a visitor which executes the desired funtionality from the node.
 
@@ -38,7 +38,7 @@ Like any interpreter, this program takes input from a file and then goes through
 
 Variables and functions are stored in the *context*, from which I set and get all dynamic information.
 
-There are three different datatypes in Van (numbers, strings, lists, and nil), but they are all contained under the dynamic type `value`, which allows for easy casting and interop between types.
+There are four different datatypes in Van (numbers, strings, lists, and nil) (nil cannot be used by the user), but they are all contained under the dynamic type `Value`, which allows for easy casting and interop between types.
 
 The parser constructs the AST nodes but also reports syntactical errors when present. 
 
@@ -104,10 +104,6 @@ Short overview for each file containing code:
 ## Potential Bugs
 - There are without a doubt errors and segfaults for things I haven't found yet. This is a relatively large project (In terms of what I've written in the past), and it's difficult to know what to even test. I've tried my best to get most of the basic errors/segfaults out of the way, but there are definitely more I have yet to find.
 
-* I know for a fact that mismatched quotes, although they don't produce a memory leak,
-are UB. Sometimes the resulting error prints garbage, sometimes it doesn't. It's
-a small issue that's purely cosmetic.
-
 * I can't promise this interpreter is in any way perfect, I can only promise that I tried my best to fix everything I could and use the data structures learned in this class.
 
 * (Not a bug just unhappy) There's no real way to debug when something is invalid syntax within a Van program, the parser spits out errors but they're pretty unhelpful for the user.
@@ -131,8 +127,8 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
 
 * **Dynamic Array (NN)**
 
-    Parsing presents a situation with an unknown length of basically any number of things at runtime provides a perfect place for dynamic arrays.
-        - The reason why you would use a dynamic array is if the size
+    Parsing provides a situation in which basically everything can have variable length which is only known at parse time. This is a perfect scenario for dynamic arrays.
+    - The reason why you would use a dynamic array is if the size
           of your input in unknown at runtime. Parsing user input with as diverse of a range as a programming language is the perfect use case for dynamic arrays because I have no idea about *any length of anything* at compile time.
 
     A great example would be in `parser.h` line 109, the function `makeProgram`. `makeProgram` collects all the *statements* that comprise the program into a vector which is then passed to a `Block` which serves as the root node of the program. Using a dynamic array here is the cleanest and most logical solution to solving the dynamic and unpredictable nature of the length of a program. By using a dynamic array, I offload all the memory complexity and work to the vector implementation. Using a vector allows me to collect programs with an unknown number of statements. 
@@ -150,6 +146,7 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
     There's not really a simpler way of associating user input (identifiers) with complex data structures (pointers to callable objects and values), so using a map here was cruical.
 
 * **Binary Search (NN)**
+
     `The code for this can be found in builtin.cpp, line 250`
     I have a builtin function in my language called "contains", it returns true
     if a list contains a value. I used binary search here for two main reasons.
@@ -176,6 +173,7 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
     Looking at the code for the `BinaryExpression` AST node in AST.cpp line 11, we can see that in a binary expression, the left most node is always evaluated until termination, then the right node, then the operation is applied and the expression returns a Value. Using a DFS-style approach here is essential because in order to execute the AST in the way which preserves the intended precedence, we must go to the bottom of the tree first, then resolve the nodes upwards towards the root.
 
 * **Recursive Algorithms**
+
     The biggest way I use recursive algorithms in my project is for the recursive
     descent parser. Although there are more niche ways of using both iteration
     and recursion to do things like expression parsing, an LL(1) recursive
