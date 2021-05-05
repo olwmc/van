@@ -10,6 +10,10 @@ Van is similar to Lua and Python, if you have any experience in those, then you'
 
 * Identifiers in Van can contain letters and '_', but not numbers or any other characters.
 
+* All quotes must be escaped in strings, that means `" \" "` AND `" \' "`.
+
+* Always `str` a list if you want to do something like `"And here are the values: " + str(list)`
+
 ### Hello... you!
 ```lua
 local name;
