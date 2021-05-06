@@ -157,21 +157,6 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
     lists as well, but adding binary search here allows for very fast searches on
     sorted lists. And when paired with my quicksort implementation, it increases overall performance when compared to a simple linear search.
 
-* **DFS (NN)**
-
-    To execute expressions, we first do a DFS to find the terminal element
-    on the lefthand side, we then postorder traversal to get the righthand
-    element, then execute the operation at the root node. Finding the deepest
-    element like this is essential for expression execution because you have
-    to evaluate all subtrees of an expression first.
-
-    DFS is built right into how the BinaryExpression class executes. It first
-    gets the terminal node on the left, executes upwards, then gets the terminal
-    node on the right, executes upwards, and finally applies the binary operation
-    to the two values.
-
-    Looking at the code for the `BinaryExpression` AST node in AST.cpp line 11, we can see that in a binary expression, the left most node is always evaluated until termination, then the right node, then the operation is applied and the expression returns a Value. Using a DFS-style approach here is essential because in order to execute the AST in the way which preserves the intended precedence, we must go to the bottom of the tree first, then resolve the nodes upwards towards the root.
-
 * **Recursive Algorithms**
 
     The biggest way I use recursive algorithms in my project is for the recursive
