@@ -1,5 +1,5 @@
 /*
-Oliver Wendell McLaughlin CSC212 Fall 2021
+Oliver Wendell McLaughlin CSC212 Spring 2021
 */
 
 #ifndef FORWARD_H
