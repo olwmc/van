@@ -1,5 +1,5 @@
 # Making new builtin functions
-Let's make a quick builtin function that adds 100 to whatever the user passes as an argument
+Let's make a quick builtin function that returns the sin of whatever number the user passes
 ```c++
 #include "builtin.h"
 #include "context.h"
