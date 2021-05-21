@@ -17,7 +17,7 @@ for usage
 5. This is a fully fledged programming language, if you'd like to
 read the documentation, it's located in `./docs/`. The [language guide](docs/language_guide.md) is realtively terse. Otherwhise, look
 through and run some of the example programs.
-6. Embedding help can be found in the api document also located in `./docs/`
+6. Embedding help can be found in the [api document](docs/API.md) also located in `./docs/`
 
 <!-- ## Design Overview
 **Design overview: How did you choose to represent the aspects of your program (i.e., what data structures did you choose and why)?**
