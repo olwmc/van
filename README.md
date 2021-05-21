@@ -14,9 +14,10 @@ The name "Van" comes from Willard Van Orman Quine, a logician who is best known 
 for usage
 3. Feel free to run and modify any of the programs in `./examples/`. To run a program, type `./bin/van examples/myProgram.van`
 4. I have an example program that is meant to be run and read through at the same time, it is located under `./examples/examples.van`
-4. This is a fully fledged programming language, if you'd like to
+5. This is a fully fledged programming language, if you'd like to
 read the documentation, it's located in `./docs/`. The [language guide](docs/language_guide.md) is realtively terse. Otherwhise, look
 through and run some of the example programs.
+6. Embedding help can be found in the api document also located in `./docs/`
 
 <!-- ## Design Overview
 **Design overview: How did you choose to represent the aspects of your program (i.e., what data structures did you choose and why)?**
