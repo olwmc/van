@@ -1,6 +1,6 @@
 # Oliver McLaughlin : CSC212 Final Project
 
-## Purpose Overview
+## Project Overview
 My project is a simple programming language which looks and feels similar to something like Lua or Python. It is called Van.
 
 The purpose of this project was to expand my knowledge of programming languages, parsers, and writing large projects. It also gave me the opportunity to really test both myself and the data structures presented within this course.
