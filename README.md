@@ -19,7 +19,6 @@ read the documentation, it's located in `./docs/`. The [language guide](docs/lan
 through and run some of the example programs.
 6. Embedding help can be found in the [api document](docs/API.md) also located in `./docs/`
 
-<!-- ## Design Overview
 **Design overview: How did you choose to represent the aspects of your program (i.e., what data structures did you choose and why)?**
 
 The most important data structure I used in this project was a tree. The AST (Abstract syntax tree) serves as the only way my program can execute the user input. Although there are other ways to represent programs, some of which have benefits over trees, trees offer a simple and easy to construct way to represent a program.
@@ -118,6 +117,7 @@ will print out the AST for your program in JSON. You can copy that JSON into [th
 ## Group
 - I did this project alone.
 
+<!--
 ## Topic Overview
 
 - Mastery, to me, is:
